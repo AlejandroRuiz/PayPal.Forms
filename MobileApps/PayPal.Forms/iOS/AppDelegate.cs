@@ -18,7 +18,7 @@ namespace PayPal.Forms.Test.iOS
 			CrossPaypalManager.Init (
 				new PayPalConfiguration (
 					PayPal.Forms.Abstractions.Enum.Environment.NoNetwork,
-					"ATdpUY5hE7rhrNmDnKjJLTD2NkyNRjEO7oq62DJdthmFjENBKKottH1AtXqr4Yatkcaj9GGdrJcZOYtL"
+					"YOUR ID STRING"
 				){
 					AcceptCreditCards = true,
 					MerchantName = "Test Store",

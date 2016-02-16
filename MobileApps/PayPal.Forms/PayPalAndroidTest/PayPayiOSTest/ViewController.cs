@@ -12,8 +12,8 @@ namespace PayPayiOSTest
 		public ViewController (IntPtr handle) : base (handle)
 		{
 			MainManager = new PayPalManager (
-				"AZ1efDFvrgcY-PqxaoVnZDg53n2_AMBVN3_qf3Q3Hm_z5jEuk4NXd_Htv8fmis1vrM0uwidTmXIc5tS5",
-				"ATdpUY5hE7rhrNmDnKjJLTD2NkyNRjEO7oq62DJdthmFjENBKKottH1AtXqr4Yatkcaj9GGdrJcZOYtL"
+				"YOUR APP ID STRING",
+				"YOUR APP ID STRING"
 			);
 		}
 
