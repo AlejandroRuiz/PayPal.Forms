@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.alex.paypalandroidtest">
+	<uses-sdk android:minSdkVersion="16" />
+	<!-- for card.io card scanning -->
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	<uses-feature android:name="android.hardware.camera" android:required="false" />
+	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+	<!-- for most things, including card.io and paypal -->
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+
+	<application android:allowBackup="true" android:icon="@mipmap/icon" android:label="@string/app_name" android:theme="@android:style/Theme.Holo.Light">
+		<service android:exported="false" android:name="com.paypal.android.sdk.payments.PayPalService" />
+		<activity android:name="com.paypal.android.sdk.payments.PaymentActivity" />
+		<activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
+		<activity android:name="com.paypal.android.sdk.payments.PaymentMethodActivity" />
+		<activity android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity" />
+		<activity android:configChanges="keyboardHidden|orientation" android:name="io.card.payment.CardIOActivity" />
+		<activity android:name="io.card.payment.DataEntryActivity" />
+	</application>
+</manifest>

@@ -1,0 +1,13 @@
+﻿<metadata>
+	<!--
+  This sample removes the class: android.support.v4.content.AsyncTaskLoader.LoadTask:
+  <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='AsyncTaskLoader.LoadTask']" />
+  
+  This sample removes the method: android.support.v4.content.CursorLoader.loadInBackground:
+  <remove-node path="/api/package[@name='android.support.v4.content']/class[@name='CursorLoader']/method[@name='loadInBackground']" />
+  -->
+   <attr path="/api/package[@name='io.card.payment']" name="managedName">Xamarin.PayPal.Android.CardIO.Payment</attr>
+   <attr path="/api/package[@name='io.card.payment.i18n']" name="managedName">Xamarin.PayPal.Android.CardIO.I18n</attr>
+   <attr path="/api/package[@name='io.card.payment.i18n.locales']" name="managedName">Xamarin.PayPal.Android.CardIO.I18n.Locales</attr>
+   <attr path="/api/package[@name='io.card.payment.ui']" name="managedName">Xamarin.PayPal.Android.CardIO.UI</attr>
+</metadata>
