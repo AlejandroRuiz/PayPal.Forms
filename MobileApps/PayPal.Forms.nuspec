@@ -60,7 +60,7 @@
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/PayPal.Forms.iOS.dll" target="lib\Xamarin.iOS10\PayPal.Forms.iOS.dll" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/PayPal.Forms.iOS.dll.mdb" target="lib\Xamarin.iOS10\PayPal.Forms.iOS.dll.mdb" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/Xamarin.PayPal.iOS.dll" target="lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll" />
-		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/Xamarin.PayPal.iOS.dll.mdb" target="lib\Xamarin.iOS10\Xamarin.PayPal.iOS.mdb" />
+		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/Xamarin.PayPal.iOS.dll.mdb" target="lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll.mdb" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Abstractions/bin/Release/PayPal.Forms.Abstractions.dll" target="lib\Xamarin.iOS10\PayPal.Forms.Abstractions.dll" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Abstractions/bin/Release/PayPal.Forms.Abstractions.dll.mdb" target="lib\Xamarin.iOS10\PayPal.Forms.Abstractions.dll.mdb" />
     
