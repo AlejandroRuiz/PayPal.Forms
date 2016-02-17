@@ -49,7 +49,7 @@
 		<!--Xamarin.Android-->
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Android/bin/Release/PayPal.Forms.Android.dll" target="lib\MonoAndroid10\PayPal.Forms.Android.dll" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Android/bin/Release/PayPal.Forms.Android.dll.mdb" target="lib\MonoAndroid10\PayPal.Forms.Android.dll.mdb" />
-		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Android/bin/Release/Xamarin.PayPal.Android.CardIO.dll" target="lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll.dll" />
+		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Android/bin/Release/Xamarin.PayPal.Android.CardIO.dll" target="lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Android/bin/Release/Xamarin.PayPal.Android.CardIO.dll.mdb" target="lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll.mdb" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Android/bin/Release/Xamarin.PayPal.Android.dll" target="lib\MonoAndroid10\Xamarin.PayPal.Android.dll" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Android/bin/Release/Xamarin.PayPal.Android.dll.mdb" target="lib\MonoAndroid10\Xamarin.PayPal.Android.dll.mdb" />
@@ -59,8 +59,10 @@
 		<!--Xamarin.iOS-->
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/PayPal.Forms.iOS.dll" target="lib\Xamarin.iOS10\PayPal.Forms.iOS.dll" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/PayPal.Forms.iOS.dll.mdb" target="lib\Xamarin.iOS10\PayPal.Forms.iOS.dll.mdb" />
+
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/Xamarin.PayPal.iOS.dll" target="lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/Xamarin.PayPal.iOS.dll.mdb" target="lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll.mdb" />
+
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Abstractions/bin/Release/PayPal.Forms.Abstractions.dll" target="lib\Xamarin.iOS10\PayPal.Forms.Abstractions.dll" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Abstractions/bin/Release/PayPal.Forms.Abstractions.dll.mdb" target="lib\Xamarin.iOS10\PayPal.Forms.Abstractions.dll.mdb" />
     
