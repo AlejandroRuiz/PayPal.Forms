@@ -54,7 +54,7 @@ if (result.Status == PaymentResultStatus.Cancelled) {
 }else if(result.Status == PaymentResultStatus.Error){
 	Console.WriteLine (result.ErrorMessage);
 }else if(result.Status == PaymentResultStatus.Successful){
-	Console.WriteLine (result.ServerResponse.response.id);
+	Console.WriteLine (result.ServerResponse.Response.Id);
 }
 ```
 ##List of Items
@@ -72,7 +72,7 @@ if (result.Status == PaymentResultStatus.Cancelled) {
 }else if(result.Status == PaymentResultStatus.Error){
 	Console.WriteLine (result.ErrorMessage);
 }else if(result.Status == PaymentResultStatus.Successful){
-	Console.WriteLine (result.ServerResponse.response.id);
+	Console.WriteLine (result.ServerResponse.Response.Id);
 }
 ```
 
