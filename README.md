@@ -78,3 +78,11 @@ if (result.Status == PaymentResultStatus.Cancelled) {
 
 # Nuget
 * Nuget Package (https://www.nuget.org/packages/PayPal.Forms)
+
+
+# TODO
+* Add support for PCL Xamarin.Forms App Projects.
+* Add app provided shipping address.
+* Enable shipping address retrieval.
+* Future payments logic.
+* Profile sharing
