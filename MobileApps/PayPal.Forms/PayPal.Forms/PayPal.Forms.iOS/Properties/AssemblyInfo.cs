@@ -5,10 +5,10 @@ using System.Runtime.CompilerServices;
 // Change them to the values specific to your project.
 
 [assembly: AssemblyTitle ("PayPal.Forms.iOS")]
-[assembly: AssemblyDescription ("")]
+[assembly: AssemblyDescription ("PayPal Plugin for Xamarin.Forms")]
 [assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("")]
-[assembly: AssemblyProduct ("")]
+[assembly: AssemblyCompany ("Los Xamarinos")]
+[assembly: AssemblyProduct ("PayPal.Forms")]
 [assembly: AssemblyCopyright ("Alejandro Ruiz")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]

@@ -49,6 +49,9 @@
     <Reference Include="Deveel.Math">
       <HintPath>..\..\packages\dmath-pcl.1.5.69\lib\portable-net40+sl50+win+wpa81+wp80\Deveel.Math.pdb\Deveel.Math.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

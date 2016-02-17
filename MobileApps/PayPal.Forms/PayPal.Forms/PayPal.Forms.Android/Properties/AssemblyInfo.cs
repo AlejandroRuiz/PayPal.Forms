@@ -6,10 +6,10 @@ using System.Runtime.CompilerServices;
 using Android.App;
 
 [assembly: AssemblyTitle ("PayPal.Forms.Android")]
-[assembly: AssemblyDescription ("")]
+[assembly: AssemblyDescription ("PayPal Plugin for Xamarin.Forms")]
 [assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("")]
-[assembly: AssemblyProduct ("")]
+[assembly: AssemblyCompany ("Los Xamarinos")]
+[assembly: AssemblyProduct ("PayPal.Forms")]
 [assembly: AssemblyCopyright ("Alejandro Ruiz")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
@@ -18,7 +18,7 @@ using Android.App;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-[assembly: AssemblyVersion ("1.0.0")]
+[assembly: AssemblyVersion ("1.0.*")]
 
 //for card.io card scanning
 [assembly: UsesPermission("android.permission.CAMERA")]

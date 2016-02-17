@@ -1,5 +1,6 @@
 ﻿using System;
 using PayPal.Forms.Abstractions.Enum;
+using Newtonsoft.Json;
 
 namespace PayPal.Forms.Abstractions
 {
@@ -7,25 +8,44 @@ namespace PayPal.Forms.Abstractions
 	{
 		public class Response
 		{
-			public string create_time { get; set; }
-			public string id { get; set; }
-			public string state { get; set; }
-			public string intent { get; set; }
+			[JsonProperty(PropertyName = "create_time")]
+			public string CreateTime { get; set; }
+
+			[JsonProperty(PropertyName = "id")]
+			public string Id { get; set; }
+
+			[JsonProperty(PropertyName = "state")]
+			public string State { get; set; }
+
+			[JsonProperty(PropertyName = "intent")]
+			public string Intent { get; set; }
 		}
 
 		public class Client
 		{
-			public string paypal_sdk_version { get; set; }
-			public string environment { get; set; }
-			public string platform { get; set; }
-			public string product_name { get; set; }
+			[JsonProperty(PropertyName = "paypal_sdk_version")]
+			public string PaypalSdkVersion { get; set; }
+
+			[JsonProperty(PropertyName = "environment")]
+			public string Environment { get; set; }
+
+			[JsonProperty(PropertyName = "platform")]
+			public string Platform { get; set; }
+
+			[JsonProperty(PropertyName = "product_name")]
+			public string ProductName { get; set; }
 		}
 
 		public class PayPalResponse
 		{
-			public Response response { get; set; }
-			public Client client { get; set; }
-			public string response_type { get; set; }
+			[JsonProperty(PropertyName = "response")]
+			public Response Response { get; set; }
+
+			[JsonProperty(PropertyName = "client")]
+			public Client Client { get; set; }
+
+			[JsonProperty(PropertyName = "response_type")]
+			public string ResponseType { get; set; }
 		}
 
 		public PaymentResultStatus Status { get; private set; }

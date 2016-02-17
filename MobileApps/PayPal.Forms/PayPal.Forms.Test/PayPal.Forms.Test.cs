@@ -53,7 +53,7 @@ namespace PayPal.Forms.Test
 			}else if(result.Status == PaymentResultStatus.Error){
 				Console.WriteLine (result.ErrorMessage);
 			}else if(result.Status == PaymentResultStatus.Successful){
-				Console.WriteLine (result.ServerResponse.response.id);
+				Console.WriteLine (result.ServerResponse.Response.Id);
 			}
 		}
 
@@ -65,7 +65,7 @@ namespace PayPal.Forms.Test
 			}else if(result.Status == PaymentResultStatus.Error){
 				Console.WriteLine (result.ErrorMessage);
 			}else if(result.Status == PaymentResultStatus.Successful){
-				Console.WriteLine (result.ServerResponse.response.id);
+				Console.WriteLine (result.ServerResponse.Response.Id);
 			}
 		}
 
