@@ -59,7 +59,7 @@ if (result.Status == PaymentResultStatus.Cancelled) {
 ```
 ##List of Items
 ```
-var result = await Forms.CrossPaypalManager.Current.Buy (new PayPalItem[] {
+var result = await CrossPaypalManager.Current.Buy (new PayPalItem[] {
 				new PayPalItem ("sample item #1", 2, new BigDecimal (87.50), "USD",
 					"sku-12345678"), 
 				new PayPalItem ("free sample item #2", 1, new BigDecimal (0.00),
