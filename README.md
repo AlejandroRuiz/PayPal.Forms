@@ -29,7 +29,7 @@ public App ()
 
 ##iOS
 
-From oficial PayPal SDK Page (https://github.com/paypal/PayPal-iOS-SDK#with-or-without-cocoapods) follow the two steps:
+From official PayPal SDK page (https://github.com/paypal/PayPal-iOS-SDK#with-or-without-cocoapods) follow the two steps:
 
 * Add the open source license acknowledgments
 * Add squemas into Info.plist
