@@ -26,6 +26,14 @@ public App ()
 			);
 }
 ```
+
+##iOS
+
+From oficial PayPal SDK Page (https://github.com/paypal/PayPal-iOS-SDK#with-or-without-cocoapods) follow the two steps:
+
+* Add the open source license acknowledgments
+* Add squemas into Info.plist
+
 ##Android
 
 Is very important to add the following code inside your OnActivityResult and OnDestroy on your main activity class
@@ -57,7 +65,9 @@ if (result.Status == PaymentResultStatus.Cancelled) {
 	Console.WriteLine (result.ServerResponse.Response.Id);
 }
 ```
+
 ##List of Items
+
 ```
 var result = await CrossPaypalManager.Current.Buy (new PayPalItem[] {
 				new PayPalItem ("sample item #1", 2, new BigDecimal (87.50), "USD",
@@ -76,6 +86,26 @@ if (result.Status == PaymentResultStatus.Cancelled) {
 }
 ```
 
+##Future Payments
+
+```
+var result = await CrossPaypalManager.Current.RequestFuturePayments();
+if (result.Status == PaymentResultStatus.Cancelled) {
+	Console.WriteLine ("Cancelled");
+}else if(result.Status == PaymentResultStatus.Error){
+	Console.WriteLine (result.ErrorMessage);
+}else if(result.Status == PaymentResultStatus.Successful){
+	//Print Authorization Code
+	Console.WriteLine(result.ServerResponse.Response.Code);
+}
+```
+
+##Obtain a Client Metadata ID
+
+```
+//Print Client Metadata Id
+Console.WriteLine(CrossPaypalManager.Current.ClientMetadataId);
+```
 # Nuget
 * Nuget Package (https://www.nuget.org/packages/PayPal.Forms)
 
@@ -84,5 +114,4 @@ if (result.Status == PaymentResultStatus.Cancelled) {
 * Add support for PCL Xamarin.Forms App Projects.
 * Add app provided shipping address.
 * Enable shipping address retrieval.
-* Future payments logic.
 * Profile sharing
