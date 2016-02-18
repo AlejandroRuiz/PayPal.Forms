@@ -11,19 +11,27 @@ using UIKit;
 
 namespace PayPayiOSTest
 {
-	[Register ("ViewController")]
-	partial class ViewController
-	{
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIButton btnTest { get; set; }
+    [Register ("ViewController")]
+    partial class ViewController
+    {
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton btnTest { get; set; }
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton futurePayments { get; set; }
 
-		void ReleaseDesignerOutlets ()
-		{
-			if (btnTest != null) {
-				btnTest.Dispose ();
-				btnTest = null;
-			}
-		}
-	}
+        void ReleaseDesignerOutlets ()
+        {
+            if (btnTest != null) {
+                btnTest.Dispose ();
+                btnTest = null;
+            }
+
+            if (futurePayments != null) {
+                futurePayments.Dispose ();
+                futurePayments = null;
+            }
+        }
+    }
 }

@@ -8,6 +8,28 @@ namespace PayPayiOSTest
 {
 	public class PayPalManager:PayPalPaymentDelegate, IPayPalProfileSharingDelegate, IFlipsideViewControllerDelegate
 	{
+		#region t
+
+		public void PayPalFuturePaymentDidCancel(PayPalFuturePaymentViewController futurePaymentViewController)
+		{
+			Debug.WriteLine("PayPal Future Payment Authorization Canceled");
+			ResultText = "";
+			//successView.hidden = true
+			futurePaymentViewController?.DismissViewController(true, null);
+		}
+
+		void PayPalFuturePaymentViewController(PayPalFuturePaymentViewController futurePaymentViewController, NSDictionary futurePaymentAuthorization)
+		{
+			Debug.WriteLine("PayPal Future Payment Authorization Success!");
+			// send authorization to your server to get refresh token.
+			futurePaymentViewController?.DismissViewController(true, () =>
+			{
+				ResultText = futurePaymentAuthorization.Description;
+			});
+		}
+
+		#endregion
+
 		PayPalConfiguration _payPalConfig;
 
 		#region IFlipsideViewControllerDelegate implementation
@@ -170,6 +192,13 @@ namespace PayPayiOSTest
 			}
 		}
 
+		public void FuturePayment()
+		{
+			var futurePaymentViewController = new PayPalFuturePaymentViewController(_payPalConfig, new CustomPayPalFuturePaymentDelegate(this));
+			var top = GetTopViewController (UIApplication.SharedApplication.KeyWindow);
+			top.PresentViewController(futurePaymentViewController, true, null);
+		}
+
 		UIViewController GetTopViewController(UIWindow window) {
 			var vc = window.RootViewController;
 
@@ -178,6 +207,26 @@ namespace PayPayiOSTest
 			}
 
 			return vc;
+		}
+
+		class CustomPayPalFuturePaymentDelegate : PayPalFuturePaymentDelegate
+		{
+			PayPalManager PayPalManager;
+
+			public CustomPayPalFuturePaymentDelegate(PayPalManager manager)
+			{
+				PayPalManager = manager;	
+			}
+
+			public override void PayPalFuturePaymentDidCancel(Xamarin.PayPal.iOS.PayPalFuturePaymentViewController futurePaymentViewController)
+			{
+				PayPalManager.PayPalFuturePaymentDidCancel(futurePaymentViewController);
+			}
+
+			public override void PayPalFuturePaymentViewController(Xamarin.PayPal.iOS.PayPalFuturePaymentViewController futurePaymentViewController, NSDictionary futurePaymentAuthorization)
+			{
+				PayPalManager.PayPalFuturePaymentViewController(futurePaymentViewController, futurePaymentAuthorization);
+			}
 		}
 	}
 

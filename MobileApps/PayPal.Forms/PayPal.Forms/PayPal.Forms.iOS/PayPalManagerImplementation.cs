@@ -11,13 +11,15 @@ namespace PayPal.Forms
 	{
 		TaskCompletionSource<PaymentResult> buyTcs;
 
+		TaskCompletionSource<FuturePaymentsResult> rfpTcs;
+
 		#region IPayPalManager implementation
 
 		public Task<PaymentResult> Buy (PayPalItem[] items, Deveel.Math.BigDecimal shipping, Deveel.Math.BigDecimal tax)
 		{
 			if (buyTcs != null) {
-				buyTcs.SetCanceled ();
-				buyTcs.SetResult (null);
+				buyTcs.TrySetCanceled ();
+				buyTcs.TrySetResult (null);
 			}
 			buyTcs = new TaskCompletionSource<PaymentResult> ();
 			Manager.BuyItems (items, shipping, tax, SendOnPayPalPaymentDidCancel, SendOnPayPalPaymentCompleted, SendOnPayPalPaymentError);
@@ -27,12 +29,29 @@ namespace PayPal.Forms
 		public Task<PaymentResult> Buy (PayPalItem item, Deveel.Math.BigDecimal tax)
 		{
 			if (buyTcs != null) {
-				buyTcs.SetCanceled ();
-				buyTcs.SetResult (null);
+				buyTcs.TrySetCanceled ();
+				buyTcs.TrySetResult (null);
 			}
 			buyTcs = new TaskCompletionSource<PaymentResult> ();
 			Manager.BuyItem (item, tax, SendOnPayPalPaymentDidCancel, SendOnPayPalPaymentCompleted, SendOnPayPalPaymentError);
 			return buyTcs.Task;
+		}
+
+		public Task<FuturePaymentsResult> RequestFuturePayments()
+		{
+			if (rfpTcs != null) {
+				rfpTcs.TrySetCanceled ();
+				rfpTcs.TrySetResult (null);
+			}
+			rfpTcs = new TaskCompletionSource<FuturePaymentsResult> ();
+			Manager.FuturePayment(SendOnPayPalPaymentDidCancel, SendOnPayPalFuturePaymentsCompleted);
+			return rfpTcs.Task;
+		}
+
+		public string ClientMetadataId {
+			get {
+				return Xamarin.PayPal.iOS.PayPalMobile.ClientMetadataID;
+			}
 		}
 
 		#endregion
@@ -42,13 +61,24 @@ namespace PayPal.Forms
 			if (buyTcs != null) {
 				buyTcs.TrySetResult (new PaymentResult (PaymentResultStatus.Cancelled));
 			}
+			if (rfpTcs != null) {
+				rfpTcs.TrySetResult(new FuturePaymentsResult(PaymentResultStatus.Cancelled));
+			}
 		}
 
 		internal void SendOnPayPalPaymentCompleted(string confirmationJSON)
 		{
 			if (buyTcs != null) {
-				var serverResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<PayPal.Forms.Abstractions.PaymentResult.PayPalResponse> (confirmationJSON);
+				var serverResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<PayPal.Forms.Abstractions.PaymentResult.PayPalPaymentResponse> (confirmationJSON);
 				buyTcs.TrySetResult (new PaymentResult (PaymentResultStatus.Successful, string.Empty, serverResponse));
+			}
+		}
+
+		internal void SendOnPayPalFuturePaymentsCompleted(string confirmationJSON)
+		{
+			if (rfpTcs != null) {
+				var serverResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<PayPal.Forms.Abstractions.FuturePaymentsResult.PayPalFuturePaymentsResponse> (confirmationJSON);
+				rfpTcs.TrySetResult (new FuturePaymentsResult (PaymentResultStatus.Successful, string.Empty, serverResponse));
 			}
 		}
 

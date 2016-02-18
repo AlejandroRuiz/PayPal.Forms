@@ -4,21 +4,13 @@ using Newtonsoft.Json;
 
 namespace PayPal.Forms.Abstractions
 {
-	public class PaymentResult
+	public class FuturePaymentsResult
 	{
+
 		public class Response
 		{
-			[JsonProperty(PropertyName = "create_time")]
-			public string CreateTime { get; set; }
-
-			[JsonProperty(PropertyName = "id")]
-			public string Id { get; set; }
-
-			[JsonProperty(PropertyName = "state")]
-			public string State { get; set; }
-
-			[JsonProperty(PropertyName = "intent")]
-			public string Intent { get; set; }
+			[JsonProperty(PropertyName = "code")]
+			public string Code { get; set; }
 		}
 
 		public class Client
@@ -36,7 +28,7 @@ namespace PayPal.Forms.Abstractions
 			public string ProductName { get; set; }
 		}
 
-		public class PayPalPaymentResponse
+		public class PayPalFuturePaymentsResponse
 		{
 			[JsonProperty(PropertyName = "response")]
 			public Response Response { get; set; }
@@ -52,9 +44,9 @@ namespace PayPal.Forms.Abstractions
 
 		public string ErrorMessage { get; private set; }
 
-		public PayPalPaymentResponse ServerResponse { get; private set; }
+		public PayPalFuturePaymentsResponse ServerResponse { get; private set; }
 
-		public PaymentResult (PaymentResultStatus status, string errorMessage = null, PayPalPaymentResponse serverResponse = null)
+		public FuturePaymentsResult(PaymentResultStatus status, string errorMessage = null, PayPalFuturePaymentsResponse serverResponse = null)
 		{
 			Status = status;
 			ErrorMessage = errorMessage;

@@ -9,6 +9,10 @@ namespace PayPal.Forms.Abstractions
 		Task<PaymentResult> Buy (PayPalItem[] items, BigDecimal shipping, BigDecimal tax);
 
 		Task<PaymentResult> Buy (PayPalItem item, BigDecimal tax);
+
+		Task<FuturePaymentsResult> RequestFuturePayments();
+
+		string ClientMetadataId { get; }
 	}
 }
 

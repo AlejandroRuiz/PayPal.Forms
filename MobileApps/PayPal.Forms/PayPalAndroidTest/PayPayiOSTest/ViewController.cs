@@ -6,6 +6,10 @@ namespace PayPayiOSTest
 {
 	public partial class ViewController : UIViewController
 	{
+		void FuturePayments_TouchUpInside(object sender, EventArgs e)
+		{
+			MainManager.FuturePayment();
+		}
 
 		PayPalManager MainManager;
 
@@ -22,6 +26,7 @@ namespace PayPayiOSTest
 			base.ViewDidLoad ();
 			// Perform any additional setup after loading the view, typically from a nib.
 			btnTest.TouchUpInside += BtnTest_TouchUpInside;
+			futurePayments.TouchUpInside += FuturePayments_TouchUpInside;
 		}
 
 		void BtnTest_TouchUpInside (object sender, EventArgs e)

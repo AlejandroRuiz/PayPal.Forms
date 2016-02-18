@@ -9,9 +9,11 @@ namespace PayPal.Forms.Test
 {
 	public class App : Application
 	{
+
 		Button BuyOnethingButton;
 		Button BuyManythingsButton;
 
+		Button RequestFuturePaymentsButton;
 
 		public App ()
 		{
@@ -24,7 +26,12 @@ namespace PayPal.Forms.Test
 				Text = "Buy Many Things Button"
 			};
 			BuyManythingsButton.Clicked += BuyManythingsButton_Clicked;
-				
+
+			RequestFuturePaymentsButton = new Button
+			{
+				Text = "Request Future Payments"
+			};
+			RequestFuturePaymentsButton.Clicked += RequestFuturePaymentsButton_Clicked;;
 
 			// The root page of your application
 			MainPage = new ContentPage {
@@ -32,15 +39,31 @@ namespace PayPal.Forms.Test
 					VerticalOptions = LayoutOptions.Center,
 					Children = {
 						BuyOnethingButton,
-						BuyManythingsButton
+						BuyManythingsButton,
+						RequestFuturePaymentsButton
 					}
 				}
 			};
 		}
 
+		async void RequestFuturePaymentsButton_Clicked(object sender, EventArgs e)
+		{
+			var result = await CrossPaypalManager.Current.RequestFuturePayments();
+			if (result.Status == PaymentResultStatus.Cancelled) {
+				Console.WriteLine ("Cancelled");
+			}else if(result.Status == PaymentResultStatus.Error){
+				Console.WriteLine (result.ErrorMessage);
+			}else if(result.Status == PaymentResultStatus.Successful){
+				//Print Authorization Code
+				Console.WriteLine(result.ServerResponse.Response.Code);
+				//Print Client Metadata Id
+				Console.WriteLine(CrossPaypalManager.Current.ClientMetadataId);
+			}
+		}
+
 		async void BuyManythingsButton_Clicked (object sender, EventArgs e)
 		{
-			var result = await Forms.CrossPaypalManager.Current.Buy (new PayPalItem[] {
+			var result = await CrossPaypalManager.Current.Buy (new PayPalItem[] {
 				new PayPalItem ("sample item #1", 2, new BigDecimal (87.50), "USD",
 					"sku-12345678"), 
 				new PayPalItem ("free sample item #2", 1, new BigDecimal (0.00),

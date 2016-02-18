@@ -99,22 +99,6 @@ namespace PayPal.Forms.Android
 			return new PayPalOAuthScopes (scopes.ToList ());
 		}
 
-		private void sendAuthorizationToServer(PayPalAuthorization authorization) {
-
-			/**
-         * TODO: Send the authorization response to your server, where it can
-         * exchange the authorization code for OAuth access and refresh tokens.
-         * 
-         * Your server must then store these tokens, so that your server code
-         * can execute payments for this user in the future.
-         * 
-         * A more complete example that includes the required app-server to
-         * PayPal-server integration is available from
-         * https://github.com/paypal/rest-api-sdk-python/tree/master/samples/mobile_backend
-         */
-
-		}
-
 		Action OnCancelled;
 
 		Action<string> OnSuccess;
@@ -187,20 +171,17 @@ namespace PayPal.Forms.Android
 			(Context as Activity).StartActivityForResult (intent, REQUEST_CODE_PAYMENT);
 		}
 
-		public void FuturePaymentPurchase() {
+		public string GetClientMetadataId() {
 			// Get the Client Metadata ID from the SDK
-			String metadataId = PayPalConfiguration.GetClientMetadataId(Context);
-
-			System.Diagnostics.Debug.WriteLine ("Client Metadata ID: " + metadataId);
-
-			// TODO: Send metadataId and transaction details to your server for processing with
-			// PayPal...
-			Toast.MakeText (
-				Context.ApplicationContext, "Client Metadata Id received from SDK", ToastLength.Long)
-				.Show ();
+			string metadataId = PayPalConfiguration.GetClientMetadataId(Context);
+			return metadataId;
 		}
 
-		public void FuturePayment() {
+		public void FuturePayment(Action onCancelled, Action<string> onSuccess) {
+
+			OnCancelled = onCancelled;
+			OnSuccess = onSuccess;
+
 			Intent intent = new Intent (Context, typeof(PayPalFuturePaymentActivity));
 
 			// send the same configuration for restart resiliency
@@ -239,9 +220,13 @@ namespace PayPal.Forms.Android
 							OnSuccess = null;
 
 						} catch (JSONException e) {
+							OnError?.Invoke ("an extremely unlikely failure occurred: " + e.Message);
+							OnError = null;
 							System.Diagnostics.Debug.WriteLine ("an extremely unlikely failure occurred: " + e.Message);
 						}
 					}
+					OnError?.Invoke ("Unknown Error");
+					OnError = null;
 				} else if (resultCode == Result.Canceled) {
 					OnCancelled?.Invoke ();
 					OnCancelled = null;
@@ -259,23 +244,21 @@ namespace PayPal.Forms.Android
 					if (auth != null) {
 						try {
 							System.Diagnostics.Debug.WriteLine(auth.ToJSONObject().ToString(4));
-
-							String authorization_code = auth.AuthorizationCode;
-							System.Diagnostics.Debug.WriteLine(authorization_code);
-
-							sendAuthorizationToServer(auth);
-							Toast.MakeText(
-								Context.ApplicationContext,
-								"Future Payment code received from PayPal", ToastLength.Long)
-								.Show();
-
+							OnSuccess?.Invoke(auth.ToJSONObject ().ToString());
+							OnSuccess = null;
 						} catch (JSONException e) {
 							System.Diagnostics.Debug.WriteLine ("an extremely unlikely failure occurred: " + e.Message);
 						}
 					}
-				} else if (resultCode == Result.Ok) {
+					OnError?.Invoke ("Unknown Error");
+					OnError = null;
+				} else if (resultCode == Result.Canceled) {
+					OnCancelled?.Invoke ();
+					OnCancelled = null;
 					System.Diagnostics.Debug.WriteLine ("The user canceled.");
 				} else if ((int)resultCode == PayPalFuturePaymentActivity.ResultExtrasInvalid) {
+					OnError?.Invoke ("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+					OnError = null;
 					System.Diagnostics.Debug.WriteLine (
 						"Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
 				} 
@@ -290,7 +273,7 @@ namespace PayPal.Forms.Android
 							String authorization_code = auth.AuthorizationCode;
 							System.Diagnostics.Debug.WriteLine(authorization_code);
 
-							sendAuthorizationToServer(auth);
+							//sendAuthorizationToServer(auth);
 							Toast.MakeText(
 								Context.ApplicationContext,
 								"Profile Sharing code received from PayPal", ToastLength.Short)

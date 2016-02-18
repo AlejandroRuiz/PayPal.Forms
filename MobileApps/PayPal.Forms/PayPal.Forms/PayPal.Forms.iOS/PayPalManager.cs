@@ -10,6 +10,39 @@ namespace PayPal.Forms.iOS
 {
 	public class PayPalManager : PayPalPaymentDelegate
 	{
+
+		#region PayPalFuturePaymentDelegate
+
+		public void PayPalFuturePaymentDidCancel(PayPalFuturePaymentViewController futurePaymentViewController)
+		{
+			Debug.WriteLine("PayPal Future Payment Authorization Canceled");
+			futurePaymentViewController?.DismissViewController(true, null);
+			OnCancelled?.Invoke ();
+			OnCancelled = null;
+		}
+
+		void PayPalFuturePaymentViewController(PayPalFuturePaymentViewController futurePaymentViewController, NSDictionary futurePaymentAuthorization)
+		{
+			Debug.WriteLine("PayPal Future Payment Authorization Success!");
+			// send authorization to your server to get refresh token.
+			futurePaymentViewController?.DismissViewController(true, () =>
+			{
+				NSError err = null;
+				NSData jsonData = NSJsonSerialization.Serialize(futurePaymentAuthorization, NSJsonWritingOptions.PrettyPrinted, out err);
+				NSString first = new NSString("");
+				if(err == null){
+					first = new NSString(jsonData, NSStringEncoding.UTF8);
+				}else{
+					Debug.WriteLine(err.LocalizedDescription);
+				}
+
+				OnSuccess?.Invoke (first.ToString());
+				OnSuccess =  null;
+			});
+		}
+
+		#endregion
+
 		PayPalConfiguration _payPalConfig;
 
 		bool _acceptCreditCards;
@@ -107,7 +140,7 @@ namespace PayPal.Forms.iOS
 				nativeItems.Add ( PayPalItem.ItemWithName (
 					product.Name,
 					(nuint)product.Quantity,
-					new NSDecimalNumber(DoFormat(product.Price.ToDouble())),
+					new NSDecimalNumber(RoundNumber(product.Price.ToDouble())),
 					product.Currency,
 					product.SKU)
 				);
@@ -116,8 +149,8 @@ namespace PayPal.Forms.iOS
 			var subtotal = PayPalItem.TotalPriceForItems (nativeItems.ToArray ());
 
 			// Optional: include payment details
-			var shipping = new NSDecimalNumber(DoFormat(xfshipping.ToDouble()));
-			var tax = new NSDecimalNumber (DoFormat (xftax.ToDouble ()));
+			var shipping = new NSDecimalNumber(RoundNumber(xfshipping.ToDouble()));
+			var tax = new NSDecimalNumber (RoundNumber (xftax.ToDouble ()));
 			var paymentDetails = PayPalPaymentDetails.PaymentDetailsWithSubtotal (subtotal, shipping, tax);
 
 			var total = subtotal.Add (shipping).Add (tax);
@@ -137,11 +170,11 @@ namespace PayPal.Forms.iOS
 
 		}
 
-		public static string DoFormat( double myNumber )
+		string RoundNumber(double myNumber)
 		{
 			var s = string.Format("{0:0.00}", myNumber);
 
-			if ( s.EndsWith("00") )
+			if (s.EndsWith("00"))
 			{
 				return ((int)myNumber).ToString();
 			}
@@ -163,7 +196,7 @@ namespace PayPal.Forms.iOS
 			OnSuccess = onSuccess;
 			OnError = onError;
 
-			NSDecimalNumber amount = new NSDecimalNumber (DoFormat (item.Price.ToDouble ())).Add (new NSDecimalNumber (DoFormat (xftax.ToDouble ())));
+			NSDecimalNumber amount = new NSDecimalNumber (RoundNumber (item.Price.ToDouble ())).Add (new NSDecimalNumber (RoundNumber (xftax.ToDouble ())));
 
 			var paymentDetails = PayPalPaymentDetails.PaymentDetailsWithSubtotal (amount, new NSDecimalNumber(0), new NSDecimalNumber (xftax.ToString ()));
 
@@ -217,6 +250,15 @@ namespace PayPal.Forms.iOS
 			});
 		}
 
+		public void FuturePayment(Action onCancelled, Action<string> onSuccess)
+		{
+			OnCancelled = onCancelled;
+			OnSuccess = onSuccess;
+			var futurePaymentViewController = new PayPalFuturePaymentViewController(_payPalConfig, new CustomPayPalFuturePaymentDelegate(this));
+			var top = GetTopViewController (UIApplication.SharedApplication.KeyWindow);
+			top.PresentViewController(futurePaymentViewController, true, null);
+		}
+
 		UIViewController GetTopViewController(UIWindow window) {
 			var vc = window.RootViewController;
 
@@ -225,6 +267,26 @@ namespace PayPal.Forms.iOS
 			}
 
 			return vc;
+		}
+
+		public class CustomPayPalFuturePaymentDelegate : PayPalFuturePaymentDelegate
+		{
+			PayPalManager PayPalManager;
+
+			public CustomPayPalFuturePaymentDelegate(PayPalManager manager)
+			{
+				PayPalManager = manager;	
+			}
+
+			public override void PayPalFuturePaymentDidCancel(Xamarin.PayPal.iOS.PayPalFuturePaymentViewController futurePaymentViewController)
+			{
+				PayPalManager.PayPalFuturePaymentDidCancel(futurePaymentViewController);
+			}
+
+			public override void PayPalFuturePaymentViewController(Xamarin.PayPal.iOS.PayPalFuturePaymentViewController futurePaymentViewController, NSDictionary futurePaymentAuthorization)
+			{
+				PayPalManager.PayPalFuturePaymentViewController(futurePaymentViewController, futurePaymentAuthorization);
+			}
 		}
 	}
 }
