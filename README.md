@@ -110,6 +110,8 @@ Debug.WriteLine(CrossPaypalManager.Current.ClientMetadataId);
 # Nuget
 * Nuget Package (https://www.nuget.org/packages/PayPal.Forms)
 
+# Known Issues
+* On Xamarin Studio 5.10.3 you will receive an alert that xamarin cant resolve "xamarin.paypal" and/or "paypal.forms" lib name this will be fixed by upgrading to Xamarin Studio 6 in alpha channel(recommended) or downgrading to Xamarin Studio 5.9(not recommended)
 
 # TODO
 * Add app provided shipping address.
