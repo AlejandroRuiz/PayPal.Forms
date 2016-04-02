@@ -227,8 +227,7 @@ namespace PayPalAndroidTest
 				}
 			}else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT) {
 				if (resultCode == Result.Ok) {
-					PayPalAuthorization auth =
-						data.GetParcelableExtra (PayPalFuturePaymentActivity.ExtraResultAuthorization);
+					PayPalAuthorization auth = (Xamarin.PayPal.Android.PayPalAuthorization)data.GetParcelableExtra(PayPalFuturePaymentActivity.ExtraResultAuthorization);
 					if (auth != null) {
 						try {
 							System.Diagnostics.Debug.WriteLine(auth.ToJSONObject().ToString(4));
@@ -254,8 +253,7 @@ namespace PayPalAndroidTest
 				} 
 			} else if (requestCode == REQUEST_CODE_PROFILE_SHARING) {
 				if (resultCode == Result.Ok) {
-					PayPalAuthorization auth =
-						data.GetParcelableExtra (PayPalProfileSharingActivity.ExtraResultAuthorization);
+					PayPalAuthorization auth = (Xamarin.PayPal.Android.PayPalAuthorization)data.GetParcelableExtra(PayPalProfileSharingActivity.ExtraResultAuthorization);
 					if (auth != null) {
 						try {
 							System.Diagnostics.Debug.WriteLine(auth.ToJSONObject().ToString(4));

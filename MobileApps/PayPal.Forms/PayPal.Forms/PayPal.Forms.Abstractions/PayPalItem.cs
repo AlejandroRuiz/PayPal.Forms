@@ -1,5 +1,4 @@
 ﻿using System;
-using Deveel.Math;
 
 namespace PayPal.Forms.Abstractions
 {
@@ -9,13 +8,13 @@ namespace PayPal.Forms.Abstractions
 
 		public uint Quantity { get; private set; } 
 
-		public BigDecimal Price { get; private set; }
+		public Decimal Price { get; private set; }
 
 		public string Currency { get; private set; }
 
 		public string SKU { get; private set; }
 
-		public PayPalItem (string name, uint quantity, BigDecimal price, string currency, string sku)
+		public PayPalItem (string name, uint quantity, Decimal price, string currency, string sku)
 		{
 			Name = name;
 			Quantity = quantity;
@@ -24,13 +23,11 @@ namespace PayPal.Forms.Abstractions
 			SKU = sku;
 		}
 
-		public PayPalItem (string name, BigDecimal price, string currency)
+		public PayPalItem (string name, Decimal price, string currency)
 		{
 			Name = name;
-			//Quantity = quantity;
 			Price = price;
 			Currency = currency;
-			//SKU = sku;
 		}
 	}
 }

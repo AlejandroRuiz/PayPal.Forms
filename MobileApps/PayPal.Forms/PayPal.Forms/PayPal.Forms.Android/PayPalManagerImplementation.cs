@@ -14,7 +14,7 @@ namespace PayPal.Forms
 
 		#region IPayPalManager implementation
 
-		public Task<PaymentResult> Buy(PayPalItem[] items, Deveel.Math.BigDecimal shipping, Deveel.Math.BigDecimal tax)
+		public Task<PaymentResult> Buy(PayPalItem[] items, Decimal shipping, Decimal tax)
 		{
 			if (buyTcs != null)
 			{
@@ -26,7 +26,7 @@ namespace PayPal.Forms
 			return buyTcs.Task;
 		}
 
-		public Task<PaymentResult> Buy(PayPalItem item, Deveel.Math.BigDecimal tax)
+		public Task<PaymentResult> Buy(PayPalItem item, Decimal tax)
 		{
 			if (buyTcs != null)
 			{

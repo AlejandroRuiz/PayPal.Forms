@@ -2,7 +2,6 @@
 
 using Xamarin.Forms;
 using PayPal.Forms.Abstractions;
-using Deveel.Math;
 using PayPal.Forms.Abstractions.Enum;
 
 namespace PayPal.Forms.Test
@@ -48,7 +47,7 @@ namespace PayPal.Forms.Test
 
 		async void RequestFuturePaymentsButton_Clicked(object sender, EventArgs e)
 		{
-			var result = await CrossPaypalManager.Current.RequestFuturePayments();
+			var result = await CrossPayPalManager.Current.RequestFuturePayments();
 			if (result.Status == PaymentResultStatus.Cancelled) {
 				Console.WriteLine ("Cancelled");
 			}else if(result.Status == PaymentResultStatus.Error){
@@ -57,20 +56,20 @@ namespace PayPal.Forms.Test
 				//Print Authorization Code
 				Console.WriteLine(result.ServerResponse.Response.Code);
 				//Print Client Metadata Id
-				Console.WriteLine(CrossPaypalManager.Current.ClientMetadataId);
+				Console.WriteLine(CrossPayPalManager.Current.ClientMetadataId);
 			}
 		}
 
 		async void BuyManythingsButton_Clicked (object sender, EventArgs e)
 		{
-			var result = await CrossPaypalManager.Current.Buy (new PayPalItem[] {
-				new PayPalItem ("sample item #1", 2, new BigDecimal (87.50), "USD",
+			var result = await CrossPayPalManager.Current.Buy (new PayPalItem[] {
+				new PayPalItem ("sample item #1", 2, new Decimal (87.50), "USD",
 					"sku-12345678"), 
-				new PayPalItem ("free sample item #2", 1, new BigDecimal (0.00),
+				new PayPalItem ("free sample item #2", 1, new Decimal (0.00),
 					"USD", "sku-zero-price"),
-				new PayPalItem ("sample item #3 with a longer name", 6, new BigDecimal (37.99),
+				new PayPalItem ("sample item #3 with a longer name", 6, new Decimal (37.99),
 					"USD", "sku-33333") 
-			}, new BigDecimal (20.5), new BigDecimal (13.20));
+			}, new Decimal (20.5), new Decimal (13.20));
 			if (result.Status == PaymentResultStatus.Cancelled) {
 				Console.WriteLine ("Cancelled");
 			}else if(result.Status == PaymentResultStatus.Error){
@@ -82,7 +81,7 @@ namespace PayPal.Forms.Test
 
 		async void BuyOnethingButton_Clicked (object sender, EventArgs e)
 		{
-			var result = await CrossPaypalManager.Current.Buy (new PayPalItem ("Test Product", new BigDecimal (12.50), "USD"), new BigDecimal (0));
+			var result = await CrossPayPalManager.Current.Buy (new PayPalItem ("Test Product", new Decimal (12.50), "USD"), new Decimal (0));
 			if (result.Status == PaymentResultStatus.Cancelled) {
 				Console.WriteLine ("Cancelled");
 			}else if(result.Status == PaymentResultStatus.Error){

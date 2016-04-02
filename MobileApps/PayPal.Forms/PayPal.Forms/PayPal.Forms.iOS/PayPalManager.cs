@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UIKit;
 using System.Linq;
 
-namespace PayPal.Forms.iOS
+namespace PayPal.Forms
 {
 	public class PayPalManager : PayPalPaymentDelegate
 	{
@@ -24,7 +24,6 @@ namespace PayPal.Forms.iOS
 		void PayPalFuturePaymentViewController(PayPalFuturePaymentViewController futurePaymentViewController, NSDictionary futurePaymentAuthorization)
 		{
 			Debug.WriteLine("PayPal Future Payment Authorization Success!");
-			// send authorization to your server to get refresh token.
 			futurePaymentViewController?.DismissViewController(true, () =>
 			{
 				NSError err = null;
@@ -75,15 +74,15 @@ namespace PayPal.Forms.iOS
 			NSString value = new NSString (xfconfig.PayPalKey);
 			string env = string.Empty;
 			switch (xfconfig.Environment) {
-			case PayPal.Forms.Abstractions.Enum.Environment.NoNetwork:
+			case PayPal.Forms.Abstractions.Enum.PayPalEnvironment.NoNetwork:
 				key = Constants.PayPalEnvironmentNoNetwork;
 				env = Constants.PayPalEnvironmentNoNetwork.ToString ();
 				break;
-				case PayPal.Forms.Abstractions.Enum.Environment.Production:
+				case PayPal.Forms.Abstractions.Enum.PayPalEnvironment.Production:
 				key = Constants.PayPalEnvironmentProduction;
 				env = Constants.PayPalEnvironmentProduction.ToString ();
 				break;
-				case PayPal.Forms.Abstractions.Enum.Environment.Sandbox:
+				case PayPal.Forms.Abstractions.Enum.PayPalEnvironment.Sandbox:
 				key = Constants.PayPalEnvironmentSandbox;
 				env = Constants.PayPalEnvironmentSandbox.ToString ();
 				break;
@@ -106,7 +105,6 @@ namespace PayPal.Forms.iOS
 			_payPalConfig = new PayPalConfiguration ();
 			AcceptCreditCards = xfconfig.AcceptCreditCards;
 
-			// Set up payPalConfig
 			_payPalConfig.MerchantName = xfconfig.MerchantName;
 			_payPalConfig.MerchantPrivacyPolicyURL = new NSUrl (xfconfig.MerchantPrivacyPolicyUri);
 			_payPalConfig.MerchantUserAgreementURL = new NSUrl (xfconfig.MerchantUserAgreementUri);
@@ -124,8 +122,8 @@ namespace PayPal.Forms.iOS
 
 		public void BuyItems(
 			PayPal.Forms.Abstractions.PayPalItem[] items,
-			Deveel.Math.BigDecimal xfshipping,
-			Deveel.Math.BigDecimal xftax,
+			Decimal xfshipping,
+			Decimal xftax,
 			Action onCancelled,
 			Action<string> onSuccess,
 			Action<string> onError
@@ -140,7 +138,7 @@ namespace PayPal.Forms.iOS
 				nativeItems.Add ( PayPalItem.ItemWithName (
 					product.Name,
 					(nuint)product.Quantity,
-					new NSDecimalNumber(RoundNumber(product.Price.ToDouble())),
+					new NSDecimalNumber(RoundNumber((double)product.Price)),
 					product.Currency,
 					product.SKU)
 				);
@@ -148,9 +146,8 @@ namespace PayPal.Forms.iOS
 
 			var subtotal = PayPalItem.TotalPriceForItems (nativeItems.ToArray ());
 
-			// Optional: include payment details
-			var shipping = new NSDecimalNumber(RoundNumber(xfshipping.ToDouble()));
-			var tax = new NSDecimalNumber (RoundNumber (xftax.ToDouble ()));
+			var shipping = new NSDecimalNumber(RoundNumber((double)xfshipping));
+			var tax = new NSDecimalNumber (RoundNumber ((double)xftax));
 			var paymentDetails = PayPalPaymentDetails.PaymentDetailsWithSubtotal (subtotal, shipping, tax);
 
 			var total = subtotal.Add (shipping).Add (tax);
@@ -186,7 +183,7 @@ namespace PayPal.Forms.iOS
 
 		public void BuyItem(
 			PayPal.Forms.Abstractions.PayPalItem item,
-			Deveel.Math.BigDecimal xftax,
+			Decimal xftax,
 			Action onCancelled,
 			Action<string> onSuccess,
 			Action<string> onError
@@ -196,7 +193,7 @@ namespace PayPal.Forms.iOS
 			OnSuccess = onSuccess;
 			OnError = onError;
 
-			NSDecimalNumber amount = new NSDecimalNumber (RoundNumber (item.Price.ToDouble ())).Add (new NSDecimalNumber (RoundNumber (xftax.ToDouble ())));
+			NSDecimalNumber amount = new NSDecimalNumber (RoundNumber ((double)item.Price)).Add (new NSDecimalNumber (RoundNumber ((double)xftax)));
 
 			var paymentDetails = PayPalPaymentDetails.PaymentDetailsWithSubtotal (amount, new NSDecimalNumber(0), new NSDecimalNumber (xftax.ToString ()));
 

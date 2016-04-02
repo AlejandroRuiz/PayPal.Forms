@@ -2,7 +2,7 @@
 
 namespace PayPal.Forms.Abstractions.Enum
 {
-	public enum Environment
+	public enum PayPalEnvironment
 	{
 		NoNetwork,
 		Production,

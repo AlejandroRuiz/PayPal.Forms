@@ -5,6 +5,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 using PayPal.Forms.Abstractions;
+using PayPal.Forms.Abstractions.Enum;
 
 namespace PayPal.Forms.Test.iOS
 {
@@ -15,9 +16,9 @@ namespace PayPal.Forms.Test.iOS
 		{
 			global::Xamarin.Forms.Forms.Init ();
 
-			CrossPaypalManager.Init (
+			CrossPayPalManager.Init (
 				new PayPalConfiguration (
-					PayPal.Forms.Abstractions.Enum.Environment.NoNetwork,
+					PayPalEnvironment.NoNetwork,
 					"YOUR ID STRING"
 				){
 					AcceptCreditCards = true,

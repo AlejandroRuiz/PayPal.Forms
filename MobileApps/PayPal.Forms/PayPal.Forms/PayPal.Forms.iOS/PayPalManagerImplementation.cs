@@ -1,8 +1,6 @@
 ﻿using System;
 using PayPal.Forms.Abstractions;
-using Deveel.Math;
 using System.Threading.Tasks;
-using PayPal.Forms.iOS;
 using PayPal.Forms.Abstractions.Enum;
 
 namespace PayPal.Forms
@@ -15,7 +13,7 @@ namespace PayPal.Forms
 
 		#region IPayPalManager implementation
 
-		public Task<PaymentResult> Buy (PayPalItem[] items, Deveel.Math.BigDecimal shipping, Deveel.Math.BigDecimal tax)
+		public Task<PaymentResult> Buy (PayPalItem[] items, Decimal shipping, Decimal tax)
 		{
 			if (buyTcs != null) {
 				buyTcs.TrySetCanceled ();
@@ -26,7 +24,7 @@ namespace PayPal.Forms
 			return buyTcs.Task;
 		}
 
-		public Task<PaymentResult> Buy (PayPalItem item, Deveel.Math.BigDecimal tax)
+		public Task<PaymentResult> Buy (PayPalItem item, Decimal tax)
 		{
 			if (buyTcs != null) {
 				buyTcs.TrySetCanceled ();

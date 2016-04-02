@@ -8,24 +8,14 @@ using Android.App;
 using Android.Widget;
 using Org.Json;
 
-namespace PayPal.Forms.Android
+namespace PayPal.Forms
 {
 	public class PayPalManager
 	{
 		Context Context;
 
-		/**
-     * - Set to PayPalConfiguration.ENVIRONMENT_PRODUCTION to move real money.
-     * 
-     * - Set to PayPalConfiguration.ENVIRONMENT_SANDBOX to use your test credentials
-     * from https://developer.paypal.com
-     * 
-     * - Set to PayPalConfiguration.ENVIRONMENT_NO_NETWORK to kick the tires
-     * without communicating to PayPal's servers.
-     */
 		private static string CONFIG_ENVIRONMENT;
 
-		// note that these credentials will differ between live & sandbox environments.
 		private static string CONFIG_CLIENT_ID = "credential from developer.paypal.com";
 
 		public static int REQUEST_CODE_PAYMENT = 1;
@@ -39,13 +29,13 @@ namespace PayPal.Forms.Android
 			Context = context;
 
 			switch (xfconfig.Environment) {
-			case PayPal.Forms.Abstractions.Enum.Environment.NoNetwork:
+			case PayPal.Forms.Abstractions.Enum.PayPalEnvironment.NoNetwork:
 				CONFIG_ENVIRONMENT = PayPalConfiguration.EnvironmentNoNetwork;
 				break;
-			case PayPal.Forms.Abstractions.Enum.Environment.Production:
+			case PayPal.Forms.Abstractions.Enum.PayPalEnvironment.Production:
 				CONFIG_ENVIRONMENT = PayPalConfiguration.EnvironmentProduction;
 				break;
-			case PayPal.Forms.Abstractions.Enum.Environment.Sandbox:
+			case PayPal.Forms.Abstractions.Enum.PayPalEnvironment.Sandbox:
 				CONFIG_ENVIRONMENT = PayPalConfiguration.EnvironmentSandbox;
 				break;
 			}
@@ -56,7 +46,6 @@ namespace PayPal.Forms.Android
 				.Environment (CONFIG_ENVIRONMENT)
 				.ClientId (CONFIG_CLIENT_ID)
 				.AcceptCreditCards (xfconfig.AcceptCreditCards)
-			// The following are only used in PayPalFuturePaymentActivity.
 				.MerchantName (xfconfig.MerchantName)
 				.MerchantPrivacyPolicyUri (global::Android.Net.Uri.Parse (xfconfig.MerchantPrivacyPolicyUri))
 				.MerchantUserAgreementUri (global::Android.Net.Uri.Parse (xfconfig.MerchantUserAgreementUri));
@@ -71,9 +60,6 @@ namespace PayPal.Forms.Android
 				paymentIntent);
 		}
 
-		/*
-		* Add app-provided shipping address to payment
-		*/
 		private void addAppProvidedShippingAddress(PayPalPayment paypalPayment) {
 			ShippingAddress shippingAddress =
 				new ShippingAddress ().RecipientName ("Mom Parker").Line1 ("52 North Main St.")
@@ -81,18 +67,11 @@ namespace PayPal.Forms.Android
 			paypalPayment.InvokeProvidedShippingAddress (shippingAddress);
 		}
 
-		/*
-     	* Enable retrieval of shipping addresses from buyer's PayPal account
-     	*/
 		private void enableShippingAddressRetrieval(PayPalPayment paypalPayment, bool enable) {
 			paypalPayment.EnablePayPalShippingAddressesRetrieval (enable);
 		}
 
 		private PayPalOAuthScopes getOauthScopes() {
-			/* create the set of required scopes
-         * Note: see https://developer.paypal.com/docs/integration/direct/identity/attributes/ for mapping between the
-         * attributes you select for this app in the PayPal developer portal and the scopes required here.
-         */
 			HashSet<string> scopes = new HashSet<string> ();
 			scopes.Add (PayPalOAuthScopes.PaypalScopeEmail);
 			scopes.Add (PayPalOAuthScopes.PaypalScopeAddress);
@@ -107,8 +86,8 @@ namespace PayPal.Forms.Android
 
 		public void BuyItems(
 			PayPal.Forms.Abstractions.PayPalItem[] items,
-			Deveel.Math.BigDecimal xfshipping,
-			Deveel.Math.BigDecimal xftax,
+			Decimal xfshipping,
+			Decimal xftax,
 			Action onCancelled,
 			Action<string> onSuccess,
 			Action<string> onError
@@ -149,7 +128,7 @@ namespace PayPal.Forms.Android
 
 		public void BuyItem(
 			PayPal.Forms.Abstractions.PayPalItem item,
-			Deveel.Math.BigDecimal xftax,
+			Decimal xftax,
 			Action onCancelled,
 			Action<string> onSuccess,
 			Action<string> onError
@@ -172,7 +151,6 @@ namespace PayPal.Forms.Android
 		}
 
 		public string GetClientMetadataId() {
-			// Get the Client Metadata ID from the SDK
 			string metadataId = PayPalConfiguration.GetClientMetadataId(Context);
 			return metadataId;
 		}
@@ -184,7 +162,6 @@ namespace PayPal.Forms.Android
 
 			Intent intent = new Intent (Context, typeof(PayPalFuturePaymentActivity));
 
-			// send the same configuration for restart resiliency
 			intent.PutExtra(PayPalService.ExtraPaypalConfiguration, config);
 
 			(Context as Activity).StartActivityForResult(intent, REQUEST_CODE_FUTURE_PAYMENT);
@@ -193,7 +170,6 @@ namespace PayPal.Forms.Android
 		public void ProfileSharing() {
 			Intent intent = new Intent (Context, typeof(PayPalProfileSharingActivity));
 
-			// send the same configuration for restart resiliency
 			intent.PutExtra(PayPalService.ExtraPaypalConfiguration, config);
 
 			intent.PutExtra (PayPalProfileSharingActivity.ExtraRequestedScopes, getOauthScopes ());
@@ -273,7 +249,6 @@ namespace PayPal.Forms.Android
 							String authorization_code = auth.AuthorizationCode;
 							System.Diagnostics.Debug.WriteLine(authorization_code);
 
-							//sendAuthorizationToServer(auth);
 							Toast.MakeText(
 								Context.ApplicationContext,
 								"Profile Sharing code received from PayPal", ToastLength.Short)

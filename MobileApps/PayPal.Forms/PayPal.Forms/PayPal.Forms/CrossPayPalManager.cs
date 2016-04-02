@@ -1,12 +1,10 @@
 ﻿using System;
-using PayPal.Forms.Abstractions;
-using System.Threading.Tasks;
-using Deveel.Math;
 using System.Diagnostics;
+using PayPal.Forms.Abstractions;
 
 namespace PayPal.Forms
 {
-	public class CrossPaypalManager
+	public class CrossPayPalManager
 	{
 
 		static PayPalConfiguration _config;
@@ -21,9 +19,9 @@ namespace PayPal.Forms
 			private set;
 		}
 
-		static Lazy<IPayPalManager> Implementation = new Lazy<IPayPalManager>(() => CreateGameCenterManager(), System.Threading.LazyThreadSafetyMode.PublicationOnly);
+		static Lazy<IPayPalManager> Implementation = new Lazy<IPayPalManager>(() => CreatePayPalManager(), System.Threading.LazyThreadSafetyMode.PublicationOnly);
 
-		public CrossPaypalManager ()
+		public CrossPayPalManager ()
 		{
 		}
 
@@ -48,10 +46,10 @@ namespace PayPal.Forms
 		}
 
 
-		static IPayPalManager CreateGameCenterManager()
+		static IPayPalManager CreatePayPalManager()
 		{
 			#if PORTABLE
-			return null;
+						return null;
 			#else
 			return new PayPalManagerImplementation(_config);
 			#endif

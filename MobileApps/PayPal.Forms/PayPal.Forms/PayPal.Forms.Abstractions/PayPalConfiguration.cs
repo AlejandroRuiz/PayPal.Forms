@@ -4,7 +4,7 @@ namespace PayPal.Forms.Abstractions
 {
 	public class PayPalConfiguration
 	{
-		public Environment Environment { get; private set; }
+		public PayPalEnvironment Environment { get; private set; }
 
 		public string PayPalKey { get; private set; }
 
@@ -16,7 +16,7 @@ namespace PayPal.Forms.Abstractions
 
 		public bool AcceptCreditCards { get; set; }
 
-		public PayPalConfiguration (Environment enviroment, string idEnvironment)
+		public PayPalConfiguration (PayPalEnvironment enviroment, string idEnvironment)
 		{
 			Environment = enviroment;
 			PayPalKey = idEnvironment;

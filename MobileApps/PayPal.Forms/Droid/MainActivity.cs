@@ -8,6 +8,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using PayPal.Forms.Abstractions;
+using PayPal.Forms.Abstractions.Enum;
 
 namespace PayPal.Forms.Test.Droid
 {
@@ -20,9 +21,9 @@ namespace PayPal.Forms.Test.Droid
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 
-			Forms.CrossPaypalManager.Init (
+			Forms.CrossPayPalManager.Init (
 				new PayPalConfiguration (
-					PayPal.Forms.Abstractions.Enum.Environment.NoNetwork,
+					PayPalEnvironment.NoNetwork,
 					"YOUR ID STRING"
 				){
 					AcceptCreditCards = true,
