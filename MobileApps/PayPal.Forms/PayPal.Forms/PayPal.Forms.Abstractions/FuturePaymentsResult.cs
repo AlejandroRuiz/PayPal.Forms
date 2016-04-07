@@ -40,13 +40,13 @@ namespace PayPal.Forms.Abstractions
 			public string ResponseType { get; set; }
 		}
 
-		public PaymentResultStatus Status { get; private set; }
+		public PayPalStatus Status { get; private set; }
 
 		public string ErrorMessage { get; private set; }
 
 		public PayPalFuturePaymentsResponse ServerResponse { get; private set; }
 
-		public FuturePaymentsResult(PaymentResultStatus status, string errorMessage = null, PayPalFuturePaymentsResponse serverResponse = null)
+		public FuturePaymentsResult(PayPalStatus status, string errorMessage = null, PayPalFuturePaymentsResponse serverResponse = null)
 		{
 			Status = status;
 			ErrorMessage = errorMessage;

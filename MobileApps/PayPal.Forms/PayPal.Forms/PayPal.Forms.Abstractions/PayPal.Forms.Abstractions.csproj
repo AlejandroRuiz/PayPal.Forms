@@ -38,9 +38,10 @@
     <Compile Include="OnCompletedEventArgs.cs" />
     <Compile Include="OnPayPalPaymentErrorEventArgs.cs" />
     <Compile Include="PaymentResult.cs" />
-    <Compile Include="Enum\PaymentResultStatus.cs" />
     <Compile Include="FuturePaymentsResult.cs" />
     <Compile Include="Enum\PayPalEnvironment.cs" />
+    <Compile Include="Enum\PayPalStatus.cs" />
+    <Compile Include="ProfileSharingResult.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

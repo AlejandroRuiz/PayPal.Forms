@@ -14,6 +14,8 @@ namespace PayPal.Forms.Test.PCL
 
 		Button RequestFuturePaymentsButton;
 
+		Button ProfileSharingButton;
+
 		public App ()
 		{
 			BuyOnethingButton = new Button () {
@@ -30,7 +32,13 @@ namespace PayPal.Forms.Test.PCL
 			{
 				Text = "Request Future Payments"
 			};
-			RequestFuturePaymentsButton.Clicked += RequestFuturePaymentsButton_Clicked;;
+			RequestFuturePaymentsButton.Clicked += RequestFuturePaymentsButton_Clicked;
+
+			ProfileSharingButton = new Button
+			{
+				Text = "Authorize Profile Sharing"
+			};
+			ProfileSharingButton.Clicked += ProfileSharingButton_Clicked;
 
 			// The root page of your application
 			MainPage = new ContentPage {
@@ -39,7 +47,8 @@ namespace PayPal.Forms.Test.PCL
 					Children = {
 						BuyOnethingButton,
 						BuyManythingsButton,
-						RequestFuturePaymentsButton
+						RequestFuturePaymentsButton,
+						ProfileSharingButton
 					}
 				}
 			};
@@ -48,11 +57,11 @@ namespace PayPal.Forms.Test.PCL
 		async void RequestFuturePaymentsButton_Clicked(object sender, EventArgs e)
 		{
 			var result = await CrossPayPalManager.Current.RequestFuturePayments();
-			if (result.Status == PaymentResultStatus.Cancelled) {
+			if (result.Status == PayPalStatus.Cancelled) {
 				Debug.WriteLine ("Cancelled");
-			}else if(result.Status == PaymentResultStatus.Error){
+			}else if(result.Status == PayPalStatus.Error){
 				Debug.WriteLine (result.ErrorMessage);
-			}else if(result.Status == PaymentResultStatus.Successful){
+			}else if(result.Status == PayPalStatus.Successful){
 				//Print Authorization Code
 				Debug.WriteLine(result.ServerResponse.Response.Code);
 				//Print Client Metadata Id
@@ -70,11 +79,11 @@ namespace PayPal.Forms.Test.PCL
 				new PayPalItem ("sample item #3 with a longer name", 6, new Decimal (37.99),
 					"USD", "sku-33333") 
 			}, new Decimal (20.5), new Decimal (13.20));
-			if (result.Status == PaymentResultStatus.Cancelled) {
+			if (result.Status == PayPalStatus.Cancelled) {
 				Debug.WriteLine ("Cancelled");
-			}else if(result.Status == PaymentResultStatus.Error){
+			}else if(result.Status == PayPalStatus.Error){
 				Debug.WriteLine (result.ErrorMessage);
-			}else if(result.Status == PaymentResultStatus.Successful){
+			}else if(result.Status == PayPalStatus.Successful){
 				Debug.WriteLine (result.ServerResponse.Response.Id);
 			}
 		}
@@ -82,12 +91,24 @@ namespace PayPal.Forms.Test.PCL
 		async void BuyOnethingButton_Clicked (object sender, EventArgs e)
 		{
 			var result = await CrossPayPalManager.Current.Buy (new PayPalItem ("Test Product", new Decimal (12.50), "USD"), new Decimal (0));
-			if (result.Status == PaymentResultStatus.Cancelled) {
+			if (result.Status == PayPalStatus.Cancelled) {
 				Debug.WriteLine ("Cancelled");
-			}else if(result.Status == PaymentResultStatus.Error){
+			}else if(result.Status == PayPalStatus.Error){
 				Debug.WriteLine (result.ErrorMessage);
-			}else if(result.Status == PaymentResultStatus.Successful){
+			}else if(result.Status == PayPalStatus.Successful){
 				Debug.WriteLine (result.ServerResponse.Response.Id);
+			}
+		}
+
+		async void ProfileSharingButton_Clicked(object sender, EventArgs e)
+		{
+			var result = await CrossPayPalManager.Current.AuthorizeProfileSharing();
+			if (result.Status == PayPalStatus.Cancelled) {
+				Debug.WriteLine ("Cancelled");
+			}else if(result.Status == PayPalStatus.Error){
+				Debug.WriteLine (result.ErrorMessage);
+			}else if(result.Status == PayPalStatus.Successful){
+				Debug.WriteLine (result.ServerResponse.Response.Code);
 			}
 		}
 

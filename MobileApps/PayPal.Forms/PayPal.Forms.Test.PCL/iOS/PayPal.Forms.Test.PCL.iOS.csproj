@@ -94,17 +94,14 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin">
-      <HintPath>..\..\packages\PayPal.Forms.1.5\lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll</HintPath>
-    </Reference>
     <Reference Include="PayPal.Forms">
-      <HintPath>..\..\packages\PayPal.Forms.1.5\lib\Xamarin.iOS10\PayPal.Forms.dll</HintPath>
+      <HintPath>..\..\packages\PayPal.Forms.1.6\lib\Xamarin.iOS10\PayPal.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.PayPal.iOS">
-      <HintPath>..\..\packages\PayPal.Forms.1.5\lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll</HintPath>
+    <Reference Include="Xamarin.PayPal">
+      <HintPath>..\..\packages\PayPal.Forms.1.6\lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll</HintPath>
     </Reference>
     <Reference Include="PayPal.Forms.Abstractions">
-      <HintPath>..\..\packages\PayPal.Forms.1.5\lib\Xamarin.iOS10\PayPal.Forms.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\PayPal.Forms.1.6\lib\Xamarin.iOS10\PayPal.Forms.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

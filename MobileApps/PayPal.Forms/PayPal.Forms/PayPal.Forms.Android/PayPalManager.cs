@@ -73,8 +73,10 @@ namespace PayPal.Forms
 
 		private PayPalOAuthScopes getOauthScopes() {
 			HashSet<string> scopes = new HashSet<string> ();
+			scopes.Add (PayPalOAuthScopes.PaypalScopeOpenid);
 			scopes.Add (PayPalOAuthScopes.PaypalScopeEmail);
 			scopes.Add (PayPalOAuthScopes.PaypalScopeAddress);
+			scopes.Add (PayPalOAuthScopes.PaypalScopePhone);
 			return new PayPalOAuthScopes (scopes.ToList ());
 		}
 
@@ -155,10 +157,11 @@ namespace PayPal.Forms
 			return metadataId;
 		}
 
-		public void FuturePayment(Action onCancelled, Action<string> onSuccess) {
+		public void FuturePayment(Action onCancelled, Action<string> onSuccess, Action<string> onError) {
 
 			OnCancelled = onCancelled;
 			OnSuccess = onSuccess;
+			OnError = onError;
 
 			Intent intent = new Intent (Context, typeof(PayPalFuturePaymentActivity));
 
@@ -167,7 +170,12 @@ namespace PayPal.Forms
 			(Context as Activity).StartActivityForResult(intent, REQUEST_CODE_FUTURE_PAYMENT);
 		}
 
-		public void ProfileSharing() {
+		public void AuthorizeProfileSharing(Action onCancelled, Action<string> onSuccess, Action<string> onError) {
+
+			OnCancelled = onCancelled;
+			OnSuccess = onSuccess;
+			OnError = onError;
+
 			Intent intent = new Intent (Context, typeof(PayPalProfileSharingActivity));
 
 			intent.PutExtra(PayPalService.ExtraPaypalConfiguration, config);
@@ -190,9 +198,9 @@ namespace PayPal.Forms
 						(PaymentConfirmation)data.GetParcelableExtra (PaymentActivity.ExtraResultConfirmation);
 					if (confirm != null) {
 						try {
-							System.Diagnostics.Debug.WriteLine (confirm.ToJSONObject ().ToString(4));
+							System.Diagnostics.Debug.WriteLine (confirm.ToJSONObject ().ToString (4));
 
-							OnSuccess?.Invoke(confirm.ToJSONObject ().ToString());
+							OnSuccess?.Invoke (confirm.ToJSONObject ().ToString ());
 							OnSuccess = null;
 
 						} catch (JSONException e) {
@@ -219,8 +227,8 @@ namespace PayPal.Forms
 						(PayPalAuthorization)data.GetParcelableExtra (PayPalFuturePaymentActivity.ExtraResultAuthorization);
 					if (auth != null) {
 						try {
-							System.Diagnostics.Debug.WriteLine(auth.ToJSONObject().ToString(4));
-							OnSuccess?.Invoke(auth.ToJSONObject ().ToString());
+							System.Diagnostics.Debug.WriteLine (auth.ToJSONObject ().ToString (4));
+							OnSuccess?.Invoke (auth.ToJSONObject ().ToString ());
 							OnSuccess = null;
 						} catch (JSONException e) {
 							System.Diagnostics.Debug.WriteLine ("an extremely unlikely failure occurred: " + e.Message);
@@ -244,23 +252,22 @@ namespace PayPal.Forms
 						(PayPalAuthorization)data.GetParcelableExtra (PayPalProfileSharingActivity.ExtraResultAuthorization);
 					if (auth != null) {
 						try {
-							System.Diagnostics.Debug.WriteLine(auth.ToJSONObject().ToString(4));
-
-							String authorization_code = auth.AuthorizationCode;
-							System.Diagnostics.Debug.WriteLine(authorization_code);
-
-							Toast.MakeText(
-								Context.ApplicationContext,
-								"Profile Sharing code received from PayPal", ToastLength.Short)
-								.Show();
-
+							System.Diagnostics.Debug.WriteLine (auth.ToJSONObject ().ToString (4));
+							OnSuccess?.Invoke (auth.ToJSONObject ().ToString ());
+							OnSuccess = null;
 						} catch (JSONException e) {
 							System.Diagnostics.Debug.WriteLine ("an extremely unlikely failure occurred: " + e.Message);
 						}
 					}
+					OnError?.Invoke ("Unknown Error");
+					OnError = null;
 				} else if (resultCode == Result.Canceled) {
+					OnCancelled?.Invoke ();
+					OnCancelled = null;
 					System.Diagnostics.Debug.WriteLine ("The user canceled.");
 				} else if ((int)resultCode == PayPalFuturePaymentActivity.ResultExtrasInvalid) {
+					OnError?.Invoke ("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+					OnError = null;
 					System.Diagnostics.Debug.WriteLine(
 						"Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
 				}

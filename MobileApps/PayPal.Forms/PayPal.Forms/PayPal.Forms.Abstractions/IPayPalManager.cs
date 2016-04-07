@@ -11,6 +11,8 @@ namespace PayPal.Forms.Abstractions
 
 		Task<FuturePaymentsResult> RequestFuturePayments();
 
+		Task<ProfileSharingResult> AuthorizeProfileSharing();
+
 		string ClientMetadataId { get; }
 	}
 }

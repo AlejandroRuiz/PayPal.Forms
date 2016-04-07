@@ -10,6 +10,34 @@ namespace PayPal.Forms
 {
 	public class PayPalManager : PayPalPaymentDelegate
 	{
+		#region PayPalFuturePaymentDelegate
+
+		public void UserDidCancelPayPalProfileSharingViewController(PayPalProfileSharingViewController profileSharingViewController)
+		{
+			Debug.WriteLine("PayPal Profile Sharing Authorization Canceled");
+			profileSharingViewController?.DismissViewController(true, null);
+			OnCancelled?.Invoke();
+			OnCancelled = null;
+		}
+
+		public void PayPalProfileSharingViewController(PayPalProfileSharingViewController profileSharingViewController, NSDictionary profileSharingAuthorization)
+		{
+			Debug.WriteLine("PayPal Profile Sharing Authorization Success!");
+			profileSharingViewController.DismissViewController (true, () => {
+				NSError err = null;
+				NSData jsonData = NSJsonSerialization.Serialize(profileSharingAuthorization, NSJsonWritingOptions.PrettyPrinted, out err);
+				NSString first = new NSString("");
+				if(err == null){
+					first = new NSString(jsonData, NSStringEncoding.UTF8);
+				}else{
+					Debug.WriteLine(err.LocalizedDescription);
+				}
+				OnSuccess?.Invoke (first.ToString());
+				OnSuccess =  null;
+			});
+		}
+
+		#endregion
 
 		#region PayPalFuturePaymentDelegate
 
@@ -256,6 +284,21 @@ namespace PayPal.Forms
 			top.PresentViewController(futurePaymentViewController, true, null);
 		}
 
+		public void AuthorizeProfileSharing(Action onCancelled, Action<string> onSuccess)
+		{
+			OnCancelled = onCancelled;
+			OnSuccess = onSuccess;
+			var infoSet = new NSSet(
+				Constants.kPayPalOAuth2ScopeOpenId.ToString(),
+				Constants.kPayPalOAuth2ScopeEmail.ToString(),
+				Constants.kPayPalOAuth2ScopeAddress.ToString(),
+				Constants.kPayPalOAuth2ScopePhone.ToString()
+			);
+			var profileSharingViewController = new PayPalProfileSharingViewController(infoSet, _payPalConfig, new CustomAuthorizeProfileSharingDelegate(this));
+			var top = GetTopViewController(UIApplication.SharedApplication.KeyWindow);
+			top.PresentViewController(profileSharingViewController, true, null);
+		}
+
 		UIViewController GetTopViewController(UIWindow window) {
 			var vc = window.RootViewController;
 
@@ -283,6 +326,26 @@ namespace PayPal.Forms
 			public override void PayPalFuturePaymentViewController(Xamarin.PayPal.iOS.PayPalFuturePaymentViewController futurePaymentViewController, NSDictionary futurePaymentAuthorization)
 			{
 				PayPalManager.PayPalFuturePaymentViewController(futurePaymentViewController, futurePaymentAuthorization);
+			}
+		}
+
+		public class CustomAuthorizeProfileSharingDelegate : PayPalProfileSharingDelegate
+		{
+			PayPalManager PayPalManager;
+
+			public CustomAuthorizeProfileSharingDelegate(PayPalManager manager)
+			{
+				PayPalManager = manager;
+			}
+
+			public override void UserDidCancelPayPalProfileSharingViewController(Xamarin.PayPal.iOS.PayPalProfileSharingViewController profileSharingViewController)
+			{
+				PayPalManager.UserDidCancelPayPalProfileSharingViewController(profileSharingViewController);
+			}
+
+			public override void PayPalProfileSharingViewController(Xamarin.PayPal.iOS.PayPalProfileSharingViewController profileSharingViewController, NSDictionary profileSharingAuthorization)
+			{
+				PayPalManager.PayPalProfileSharingViewController(profileSharingViewController, profileSharingAuthorization);
 			}
 		}
 	}
