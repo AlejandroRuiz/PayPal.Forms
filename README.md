@@ -58,11 +58,11 @@ protected override void OnDestroy()
 
 ```
 var result = await CrossPaypalManager.Current.Buy (new PayPalItem ("Test Product", new Decimal (12.50), "USD"), new Decimal (0));
-if (result.Status == PaymentResultStatus.Cancelled) {
+if (result.Status == PayPalStatus.Cancelled) {
 	Debug.WriteLine ("Cancelled");
-}else if(result.Status == PaymentResultStatus.Error){
+}else if(result.Status == PayPalStatus.Error){
 	Debug.WriteLine (result.ErrorMessage);
-}else if(result.Status == PaymentResultStatus.Successful){
+}else if(result.Status == PayPalStatus.Successful){
 	Debug.WriteLine (result.ServerResponse.Response.Id);
 }
 ```
@@ -78,11 +78,11 @@ var result = await CrossPaypalManager.Current.Buy (new PayPalItem[] {
 				new PayPalItem ("sample item #3 with a longer name", 6, new Decimal (37.99),
 					"USD", "sku-33333") 
 			}, new Decimal (20.5), new Decimal (13.20));
-if (result.Status == PaymentResultStatus.Cancelled) {
+if (result.Status == PayPalStatus.Cancelled) {
 	Debug.WriteLine ("Cancelled");
-}else if(result.Status == PaymentResultStatus.Error){
+}else if(result.Status == PayPalStatus.Error){
 	Debug.WriteLine (result.ErrorMessage);
-}else if(result.Status == PaymentResultStatus.Successful){
+}else if(result.Status == PayPalStatus.Successful){
 	Debug.WriteLine (result.ServerResponse.Response.Id);
 }
 ```
@@ -91,13 +91,26 @@ if (result.Status == PaymentResultStatus.Cancelled) {
 
 ```
 var result = await CrossPaypalManager.Current.RequestFuturePayments();
-if (result.Status == PaymentResultStatus.Cancelled) {
+if (result.Status == PayPalStatus.Cancelled) {
 	Debug.WriteLine ("Cancelled");
-}else if(result.Status == PaymentResultStatus.Error){
+}else if(result.Status == PayPalStatus.Error){
 	Debug.WriteLine (result.ErrorMessage);
-}else if(result.Status == PaymentResultStatus.Successful){
+}else if(result.Status == PayPalStatus.Successful){
 	//Print Authorization Code
 	Debug.WriteLine(result.ServerResponse.Response.Code);
+}
+```
+
+##Profile sharing
+
+```
+var result = await CrossPayPalManager.Current.AuthorizeProfileSharing();
+if (result.Status == PayPalStatus.Cancelled) {
+	Debug.WriteLine ("Cancelled");
+}else if(result.Status == PayPalStatus.Error){
+	Debug.WriteLine (result.ErrorMessage);
+}else if(result.Status == PayPalStatus.Successful){
+	Debug.WriteLine (result.ServerResponse.Response.Code);
 }
 ```
 
@@ -116,4 +129,3 @@ Debug.WriteLine(CrossPaypalManager.Current.ClientMetadataId);
 # TODO
 * Add app provided shipping address.
 * Enable shipping address retrieval.
-* Profile sharing
