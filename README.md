@@ -87,6 +87,31 @@ if (result.Status == PayPalStatus.Cancelled) {
 }
 ```
 
+##Shipping Address (Optional)
+
+```
+//New optional shipping address parameter into Buy methods.
+var result = await CrossPayPalManager.Current.Buy(
+			new PayPalItem(
+				"Test Product",
+				new Decimal(12.50), "USD"),
+				new Decimal(0),
+				new ShippingAddress("My Custom Recipient Name", "Custom Line 1", "", "My City", "My State", "12345", "MX")
+		   );
+if (result.Status == PayPalStatus.Cancelled)
+{
+	Debug.WriteLine("Cancelled");
+}
+else if (result.Status == PayPalStatus.Error)
+{
+	Debug.WriteLine(result.ErrorMessage);
+}
+else if (result.Status == PayPalStatus.Successful)
+{
+	Debug.WriteLine(result.ServerResponse.Response.Id);
+}
+```
+
 ##Future Payments
 
 ```
@@ -127,5 +152,4 @@ Debug.WriteLine(CrossPaypalManager.Current.ClientMetadataId);
 * On Xamarin Studio 5.10.X you will receive an alert that xamarin cant resolve "xamarin.paypal" and/or "paypal.forms" lib name this will be fixed by upgrading to Xamarin Studio 6 in alpha channel(recommended) or downgrading to Xamarin Studio 5.9(not recommended)
 
 # TODO
-* Add app provided shipping address.
-* Enable shipping address retrieval.
+No new tasks to do. All issues or features requests are welcome
