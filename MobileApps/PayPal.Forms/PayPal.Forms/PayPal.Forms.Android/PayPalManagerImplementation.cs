@@ -16,7 +16,7 @@ namespace PayPal.Forms
 
 		#region IPayPalManager implementation
 
-		public Task<PaymentResult> Buy(PayPalItem[] items, Decimal shipping, Decimal tax)
+		public Task<PaymentResult> Buy(PayPalItem[] items, Decimal shipping, Decimal tax, ShippingAddress address = null)
 		{
 			if (buyTcs != null)
 			{
@@ -24,11 +24,11 @@ namespace PayPal.Forms
 				buyTcs.TrySetResult(null);
 			}
 			buyTcs = new TaskCompletionSource<PaymentResult>();
-			Manager.BuyItems(items, shipping, tax, SendOnPayPalPaymentDidCancel, SendOnPayPalPaymentCompleted, SendOnPayPalPaymentError);
+			Manager.BuyItems(items, shipping, tax, SendOnPayPalPaymentDidCancel, SendOnPayPalPaymentCompleted, SendOnPayPalPaymentError, address);
 			return buyTcs.Task;
 		}
 
-		public Task<PaymentResult> Buy(PayPalItem item, Decimal tax)
+		public Task<PaymentResult> Buy(PayPalItem item, Decimal tax, ShippingAddress address = null)
 		{
 			if (buyTcs != null)
 			{
@@ -36,7 +36,7 @@ namespace PayPal.Forms
 				buyTcs.TrySetResult(null);
 			}
 			buyTcs = new TaskCompletionSource<PaymentResult>();
-			Manager.BuyItem(item, tax, SendOnPayPalPaymentDidCancel, SendOnPayPalPaymentCompleted, SendOnPayPalPaymentError);
+			Manager.BuyItem(item, tax, SendOnPayPalPaymentDidCancel, SendOnPayPalPaymentCompleted, SendOnPayPalPaymentError, address);
 			return buyTcs.Task;
 		}
 

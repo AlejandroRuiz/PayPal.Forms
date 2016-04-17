@@ -42,6 +42,7 @@
     <Compile Include="Enum\PayPalEnvironment.cs" />
     <Compile Include="Enum\PayPalStatus.cs" />
     <Compile Include="ProfileSharingResult.cs" />
+    <Compile Include="ShippingAddress.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>

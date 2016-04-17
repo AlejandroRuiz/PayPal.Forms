@@ -42,13 +42,13 @@ namespace PayPal.Forms
 
 			CONFIG_CLIENT_ID = xfconfig.PayPalKey;
 
-			config = new PayPalConfiguration ()
-				.Environment (CONFIG_ENVIRONMENT)
-				.ClientId (CONFIG_CLIENT_ID)
-				.AcceptCreditCards (xfconfig.AcceptCreditCards)
-				.MerchantName (xfconfig.MerchantName)
-				.MerchantPrivacyPolicyUri (global::Android.Net.Uri.Parse (xfconfig.MerchantPrivacyPolicyUri))
-				.MerchantUserAgreementUri (global::Android.Net.Uri.Parse (xfconfig.MerchantUserAgreementUri));
+			config = new PayPalConfiguration()
+				.Environment(CONFIG_ENVIRONMENT)
+				.ClientId(CONFIG_CLIENT_ID)
+				.AcceptCreditCards(xfconfig.AcceptCreditCards)
+				.MerchantName(xfconfig.MerchantName)
+				.MerchantPrivacyPolicyUri(global::Android.Net.Uri.Parse(xfconfig.MerchantPrivacyPolicyUri))
+				.MerchantUserAgreementUri(global::Android.Net.Uri.Parse(xfconfig.MerchantUserAgreementUri));
 
 			Intent intent = new Intent (Context, typeof(PayPalService));
 			intent.PutExtra (PayPalService.ExtraPaypalConfiguration, config);
@@ -65,10 +65,6 @@ namespace PayPal.Forms
 				new ShippingAddress ().RecipientName ("Mom Parker").Line1 ("52 North Main St.")
 					.City ("Austin").State ("TX").PostalCode ("78729").CountryCode ("US");
 			paypalPayment.InvokeProvidedShippingAddress (shippingAddress);
-		}
-
-		private void enableShippingAddressRetrieval(PayPalPayment paypalPayment, bool enable) {
-			paypalPayment.EnablePayPalShippingAddressesRetrieval (enable);
 		}
 
 		private PayPalOAuthScopes getOauthScopes() {
@@ -92,7 +88,8 @@ namespace PayPal.Forms
 			Decimal xftax,
 			Action onCancelled,
 			Action<string> onSuccess,
-			Action<string> onError
+			Action<string> onError,
+			PayPal.Forms.Abstractions.ShippingAddress address
 		) {
 
 			OnCancelled = onCancelled;
@@ -119,6 +116,21 @@ namespace PayPal.Forms
 			PayPalPayment payment = new PayPalPayment (amount, nativeItems.FirstOrDefault().Currency, "Multiple items", PayPalPayment.PaymentIntentSale);
 			payment = payment.Items (nativeItems.ToArray ()).PaymentDetails (paymentDetails);
 
+			if (address != null)
+			{
+				ShippingAddress shippingAddress = new ShippingAddress()
+					.RecipientName(address.RecipientName)
+					.Line1(address.Line1)
+					.Line2(address.Line2)
+					.City(address.City)
+					.State(address.State)
+					.PostalCode(address.PostalCode)
+					.CountryCode(address.CountryCode);
+				payment = payment.InvokeProvidedShippingAddress(shippingAddress);
+			}
+
+			payment = payment.EnablePayPalShippingAddressesRetrieval(true);
+
 			Intent intent = new Intent (Context, typeof(PaymentActivity));
 
 			intent.PutExtra (PayPalService.ExtraPaypalConfiguration, config);
@@ -133,7 +145,8 @@ namespace PayPal.Forms
 			Decimal xftax,
 			Action onCancelled,
 			Action<string> onSuccess,
-			Action<string> onError
+			Action<string> onError,
+			PayPal.Forms.Abstractions.ShippingAddress address
 		){
 
 			OnCancelled = onCancelled;
@@ -142,6 +155,21 @@ namespace PayPal.Forms
 			BigDecimal amount = new BigDecimal (item.Price.ToString ()).Add (new BigDecimal (xftax.ToString ()));
 
 			PayPalPayment payment = new PayPalPayment (amount, item.Currency, item.Name, PayPalPayment.PaymentIntentSale);
+
+			if (address != null)
+			{
+				ShippingAddress shippingAddress = new ShippingAddress()
+					.RecipientName(address.RecipientName)
+					.Line1(address.Line1)
+					.Line2(address.Line2)
+					.City(address.City)
+					.State(address.State)
+					.PostalCode(address.PostalCode)
+					.CountryCode(address.CountryCode);
+				payment = payment.InvokeProvidedShippingAddress(shippingAddress);
+			}
+
+			payment = payment.EnablePayPalShippingAddressesRetrieval(true);
 
 			Intent intent = new Intent (Context, typeof(PaymentActivity));
 

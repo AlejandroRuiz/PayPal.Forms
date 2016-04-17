@@ -137,7 +137,7 @@ namespace PayPal.Forms
 			_payPalConfig.MerchantPrivacyPolicyURL = new NSUrl (xfconfig.MerchantPrivacyPolicyUri);
 			_payPalConfig.MerchantUserAgreementURL = new NSUrl (xfconfig.MerchantUserAgreementUri);
 			_payPalConfig.LanguageOrLocale = NSLocale.PreferredLanguages [0];
-			_payPalConfig.PayPalShippingAddressOption = PayPalShippingAddressOption.PayPal;
+			_payPalConfig.PayPalShippingAddressOption = PayPalShippingAddressOption.Both;
 
 			Debug.WriteLine ("PayPal iOS SDK Version: " + PayPalMobile.LibraryVersion);
 		}
@@ -154,7 +154,8 @@ namespace PayPal.Forms
 			Decimal xftax,
 			Action onCancelled,
 			Action<string> onSuccess,
-			Action<string> onError
+			Action<string> onError,
+			PayPal.Forms.Abstractions.ShippingAddress address
 		) {
 
 			OnCancelled = onCancelled;
@@ -181,9 +182,22 @@ namespace PayPal.Forms
 			var total = subtotal.Add (shipping).Add (tax);
 
 			var payment = PayPalPayment.PaymentWithAmount (total, nativeItems.FirstOrDefault().Currency, "Multiple items", PayPalPaymentIntent.Sale);
-
 			payment.Items = nativeItems.ToArray ();
 			payment.PaymentDetails = paymentDetails;
+
+			if (address != null)
+			{
+				payment.ShippingAddress = PayPalShippingAddress.ShippingAddressWithRecipientName(
+					address.RecipientName,
+					address.Line1,
+					address.Line2,
+					address.City,
+					address.State,
+					address.PostalCode,
+					address.CountryCode
+				);
+			}
+
 			if (payment.Processable) {
 				var paymentViewController = new PayPalPaymentViewController(payment, _payPalConfig, this);
 				var top = GetTopViewController (UIApplication.SharedApplication.KeyWindow);
@@ -214,7 +228,8 @@ namespace PayPal.Forms
 			Decimal xftax,
 			Action onCancelled,
 			Action<string> onSuccess,
-			Action<string> onError
+			Action<string> onError,
+			PayPal.Forms.Abstractions.ShippingAddress address
 		){
 
 			OnCancelled = onCancelled;
@@ -236,6 +251,20 @@ namespace PayPal.Forms
 					item.SKU
 				)
 			};
+
+			if (address != null) {
+				payment.ShippingAddress = PayPalShippingAddress.ShippingAddressWithRecipientName(
+					address.RecipientName,
+					address.Line1,
+					address.Line2,
+					address.City,
+					address.State,
+					address.PostalCode,
+					address.CountryCode
+				);
+			}
+
+
 			if (payment.Processable) {
 				var paymentViewController = new PayPalPaymentViewController(payment, _payPalConfig, this);
 				var top = GetTopViewController (UIApplication.SharedApplication.KeyWindow);
