@@ -7,6 +7,8 @@ using System.Linq;
 using Android.App;
 using Android.Widget;
 using Org.Json;
+using Xamarin.PayPal.Android.CardIO.Payment;
+using Android.Graphics;
 
 namespace PayPal.Forms
 {
@@ -21,6 +23,7 @@ namespace PayPal.Forms
 		public static int REQUEST_CODE_PAYMENT = 1;
 		public static int REQUEST_CODE_FUTURE_PAYMENT = 2;
 		public static int REQUEST_CODE_PROFILE_SHARING = 3;
+		public static int REQUEST_CODE_CARD_SCAN = 4;
 
 		private PayPalConfiguration config;
 
@@ -213,6 +216,37 @@ namespace PayPal.Forms
 			(Context as Activity).StartActivityForResult (intent, REQUEST_CODE_PROFILE_SHARING);
 		}
 
+		Action RetrieveCardCancelled;
+
+		Action<Xamarin.PayPal.Android.CardIO.Payment.CreditCard, Bitmap> RetrieveCardSuccess;
+
+		public void RequestCardData(Action onCancelled, Action<Xamarin.PayPal.Android.CardIO.Payment.CreditCard, Bitmap> onSuccess, PayPal.Forms.Abstractions.Enum.CardIOLogo scannerLogo)
+		{
+			RetrieveCardCancelled = onCancelled;
+			RetrieveCardSuccess = onSuccess;
+
+			Intent intent = new Intent(Context, typeof(CardIOActivity));
+
+			switch (scannerLogo)
+			{
+				case Abstractions.Enum.CardIOLogo.CardIO:
+					intent.PutExtra(CardIOActivity.ExtraHideCardioLogo, false);
+					intent.PutExtra(CardIOActivity.ExtraUseCardioLogo, true);
+					break;
+				case Abstractions.Enum.CardIOLogo.None:
+					intent.PutExtra(CardIOActivity.ExtraHideCardioLogo, true);
+					intent.PutExtra(CardIOActivity.ExtraUseCardioLogo, false);
+					break;
+			}
+
+			intent.PutExtra (CardIOActivity.ExtraReturnCardImage, true);
+			intent.PutExtra (CardIOActivity.ExtraRequireExpiry, true);
+			intent.PutExtra (CardIOActivity.ExtraRequireCvv, true);
+
+			(Context as Activity).StartActivityForResult(intent, REQUEST_CODE_CARD_SCAN);
+
+		}
+
 		public void Destroy()
 		{
 			Context.StopService (new Intent (Context, typeof(PayPalService)));
@@ -220,84 +254,135 @@ namespace PayPal.Forms
 
 		public void OnActivityResult(int requestCode, Result resultCode, global::Android.Content.Intent data)
 		{
-			if (requestCode == PayPalManager.REQUEST_CODE_PAYMENT) {
-				if (resultCode == Result.Ok) {
+			if (requestCode == PayPalManager.REQUEST_CODE_PAYMENT)
+			{
+				if (resultCode == Result.Ok)
+				{
 					PaymentConfirmation confirm =
-						(PaymentConfirmation)data.GetParcelableExtra (PaymentActivity.ExtraResultConfirmation);
-					if (confirm != null) {
-						try {
-							System.Diagnostics.Debug.WriteLine (confirm.ToJSONObject ().ToString (4));
+						(PaymentConfirmation)data.GetParcelableExtra(PaymentActivity.ExtraResultConfirmation);
+					if (confirm != null)
+					{
+						try
+						{
+							System.Diagnostics.Debug.WriteLine(confirm.ToJSONObject().ToString(4));
 
-							OnSuccess?.Invoke (confirm.ToJSONObject ().ToString ());
+							OnSuccess?.Invoke(confirm.ToJSONObject().ToString());
 							OnSuccess = null;
 
-						} catch (JSONException e) {
-							OnError?.Invoke ("an extremely unlikely failure occurred: " + e.Message);
+						}
+						catch (JSONException e)
+						{
+							OnError?.Invoke("an extremely unlikely failure occurred: " + e.Message);
 							OnError = null;
-							System.Diagnostics.Debug.WriteLine ("an extremely unlikely failure occurred: " + e.Message);
+							System.Diagnostics.Debug.WriteLine("an extremely unlikely failure occurred: " + e.Message);
 						}
 					}
-					OnError?.Invoke ("Unknown Error");
+					OnError?.Invoke("Unknown Error");
 					OnError = null;
-				} else if (resultCode == Result.Canceled) {
-					OnCancelled?.Invoke ();
+				}
+				else if (resultCode == Result.Canceled)
+				{
+					OnCancelled?.Invoke();
 					OnCancelled = null;
-					System.Diagnostics.Debug.WriteLine ("The user canceled.");
-				} else if ((int)resultCode == PaymentActivity.ResultExtrasInvalid) {
-					OnError?.Invoke ("An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+					System.Diagnostics.Debug.WriteLine("The user canceled.");
+				}
+				else if ((int)resultCode == PaymentActivity.ResultExtrasInvalid)
+				{
+					OnError?.Invoke("An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
 					OnError = null;
-					System.Diagnostics.Debug.WriteLine (
+					System.Diagnostics.Debug.WriteLine(
 						"An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
 				}
-			}else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT) {
-				if (resultCode == Result.Ok) {
+			}
+			else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT)
+			{
+				if (resultCode == Result.Ok)
+				{
 					PayPalAuthorization auth =
-						(PayPalAuthorization)data.GetParcelableExtra (PayPalFuturePaymentActivity.ExtraResultAuthorization);
-					if (auth != null) {
-						try {
-							System.Diagnostics.Debug.WriteLine (auth.ToJSONObject ().ToString (4));
-							OnSuccess?.Invoke (auth.ToJSONObject ().ToString ());
+						(PayPalAuthorization)data.GetParcelableExtra(PayPalFuturePaymentActivity.ExtraResultAuthorization);
+					if (auth != null)
+					{
+						try
+						{
+							System.Diagnostics.Debug.WriteLine(auth.ToJSONObject().ToString(4));
+							OnSuccess?.Invoke(auth.ToJSONObject().ToString());
 							OnSuccess = null;
-						} catch (JSONException e) {
-							System.Diagnostics.Debug.WriteLine ("an extremely unlikely failure occurred: " + e.Message);
+						}
+						catch (JSONException e)
+						{
+							System.Diagnostics.Debug.WriteLine("an extremely unlikely failure occurred: " + e.Message);
 						}
 					}
-					OnError?.Invoke ("Unknown Error");
+					OnError?.Invoke("Unknown Error");
 					OnError = null;
-				} else if (resultCode == Result.Canceled) {
-					OnCancelled?.Invoke ();
+				}
+				else if (resultCode == Result.Canceled)
+				{
+					OnCancelled?.Invoke();
 					OnCancelled = null;
-					System.Diagnostics.Debug.WriteLine ("The user canceled.");
-				} else if ((int)resultCode == PayPalFuturePaymentActivity.ResultExtrasInvalid) {
-					OnError?.Invoke ("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
-					OnError = null;
-					System.Diagnostics.Debug.WriteLine (
-						"Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
-				} 
-			} else if (requestCode == REQUEST_CODE_PROFILE_SHARING) {
-				if (resultCode == Result.Ok) {
-					PayPalAuthorization auth =
-						(PayPalAuthorization)data.GetParcelableExtra (PayPalProfileSharingActivity.ExtraResultAuthorization);
-					if (auth != null) {
-						try {
-							System.Diagnostics.Debug.WriteLine (auth.ToJSONObject ().ToString (4));
-							OnSuccess?.Invoke (auth.ToJSONObject ().ToString ());
-							OnSuccess = null;
-						} catch (JSONException e) {
-							System.Diagnostics.Debug.WriteLine ("an extremely unlikely failure occurred: " + e.Message);
-						}
-					}
-					OnError?.Invoke ("Unknown Error");
-					OnError = null;
-				} else if (resultCode == Result.Canceled) {
-					OnCancelled?.Invoke ();
-					OnCancelled = null;
-					System.Diagnostics.Debug.WriteLine ("The user canceled.");
-				} else if ((int)resultCode == PayPalFuturePaymentActivity.ResultExtrasInvalid) {
-					OnError?.Invoke ("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+					System.Diagnostics.Debug.WriteLine("The user canceled.");
+				}
+				else if ((int)resultCode == PayPalFuturePaymentActivity.ResultExtrasInvalid)
+				{
+					OnError?.Invoke("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
 					OnError = null;
 					System.Diagnostics.Debug.WriteLine(
 						"Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+				}
+			}
+			else if (requestCode == REQUEST_CODE_PROFILE_SHARING)
+			{
+				if (resultCode == Result.Ok)
+				{
+					PayPalAuthorization auth =
+						(PayPalAuthorization)data.GetParcelableExtra(PayPalProfileSharingActivity.ExtraResultAuthorization);
+					if (auth != null)
+					{
+						try
+						{
+							System.Diagnostics.Debug.WriteLine(auth.ToJSONObject().ToString(4));
+							OnSuccess?.Invoke(auth.ToJSONObject().ToString());
+							OnSuccess = null;
+						}
+						catch (JSONException e)
+						{
+							System.Diagnostics.Debug.WriteLine("an extremely unlikely failure occurred: " + e.Message);
+						}
+					}
+					OnError?.Invoke("Unknown Error");
+					OnError = null;
+				}
+				else if (resultCode == Result.Canceled)
+				{
+					OnCancelled?.Invoke();
+					OnCancelled = null;
+					System.Diagnostics.Debug.WriteLine("The user canceled.");
+				}
+				else if ((int)resultCode == PayPalFuturePaymentActivity.ResultExtrasInvalid)
+				{
+					OnError?.Invoke("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+					OnError = null;
+					System.Diagnostics.Debug.WriteLine(
+						"Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+				}
+			} else if(requestCode == REQUEST_CODE_CARD_SCAN){
+				if (data == null) {
+					RetrieveCardCancelled?.Invoke ();
+					RetrieveCardCancelled = null;
+					System.Diagnostics.Debug.WriteLine ("The user canceled.");
+					return;
+				}
+				var card = (CreditCard)data.GetParcelableExtra(CardIOActivity.ExtraScanResult);
+				if (card != null)
+				{
+					RetrieveCardSuccess?.Invoke(card, CardIOActivity.GetCapturedCardImage (data));
+					RetrieveCardSuccess = null;
+				}
+				else
+				{
+					RetrieveCardCancelled?.Invoke();
+					RetrieveCardCancelled = null;
+					System.Diagnostics.Debug.WriteLine("The user canceled.");
 				}
 			}
 		}

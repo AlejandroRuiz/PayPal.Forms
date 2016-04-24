@@ -55,5 +55,7 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleName</key>
+	<string>PayPal.Forms.Test</string>
 </dict>
 </plist>

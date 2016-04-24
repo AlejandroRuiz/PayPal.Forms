@@ -3,6 +3,9 @@ using PayPal.Forms.Abstractions;
 using System.Threading.Tasks;
 using PayPal.Forms.Android;
 using PayPal.Forms.Abstractions.Enum;
+using System.IO;
+using Android.Graphics;
+using Xamarin.Forms;
 
 namespace PayPal.Forms
 {
@@ -13,6 +16,8 @@ namespace PayPal.Forms
 		TaskCompletionSource<FuturePaymentsResult> rfpTcs;
 
 		TaskCompletionSource<ProfileSharingResult> apsTcs;
+
+		TaskCompletionSource<ScanCardResult> gcardTcs;
 
 		#region IPayPalManager implementation
 
@@ -67,6 +72,18 @@ namespace PayPal.Forms
 			apsTcs = new TaskCompletionSource<ProfileSharingResult>();
 			Manager.AuthorizeProfileSharing(SendOnAuthorizeProfileSharingDidCancel, SendAuthorizeProfileSharingCompleted, SendOnPayPalPaymentError);
 			return apsTcs.Task;
+		}
+
+		public Task<ScanCardResult> ScanCard(CardIOLogo scannerLogo = CardIOLogo.PayPal)
+		{
+			if (gcardTcs != null)
+			{
+				gcardTcs.TrySetCanceled();
+				gcardTcs.TrySetResult(null);
+			}
+			gcardTcs = new TaskCompletionSource<ScanCardResult>();
+			Manager.RequestCardData(SendScanCardDidCancel, SendScanCardCompleted, scannerLogo);
+			return gcardTcs.Task;
 		}
 
 		#endregion
@@ -130,6 +147,32 @@ namespace PayPal.Forms
 				var serverResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<PayPal.Forms.Abstractions.FuturePaymentsResult.PayPalFuturePaymentsResponse> (confirmationJSON);
 				rfpTcs.TrySetResult (new FuturePaymentsResult (PayPalStatus.Successful, string.Empty, serverResponse));
 			}
+		}
+
+		internal void SendScanCardDidCancel()
+		{
+			gcardTcs.SetResult(new ScanCardResult(PayPalStatus.Cancelled));
+		}
+
+		internal void SendScanCardCompleted (Xamarin.PayPal.Android.CardIO.Payment.CreditCard cardInfo, Bitmap image)
+		{
+			var card = new Card (
+				(image != null),//cardInfo.scanned,
+				cardInfo.RedactedCardNumber,
+				cardInfo.PostalCode,
+				(int)cardInfo.ExpiryYear,
+				(int)cardInfo.ExpiryMonth,
+				cardInfo.Cvv,
+				(CreditCardType)Enum.Parse (typeof (CreditCardType), cardInfo.CardType.Name, true),
+				cardInfo.CardNumber,
+				(image == null) ? null : ImageSource.FromStream (() => {
+					MemoryStream ms = new MemoryStream ();
+					image.Compress (Bitmap.CompressFormat.Jpeg, 100, ms);
+					ms.Seek (0L, SeekOrigin.Begin);
+					return ms;
+				})
+			);
+			gcardTcs.SetResult (new ScanCardResult (PayPalStatus.Successful, card));
 		}
 
 

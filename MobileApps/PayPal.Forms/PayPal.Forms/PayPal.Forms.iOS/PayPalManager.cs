@@ -10,7 +10,7 @@ namespace PayPal.Forms
 {
 	public class PayPalManager : PayPalPaymentDelegate
 	{
-		#region PayPalFuturePaymentDelegate
+		#region PayPalProfileSharingDelegate
 
 		public void UserDidCancelPayPalProfileSharingViewController(PayPalProfileSharingViewController profileSharingViewController)
 		{
@@ -66,6 +66,22 @@ namespace PayPal.Forms
 				OnSuccess?.Invoke (first.ToString());
 				OnSuccess =  null;
 			});
+		}
+
+		#endregion
+
+		#region ProvideCreditCard
+
+		public void UserDidCancelPaymentViewController(CardIOPaymentViewController paymentViewController)
+		{
+			paymentViewController.DismissViewController(true, null);
+			RetrieveCardCancelled?.Invoke();
+		}
+
+		public void UserDidProvideCreditCardInfo(CardIOCreditCardInfo cardInfo, CardIOPaymentViewController paymentViewController)
+		{
+			paymentViewController.DismissViewController(true, null);
+			RetrieveCardSuccess?.Invoke(cardInfo);
 		}
 
 		#endregion
@@ -236,9 +252,11 @@ namespace PayPal.Forms
 			OnSuccess = onSuccess;
 			OnError = onError;
 
-			NSDecimalNumber amount = new NSDecimalNumber (RoundNumber ((double)item.Price)).Add (new NSDecimalNumber (RoundNumber ((double)xftax)));
 
-			var paymentDetails = PayPalPaymentDetails.PaymentDetailsWithSubtotal (amount, new NSDecimalNumber(0), new NSDecimalNumber (xftax.ToString ()));
+			var subTotal = new NSDecimalNumber(RoundNumber((double)item.Price));
+			NSDecimalNumber amount = subTotal.Add (new NSDecimalNumber (RoundNumber ((double)xftax)));
+
+			var paymentDetails = PayPalPaymentDetails.PaymentDetailsWithSubtotal (subTotal, new NSDecimalNumber(0), new NSDecimalNumber(RoundNumber((double)xftax)));
 
 			var payment = PayPalPayment.PaymentWithAmount (amount, item.Currency, item.Name, PayPalPaymentIntent.Sale);
 			payment.PaymentDetails = paymentDetails;
@@ -246,7 +264,7 @@ namespace PayPal.Forms
 				PayPalItem.ItemWithName (
 					item.Name,
 					1,
-					new  NSDecimalNumber (item.Price.ToString ()),
+					new  NSDecimalNumber (RoundNumber((double)item.Price)),
 					item.Currency,
 					item.SKU
 				)
@@ -328,6 +346,30 @@ namespace PayPal.Forms
 			top.PresentViewController(profileSharingViewController, true, null);
 		}
 
+		Action RetrieveCardCancelled;
+
+		Action<CardIOCreditCardInfo> RetrieveCardSuccess;
+
+		public void RequestCardData(Action onCancelled, Action<CardIOCreditCardInfo> onSuccess, PayPal.Forms.Abstractions.Enum.CardIOLogo scannerLogo)
+		{
+			RetrieveCardCancelled = onCancelled;
+			RetrieveCardSuccess = onSuccess;
+			var scanViewController = new CardIOPaymentViewController(new CustomCardIOPaymentViewControllerDelegate(this));
+
+			switch (scannerLogo) {
+				case Abstractions.Enum.CardIOLogo.CardIO:
+					scanViewController.HideCardIOLogo = false;
+					scanViewController.UseCardIOLogo = true;
+				break;
+				case Abstractions.Enum.CardIOLogo.None:
+					scanViewController.HideCardIOLogo = true;
+					scanViewController.UseCardIOLogo = false;
+				break;
+			}
+			var top = GetTopViewController(UIApplication.SharedApplication.KeyWindow);
+			top.PresentViewController(scanViewController, true, null);
+		}
+
 		UIViewController GetTopViewController(UIWindow window) {
 			var vc = window.RootViewController;
 
@@ -336,6 +378,27 @@ namespace PayPal.Forms
 			}
 
 			return vc;
+		}
+
+
+		public class CustomCardIOPaymentViewControllerDelegate : CardIOPaymentViewControllerDelegate
+		{
+			PayPalManager PayPalManager;
+
+			public CustomCardIOPaymentViewControllerDelegate(PayPalManager manager)
+			{
+				PayPalManager = manager;
+			}
+
+			public override void UserDidCancelPaymentViewController(CardIOPaymentViewController paymentViewController)
+			{
+				PayPalManager.UserDidCancelPaymentViewController(paymentViewController);
+			}
+
+			public override void UserDidProvideCreditCardInfo(CardIOCreditCardInfo cardInfo, CardIOPaymentViewController paymentViewController)
+			{
+				PayPalManager.UserDidProvideCreditCardInfo(cardInfo, paymentViewController);
+			}
 		}
 
 		public class CustomPayPalFuturePaymentDelegate : PayPalFuturePaymentDelegate

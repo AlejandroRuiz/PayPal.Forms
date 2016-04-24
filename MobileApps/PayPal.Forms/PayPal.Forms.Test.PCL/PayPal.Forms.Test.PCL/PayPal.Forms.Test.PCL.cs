@@ -9,12 +9,16 @@ namespace PayPal.Forms.Test.PCL
 {
 	public class App : Application
 	{
+
 		Button BuyOnethingButton;
 		Button BuyOnethingCustomAddressButton;
 		Button BuyManythingsButton;
 		Button BuyManythingsCustomAddressButton;
 		Button RequestFuturePaymentsButton;
 		Button ProfileSharingButton;
+		Button GetCardInfoButton;
+
+		Image CardImage;
 
 		public App()
 		{
@@ -54,6 +58,17 @@ namespace PayPal.Forms.Test.PCL
 			};
 			ProfileSharingButton.Clicked += ProfileSharingButton_Clicked;
 
+			GetCardInfoButton = new Button
+			{
+				Text = "Scan Card"
+			};
+			GetCardInfoButton.Clicked += GetCardInfoButton_Clicked;
+
+			CardImage = new Image
+			{
+				HeightRequest = 200
+			};
+
 			// The root page of your application
 			MainPage = new ContentPage
 			{
@@ -66,7 +81,9 @@ namespace PayPal.Forms.Test.PCL
 						BuyManythingsButton,
 						BuyManythingsCustomAddressButton,
 						RequestFuturePaymentsButton,
-						ProfileSharingButton
+						ProfileSharingButton,
+						GetCardInfoButton,
+						CardImage
 					}
 				}
 			};
@@ -126,7 +143,7 @@ namespace PayPal.Forms.Test.PCL
 		{
 			var result = await CrossPayPalManager.Current.Buy(
 				new PayPalItem("Test Product", new Decimal(12.50), "USD"),
-				new Decimal(0),
+				new Decimal(25),
 				new ShippingAddress("My Custom Recipient Name", "Custom Line 1", "", "My City", "My State", "12345", "MX")
 			);
 			if (result.Status == PayPalStatus.Cancelled)
@@ -145,7 +162,7 @@ namespace PayPal.Forms.Test.PCL
 
 		async void BuyOnethingButton_Clicked(object sender, EventArgs e)
 		{
-			var result = await CrossPayPalManager.Current.Buy(new PayPalItem("Test Product", new Decimal(12.50), "USD"), new Decimal(0));
+			var result = await CrossPayPalManager.Current.Buy(new PayPalItem("Test Product", new Decimal(12.50), "USD"), new Decimal(150.30));
 			if (result.Status == PayPalStatus.Cancelled)
 			{
 				Debug.WriteLine("Cancelled");
@@ -197,6 +214,24 @@ namespace PayPal.Forms.Test.PCL
 			}
 		}
 
+		async void GetCardInfoButton_Clicked(object sender, EventArgs e)
+		{
+			var result = await CrossPayPalManager.Current.ScanCard();
+			if (result.Status == PayPalStatus.Cancelled)
+			{
+				Debug.WriteLine("Cancelled");
+			}
+			else if (result.Status == PayPalStatus.Successful)
+			{
+				if (result.Card.CardImage != null)
+				{
+					CardImage.Source = result.Card.CardImage;
+				}
+				Debug.WriteLine($"CardNumber: {result.Card.CardNumber}, CardType: {result.Card.CardType.ToString()}, Cvv: {result.Card.Cvv}, ExpiryMonth: {result.Card.ExpiryMonth}");
+				Debug.WriteLine($"ExpiryYear: {result.Card.ExpiryYear}, PostalCode: {result.Card.PostalCode}, RedactedCardNumber: {result.Card.RedactedCardNumber}, Scaned: {result.Card.Scaned}");
+			}
+		}
+
 		protected override void OnStart()
 		{
 			// Handle when your app starts
@@ -213,4 +248,3 @@ namespace PayPal.Forms.Test.PCL
 		}
 	}
 }
-

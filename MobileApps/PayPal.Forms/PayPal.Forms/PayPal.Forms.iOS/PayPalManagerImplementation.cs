@@ -2,6 +2,7 @@
 using PayPal.Forms.Abstractions;
 using System.Threading.Tasks;
 using PayPal.Forms.Abstractions.Enum;
+using Xamarin.Forms;
 
 namespace PayPal.Forms
 {
@@ -12,6 +13,8 @@ namespace PayPal.Forms
 		TaskCompletionSource<FuturePaymentsResult> rfpTcs;
 
 		TaskCompletionSource<ProfileSharingResult> apsTcs;
+
+		TaskCompletionSource<ScanCardResult> gcardTcs;
 
 		#region IPayPalManager implementation
 
@@ -66,6 +69,18 @@ namespace PayPal.Forms
 			return apsTcs.Task;
 		}
 
+		public Task<ScanCardResult> ScanCard(CardIOLogo scannerLogo = CardIOLogo.PayPal)
+		{
+			if (gcardTcs != null)
+			{
+				gcardTcs.TrySetCanceled();
+				gcardTcs.TrySetResult(null);
+			}
+			gcardTcs = new TaskCompletionSource<ScanCardResult>();
+			Manager.RequestCardData(SendScanCardDidCancel, SendScanCardCompleted, scannerLogo);
+			return gcardTcs.Task;
+		}
+
 		#endregion
 
 		internal void SendOnAuthorizeProfileSharingDidCancel()
@@ -116,6 +131,27 @@ namespace PayPal.Forms
 			if (buyTcs != null) {
 				buyTcs.TrySetResult (new PaymentResult (PayPalStatus.Cancelled, errorMessage));
 			}
+		}
+
+		internal void SendScanCardDidCancel()
+		{
+			gcardTcs.SetResult(new ScanCardResult(PayPalStatus.Cancelled));
+		}
+
+		internal void SendScanCardCompleted(Xamarin.PayPal.iOS.CardIOCreditCardInfo cardInfo)
+		{
+			var card = new Card(
+				cardInfo.Scanned,
+				cardInfo.RedactedCardNumber,
+				cardInfo.PostalCode,
+				(int)cardInfo.ExpiryYear,
+				(int)cardInfo.ExpiryMonth,
+				cardInfo.Cvv,
+				((CreditCardType)(uint)cardInfo.CardType),
+				cardInfo.CardNumber,
+				(cardInfo.CardImage == null) ? null : ImageSource.FromStream(() => cardInfo.CardImage.AsPNG().AsStream())
+			);
+			gcardTcs.SetResult(new ScanCardResult(PayPalStatus.Successful, card));
 		}
 
 		public static PayPalManager Manager { get; private set; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using PayPal.Forms.Abstractions.Enum;
 
 namespace PayPal.Forms.Abstractions
 {
@@ -12,6 +13,8 @@ namespace PayPal.Forms.Abstractions
 		Task<FuturePaymentsResult> RequestFuturePayments();
 
 		Task<ProfileSharingResult> AuthorizeProfileSharing();
+
+		Task<ScanCardResult> ScanCard(CardIOLogo scannerLogo = CardIOLogo.PayPal);
 
 		string ClientMetadataId { get; }
 	}
