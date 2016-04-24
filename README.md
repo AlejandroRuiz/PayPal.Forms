@@ -9,7 +9,7 @@ In MainActivity(Android)/AppDelegate(iOS) after "Forms.Init()"  call the Init me
 ```
 ...
 global::Xamarin.Forms.Forms.Init ();
- CrossPaypalManager.Init(new PayPalConfiguration(
+ CrossPayPalManager.Init(new PayPalConfiguration(
 					PayPalEnvironment.NoNetwork,
 					"Your PayPal ID from https://developer.paypal.com/developer/applications/"
 					)
