@@ -90,7 +90,7 @@ if (result.Status == PayPalStatus.Cancelled) {
 ##Shipping Address (Optional)
 
 ```
-//New optional shipping address parameter into Buy methods.
+//Optional shipping address parameter into Buy methods.
 var result = await CrossPayPalManager.Current.Buy(
 			new PayPalItem(
 				"Test Product",
@@ -145,6 +145,27 @@ if (result.Status == PayPalStatus.Cancelled) {
 //Print Client Metadata Id
 Debug.WriteLine(CrossPaypalManager.Current.ClientMetadataId);
 ```
+
+##Standalone Card Scanner
+
+```
+//Optional parameter CardIOLogo("PayPal", "CardIO" or "None") for ScanCard method by default "PayPal" is used
+var result = await CrossPayPalManager.Current.ScanCard();
+if (result.Status == PayPalStatus.Cancelled)
+{
+	Debug.WriteLine("Cancelled");
+}
+else if (result.Status == PayPalStatus.Successful)
+{
+	if (result.Card.CardImage != null)
+	{
+		CardImage.Source = result.Card.CardImage;
+	}
+	Debug.WriteLine($"CardNumber: {result.Card.CardNumber}, CardType: {result.Card.CardType.ToString()}, Cvv: {result.Card.Cvv}, ExpiryMonth: {result.Card.ExpiryMonth}");
+	Debug.WriteLine($"ExpiryYear: {result.Card.ExpiryYear}, PostalCode: {result.Card.PostalCode}, RedactedCardNumber: {result.Card.RedactedCardNumber}, Scaned: {result.Card.Scaned}");
+}
+```
+
 # Nuget
 * Nuget Package (https://www.nuget.org/packages/PayPal.Forms)
 
