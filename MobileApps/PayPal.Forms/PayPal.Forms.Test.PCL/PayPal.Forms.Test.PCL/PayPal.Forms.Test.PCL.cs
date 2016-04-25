@@ -216,7 +216,7 @@ namespace PayPal.Forms.Test.PCL
 
 		async void GetCardInfoButton_Clicked(object sender, EventArgs e)
 		{
-			var result = await CrossPayPalManager.Current.ScanCard();
+			var result = await CrossPayPalManager.Current.ScanCard(CardIOLogo.CardIO);
 			if (result.Status == PayPalStatus.Cancelled)
 			{
 				Debug.WriteLine("Cancelled");

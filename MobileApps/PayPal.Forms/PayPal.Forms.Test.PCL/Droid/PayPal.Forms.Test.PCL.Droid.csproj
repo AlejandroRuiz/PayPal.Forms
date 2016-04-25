@@ -76,16 +76,16 @@
       <HintPath>..\..\packages\Newtonsoft.Json.8.0.3\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PayPal.Forms">
-      <HintPath>..\..\packages\PayPal.Forms.2.0.0\lib\MonoAndroid10\PayPal.Forms.dll</HintPath>
+      <HintPath>..\..\packages\PayPal.Forms.2.0.1\lib\MonoAndroid10\PayPal.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.PayPal.Android.CardIO">
-      <HintPath>..\..\packages\PayPal.Forms.2.0.0\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
+      <HintPath>..\..\packages\PayPal.Forms.2.0.1\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.PayPal.Android">
-      <HintPath>..\..\packages\PayPal.Forms.2.0.0\lib\MonoAndroid10\Xamarin.PayPal.Android.dll</HintPath>
+      <HintPath>..\..\packages\PayPal.Forms.2.0.1\lib\MonoAndroid10\Xamarin.PayPal.Android.dll</HintPath>
     </Reference>
     <Reference Include="PayPal.Forms.Abstractions">
-      <HintPath>..\..\packages\PayPal.Forms.2.0.0\lib\MonoAndroid10\PayPal.Forms.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\PayPal.Forms.2.0.1\lib\MonoAndroid10\PayPal.Forms.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
