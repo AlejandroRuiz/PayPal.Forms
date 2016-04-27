@@ -170,7 +170,7 @@ else if (result.Status == PayPalStatus.Successful)
 * Nuget Package (https://www.nuget.org/packages/PayPal.Forms)
 
 # Known Issues
-* On Xamarin Studio 5.10.X you will receive an alert that xamarin cant resolve "xamarin.paypal" and/or "paypal.forms" lib name this will be fixed by upgrading to Xamarin Studio 6 in alpha channel(recommended) or downgrading to Xamarin Studio 5.9(not recommended)
+* On Xamarin Studio 5.10.X you will receive an alert that xamarin cant resolve "xamarin.paypal" and/or "paypal.forms" lib name this will be fixed by upgrading to Xamarin Studio 6 in beta/alpha channel(recommended) or downgrading to Xamarin Studio 5.9(not recommended)
 
 # TODO
 No new tasks to do. All issues or features requests are welcome
