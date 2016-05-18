@@ -104,15 +104,15 @@ namespace PayPal.Forms
 				nativeItems.Add (new PayPalItem (
 					product.Name,
 					new Java.Lang.Integer ((int)product.Quantity),
-					new BigDecimal (product.Price.ToString ()),
+					new BigDecimal ((double)product.Price),
 					product.Currency,
 					product.SKU)
 				);
 			}
 
 			BigDecimal subtotal = PayPalItem.GetItemTotal (nativeItems.ToArray ());
-			BigDecimal shipping = new BigDecimal (xfshipping.ToString ());
-			BigDecimal tax = new BigDecimal (xftax.ToString ());
+			BigDecimal shipping = new BigDecimal((double)xfshipping);
+			BigDecimal tax = new BigDecimal((double)xftax);
 			PayPalPaymentDetails paymentDetails = new PayPalPaymentDetails (shipping, subtotal, tax);
 			BigDecimal amount = subtotal.Add (shipping).Add (tax);
 
@@ -155,7 +155,7 @@ namespace PayPal.Forms
 			OnCancelled = onCancelled;
 			OnSuccess = onSuccess;
 			OnError = onError;
-			BigDecimal amount = new BigDecimal (item.Price.ToString ()).Add (new BigDecimal (xftax.ToString ()));
+			BigDecimal amount = new BigDecimal ((double)item.Price).Add (new BigDecimal ((double)xftax));
 
 			PayPalPayment payment = new PayPalPayment (amount, item.Currency, item.Name, PayPalPayment.PaymentIntentSale);
 

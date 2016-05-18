@@ -93,7 +93,7 @@ namespace PayPal.Forms.Test
 					new PayPalItem ("free sample item #2", 1, new Decimal (0.00), "USD", "sku-zero-price"),
 					new PayPalItem ("sample item #3 with a longer name", 6, new Decimal (37.99), "USD", "sku-33333")
 				},
-				new Decimal(20.5),
+				new Decimal(12.55),
 				new Decimal(13.20),
 				new ShippingAddress("My Custom Recipient Name", "Custom Line 1", "", "My City", "My State", "12345", "MX")
 			);
