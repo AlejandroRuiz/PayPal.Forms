@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using UIKit;
 using System.Linq;
+using System.Globalization;
 
 namespace PayPal.Forms
 {
@@ -227,7 +228,7 @@ namespace PayPal.Forms
 
 		string RoundNumber(double myNumber)
 		{
-			var s = string.Format("{0:0.00}", myNumber);
+			var s = string.Format(CultureInfo.InvariantCulture, "{0:0.00}", myNumber);
 
 			if (s.EndsWith("00"))
 			{
