@@ -153,7 +153,9 @@ namespace PayPal.Forms
 			_payPalConfig.MerchantName = xfconfig.MerchantName;
 			_payPalConfig.MerchantPrivacyPolicyURL = new NSUrl (xfconfig.MerchantPrivacyPolicyUri);
 			_payPalConfig.MerchantUserAgreementURL = new NSUrl (xfconfig.MerchantUserAgreementUri);
-			_payPalConfig.LanguageOrLocale = NSLocale.PreferredLanguages [0];
+            _payPalConfig.LanguageOrLocale = xfconfig.Language ?? NSLocale.PreferredLanguages[0];
+            if (!String.IsNullOrEmpty(xfconfig.PhoneCountryCode))
+                _payPalConfig.DefaultUserPhoneCountryCode = xfconfig.PhoneCountryCode;
 
 
 			switch (xfconfig.ShippingAddressOption) {
@@ -456,4 +458,3 @@ namespace PayPal.Forms
 		}
 	}
 }
-
