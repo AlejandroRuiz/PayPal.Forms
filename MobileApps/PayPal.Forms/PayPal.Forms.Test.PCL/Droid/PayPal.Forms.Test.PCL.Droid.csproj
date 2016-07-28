@@ -66,18 +66,6 @@
     <Reference Include="Xamarin.Android.Support.v7.MediaRouter">
       <HintPath>..\..\packages\Xamarin.Android.Support.v7.MediaRouter.23.3.0\lib\MonoAndroid403\Xamarin.Android.Support.v7.MediaRouter.dll</HintPath>
     </Reference>
-    <Reference Include="PayPal.Forms">
-      <HintPath>..\..\packages\PayPal.Forms.2.0.6\lib\MonoAndroid10\PayPal.Forms.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.PayPal.Android.CardIO">
-      <HintPath>..\..\packages\PayPal.Forms.2.0.6\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.PayPal.Android">
-      <HintPath>..\..\packages\PayPal.Forms.2.0.6\lib\MonoAndroid10\Xamarin.PayPal.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="PayPal.Forms.Abstractions">
-      <HintPath>..\..\packages\PayPal.Forms.2.0.6\lib\MonoAndroid10\PayPal.Forms.Abstractions.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Forms.Platform.Android">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.0.107\lib\MonoAndroid10\Xamarin.Forms.Platform.Android.dll</HintPath>
     </Reference>
@@ -95,6 +83,18 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PayPal.Forms">
+      <HintPath>..\..\packages\PayPal.Forms.2.14.4\lib\MonoAndroid10\PayPal.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.PayPal.Android.CardIO">
+      <HintPath>..\..\packages\PayPal.Forms.2.14.4\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.PayPal.Android">
+      <HintPath>..\..\packages\PayPal.Forms.2.14.4\lib\MonoAndroid10\Xamarin.PayPal.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="PayPal.Forms.Abstractions">
+      <HintPath>..\..\packages\PayPal.Forms.2.14.4\lib\MonoAndroid10\PayPal.Forms.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
