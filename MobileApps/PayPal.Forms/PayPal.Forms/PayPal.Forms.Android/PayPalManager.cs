@@ -9,6 +9,7 @@ using Android.Widget;
 using Org.Json;
 using Xamarin.PayPal.Android.CardIO.Payment;
 using Android.Graphics;
+using System.Globalization;
 
 namespace PayPal.Forms
 {
@@ -27,8 +28,11 @@ namespace PayPal.Forms
 
 		private PayPalConfiguration config;
 
+		PayPal.Forms.Abstractions.PayPalConfiguration _xfconfig;
+
 		public PayPalManager (Context context, PayPal.Forms.Abstractions.PayPalConfiguration xfconfig)
 		{
+			_xfconfig = xfconfig;
 			Context = context;
 
 			switch (xfconfig.Environment) {
@@ -100,19 +104,20 @@ namespace PayPal.Forms
 			OnError = onError;
 
 			List<PayPalItem> nativeItems = new List<PayPalItem> ();
-			foreach (var product in items) {
-				nativeItems.Add (new PayPalItem (
+			foreach (var product in items)
+			{
+				nativeItems.Add(new PayPalItem(
 					product.Name,
-					new Java.Lang.Integer ((int)product.Quantity),
-					new BigDecimal ((double)product.Price),
+					new Java.Lang.Integer((int)product.Quantity),
+					new BigDecimal(RoundNumber((double)product.Price)),
 					product.Currency,
 					product.SKU)
 				);
 			}
 
 			BigDecimal subtotal = PayPalItem.GetItemTotal (nativeItems.ToArray ());
-			BigDecimal shipping = new BigDecimal((double)xfshipping);
-			BigDecimal tax = new BigDecimal((double)xftax);
+			BigDecimal shipping = new BigDecimal(RoundNumber((double)xfshipping));
+			BigDecimal tax = new BigDecimal(RoundNumber((double)xftax));
 			PayPalPaymentDetails paymentDetails = new PayPalPaymentDetails (shipping, subtotal, tax);
 			BigDecimal amount = subtotal.Add (shipping).Add (tax);
 
@@ -132,7 +137,16 @@ namespace PayPal.Forms
 				payment = payment.InvokeProvidedShippingAddress(shippingAddress);
 			}
 
-			payment = payment.EnablePayPalShippingAddressesRetrieval(true);
+			switch (_xfconfig.ShippingAddressOption)
+			{
+				case Abstractions.Enum.ShippingAddressOption.Both:
+				case Abstractions.Enum.ShippingAddressOption.PayPal:
+					payment = payment.EnablePayPalShippingAddressesRetrieval(true);
+					break;
+				default:
+					payment = payment.EnablePayPalShippingAddressesRetrieval(false);
+					break;
+			}
 
 			Intent intent = new Intent (Context, typeof(PaymentActivity));
 
@@ -150,14 +164,15 @@ namespace PayPal.Forms
 			Action<string> onSuccess,
 			Action<string> onError,
 			PayPal.Forms.Abstractions.ShippingAddress address
-		){
+		)
+		{
 
 			OnCancelled = onCancelled;
 			OnSuccess = onSuccess;
 			OnError = onError;
-			BigDecimal amount = new BigDecimal ((double)item.Price).Add (new BigDecimal ((double)xftax));
+			BigDecimal amount = new BigDecimal(RoundNumber((double)item.Price)).Add(new BigDecimal(RoundNumber((double)xftax)));
 
-			PayPalPayment payment = new PayPalPayment (amount, item.Currency, item.Name, PayPalPayment.PaymentIntentSale);
+			PayPalPayment payment = new PayPalPayment(amount, item.Currency, item.Name, PayPalPayment.PaymentIntentSale);
 
 			if (address != null)
 			{
@@ -172,15 +187,24 @@ namespace PayPal.Forms
 				payment = payment.InvokeProvidedShippingAddress(shippingAddress);
 			}
 
-			payment = payment.EnablePayPalShippingAddressesRetrieval(true);
+			switch (_xfconfig.ShippingAddressOption)
+			{
+				case Abstractions.Enum.ShippingAddressOption.Both:
+				case Abstractions.Enum.ShippingAddressOption.PayPal:
+					payment = payment.EnablePayPalShippingAddressesRetrieval(true);
+					break;
+				default:
+					payment = payment.EnablePayPalShippingAddressesRetrieval(false);
+					break;
+			}
 
-			Intent intent = new Intent (Context, typeof(PaymentActivity));
+			Intent intent = new Intent(Context, typeof(PaymentActivity));
 
-			intent.PutExtra (PayPalService.ExtraPaypalConfiguration, config);
+			intent.PutExtra(PayPalService.ExtraPaypalConfiguration, config);
 
-			intent.PutExtra (PaymentActivity.ExtraPayment, payment);
+			intent.PutExtra(PaymentActivity.ExtraPayment, payment);
 
-			(Context as Activity).StartActivityForResult (intent, REQUEST_CODE_PAYMENT);
+			(Context as Activity).StartActivityForResult(intent, REQUEST_CODE_PAYMENT);
 		}
 
 		public string GetClientMetadataId() {
@@ -264,8 +288,6 @@ namespace PayPal.Forms
 					{
 						try
 						{
-							System.Diagnostics.Debug.WriteLine(confirm.ToJSONObject().ToString(4));
-
 							OnSuccess?.Invoke(confirm.ToJSONObject().ToString());
 							OnSuccess = null;
 
@@ -304,7 +326,6 @@ namespace PayPal.Forms
 					{
 						try
 						{
-							System.Diagnostics.Debug.WriteLine(auth.ToJSONObject().ToString(4));
 							OnSuccess?.Invoke(auth.ToJSONObject().ToString());
 							OnSuccess = null;
 						}
@@ -340,7 +361,6 @@ namespace PayPal.Forms
 					{
 						try
 						{
-							System.Diagnostics.Debug.WriteLine(auth.ToJSONObject().ToString(4));
 							OnSuccess?.Invoke(auth.ToJSONObject().ToString());
 							OnSuccess = null;
 						}
@@ -384,6 +404,20 @@ namespace PayPal.Forms
 					RetrieveCardCancelled = null;
 					System.Diagnostics.Debug.WriteLine("The user canceled.");
 				}
+			}
+		}
+
+		string RoundNumber(double myNumber)
+		{
+			var s = string.Format(CultureInfo.InvariantCulture, "{0:0.00}", myNumber);
+
+			if (s.EndsWith("00"))
+			{
+				return ((int)myNumber).ToString();
+			}
+			else
+			{
+				return s;
 			}
 		}
 	}

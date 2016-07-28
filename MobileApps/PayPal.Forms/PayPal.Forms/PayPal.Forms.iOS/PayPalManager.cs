@@ -154,7 +154,22 @@ namespace PayPal.Forms
 			_payPalConfig.MerchantPrivacyPolicyURL = new NSUrl (xfconfig.MerchantPrivacyPolicyUri);
 			_payPalConfig.MerchantUserAgreementURL = new NSUrl (xfconfig.MerchantUserAgreementUri);
 			_payPalConfig.LanguageOrLocale = NSLocale.PreferredLanguages [0];
-			_payPalConfig.PayPalShippingAddressOption = PayPalShippingAddressOption.Both;
+
+
+			switch (xfconfig.ShippingAddressOption) {
+				case Abstractions.Enum.ShippingAddressOption.Both:
+					_payPalConfig.PayPalShippingAddressOption = PayPalShippingAddressOption.Both;
+					break;
+				case Abstractions.Enum.ShippingAddressOption.None:
+					_payPalConfig.PayPalShippingAddressOption = PayPalShippingAddressOption.None;
+					break;
+				case Abstractions.Enum.ShippingAddressOption.PayPal:
+					_payPalConfig.PayPalShippingAddressOption = PayPalShippingAddressOption.PayPal;
+					break;
+				case Abstractions.Enum.ShippingAddressOption.Provided:
+					_payPalConfig.PayPalShippingAddressOption = PayPalShippingAddressOption.Provided;
+					break;
+			}
 
 			Debug.WriteLine ("PayPal iOS SDK Version: " + PayPalMobile.LibraryVersion);
 		}
@@ -307,8 +322,6 @@ namespace PayPal.Forms
 		{
 			Debug.WriteLine("PayPal Payment Success !");
 			paymentViewController.DismissViewController (true, () => {
-				Debug.WriteLine ("Here is your proof of payment:" + completedPayment.Confirmation + "Send this to your server for confirmation and fulfillment.");
-
 				NSError err = null;
 				NSData jsonData = NSJsonSerialization.Serialize(completedPayment.Confirmation, NSJsonWritingOptions.PrettyPrinted, out err);
 				NSString first = new NSString("");

@@ -24,7 +24,8 @@ namespace PayPal.Forms.Test.iOS
 					AcceptCreditCards = true,
 					MerchantName = "Test Store",
 					MerchantPrivacyPolicyUri = "https://www.example.com/privacy",
-					MerchantUserAgreementUri = "https://www.example.com/legal"
+					MerchantUserAgreementUri = "https://www.example.com/legal",
+				ShippingAddressOption = ShippingAddressOption.Provided
 				}
 			);
 

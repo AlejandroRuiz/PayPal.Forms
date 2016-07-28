@@ -16,6 +16,8 @@ namespace PayPal.Forms.Abstractions
 
 		public bool AcceptCreditCards { get; set; }
 
+		public ShippingAddressOption ShippingAddressOption { get; set; }
+
 		public PayPalConfiguration (PayPalEnvironment enviroment, string idEnvironment)
 		{
 			Environment = enviroment;
