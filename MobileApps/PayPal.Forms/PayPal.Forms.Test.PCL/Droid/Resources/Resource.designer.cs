@@ -26,7 +26,6 @@ namespace PayPal.Forms.Test.PCL.Droid
 		
 		public static void UpdateIdValues()
 		{
-			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::PayPal.Forms.Test.PCL.Droid.Resource.Attribute.actionBarSize;
 			global::PayPal.Forms.Android.Resource.Animation.abc_fade_in = global::PayPal.Forms.Test.PCL.Droid.Resource.Animation.abc_fade_in;
 			global::PayPal.Forms.Android.Resource.Animation.abc_fade_out = global::PayPal.Forms.Test.PCL.Droid.Resource.Animation.abc_fade_out;
 			global::PayPal.Forms.Android.Resource.Animation.abc_grow_fade_in_from_bottom = global::PayPal.Forms.Test.PCL.Droid.Resource.Animation.abc_grow_fade_in_from_bottom;
@@ -1560,6 +1559,7 @@ namespace PayPal.Forms.Test.PCL.Droid
 			global::PayPal.Forms.Android.Resource.Styleable.ViewStubCompat_android_id = global::PayPal.Forms.Test.PCL.Droid.Resource.Styleable.ViewStubCompat_android_id;
 			global::PayPal.Forms.Android.Resource.Styleable.ViewStubCompat_android_inflatedId = global::PayPal.Forms.Test.PCL.Droid.Resource.Styleable.ViewStubCompat_android_inflatedId;
 			global::PayPal.Forms.Android.Resource.Styleable.ViewStubCompat_android_layout = global::PayPal.Forms.Test.PCL.Droid.Resource.Styleable.ViewStubCompat_android_layout;
+			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::PayPal.Forms.Test.PCL.Droid.Resource.Attribute.actionBarSize;
 		}
 		
 		public partial class Animation

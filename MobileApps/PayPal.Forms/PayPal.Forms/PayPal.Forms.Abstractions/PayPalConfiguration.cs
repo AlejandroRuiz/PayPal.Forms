@@ -17,6 +17,19 @@ namespace PayPal.Forms.Abstractions
         public string MerchantPrivacyPolicyUri { get; set; }
 
         public string MerchantUserAgreementUri { get; set; }
+<<<<<<< HEAD
+=======
+
+        public bool AcceptCreditCards { get; set; }
+
+        public PayPalConfiguration(PayPalEnvironment enviroment, string idEnvironment)
+        {
+            Environment = enviroment;
+            PayPalKey = idEnvironment;
+        }
+    }
+}
+>>>>>>> d3942ff1a9fa1ee495bb46ef241b36a9d3d5f692
 
         public bool AcceptCreditCards { get; set; }
 
