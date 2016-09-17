@@ -9,7 +9,7 @@
     <RootNamespace>Xamarin.PayPal.Android</RootNamespace>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
+    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <AssemblyName>Xamarin.PayPal.Android</AssemblyName>
     <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
   </PropertyGroup>
@@ -57,6 +57,6 @@
     <EmbeddedReferenceJar Include="Jars\okio-1.6.0.jar" />
   </ItemGroup>
   <ItemGroup>
-    <LibraryProjectZip Include="Jars\PayPalAndroidSDK-2.14.4.aar" />
+    <LibraryProjectZip Include="Jars\PayPalAndroidSDK-2.14.5.aar" />
   </ItemGroup>
 </Project>

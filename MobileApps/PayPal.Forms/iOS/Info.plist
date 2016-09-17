@@ -57,5 +57,7 @@
 	</array>
 	<key>CFBundleName</key>
 	<string>PayPal.Forms.Test</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We will use your camera to scan the credit card</string>
 </dict>
 </plist>

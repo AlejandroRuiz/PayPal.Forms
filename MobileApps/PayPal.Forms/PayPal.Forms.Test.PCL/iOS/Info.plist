@@ -42,5 +42,7 @@
 	<string>Resources/Images.xcassets/AppIcons.appiconset</string>
 	<key>CFBundleName</key>
 	<string>PayPal.Forms.Test.PCL</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We will use your camera to scan the credit card</string>
 </dict>
 </plist>

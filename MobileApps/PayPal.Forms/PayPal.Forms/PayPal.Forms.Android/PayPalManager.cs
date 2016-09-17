@@ -57,6 +57,12 @@ namespace PayPal.Forms
 				.MerchantPrivacyPolicyUri(global::Android.Net.Uri.Parse(xfconfig.MerchantPrivacyPolicyUri))
 				.MerchantUserAgreementUri(global::Android.Net.Uri.Parse(xfconfig.MerchantUserAgreementUri));
 
+			if (!String.IsNullOrEmpty(xfconfig.Language))
+				config = config.LanguageOrLocale(xfconfig.Language);
+
+			if (!String.IsNullOrEmpty(xfconfig.PhoneCountryCode))
+				config = config.DefaultUserPhoneCountryCode(xfconfig.PhoneCountryCode);
+
 			Intent intent = new Intent (Context, typeof(PayPalService));
 			intent.PutExtra (PayPalService.ExtraPaypalConfiguration, config);
 			Context.StartService (intent);

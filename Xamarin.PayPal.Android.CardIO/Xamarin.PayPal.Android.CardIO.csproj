@@ -9,7 +9,7 @@
     <RootNamespace>Xamarin.PayPal.Android.CardIO</RootNamespace>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>true</AndroidUseLatestPlatformSdk>
+    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <AssemblyName>Xamarin.PayPal.Android.CardIO</AssemblyName>
     <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
   </PropertyGroup>
@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <ConsolePause>false</ConsolePause>
+    <MandroidExtraArgs></MandroidExtraArgs>
+  </PropertyGroup>
+  <PropertyGroup>
+    <JavaOptions>$(JavaOptions) -noverify </JavaOptions>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -51,8 +55,8 @@
     <TransformFile Include="Transforms\EnumMethods.xml" />
     <TransformFile Include="Transforms\Metadata.xml" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.Bindings.targets" />
   <ItemGroup>
-    <LibraryProjectZip Include="Jars\android-sdk-5.3.0.aar" />
+    <LibraryProjectZip Include="Jars\card.io-5.4.0.aar" />
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.Bindings.targets" />
 </Project>

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata minClientVersion="2.8.3">
 		<id>PayPal.Forms</id>
-		<version>2.14.4</version>
+		<version>2.15.1</version>
 		<title>PayPal Plugin for Xamarin.Forms</title>
 		<authors>Alejandro Ruiz</authors>
 		<owners>Alejandro Ruiz</owners>
@@ -18,23 +18,23 @@
 		<dependencies>
 			<group targetFramework="net">
 				<dependency id="Newtonsoft.Json" version="9.0.1" />
-				<dependency id="Xamarin.Forms" version="2.3.0.107" />
+				<dependency id="Xamarin.Forms" version="2.3.2.127" />
 			</group>
 			<group targetFramework="MonoAndroid">
 				<dependency id="Newtonsoft.Json" version="9.0.1" />
-				<dependency id="Xamarin.Forms" version="2.3.0.107" />
+				<dependency id="Xamarin.Forms" version="2.3.2.127" />
 			</group>
 			<group targetFramework="Xamarin.iOS10">
 				<dependency id="Newtonsoft.Json" version="9.0.1" />
-				<dependency id="Xamarin.Forms" version="2.3.0.107" />
+				<dependency id="Xamarin.Forms" version="2.3.2.127" />
 			</group>
 			<group targetFramework="portable-net45+win8+wpa81+wp8">
 				<dependency id="Newtonsoft.Json" version="9.0.1" />
-				<dependency id="Xamarin.Forms" version="2.3.0.107" />
+				<dependency id="Xamarin.Forms" version="2.3.2.127" />
 			</group>
 			<group targetFramework="dotnet">
 				<dependency id="Newtonsoft.Json" version="9.0.1" />
-				<dependency id="Xamarin.Forms" version="2.3.0.107" />
+				<dependency id="Xamarin.Forms" version="2.3.2.127" />
 			</group>
 		</dependencies>
 	</metadata>
