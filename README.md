@@ -21,7 +21,16 @@ global::Xamarin.Forms.Forms.Init ();
 					  //Your privacy policy Url
 					  MerchantPrivacyPolicyUri = "https://www.example.com/privacy",
 					  //Your user agreement Url
-					  MerchantUserAgreementUri = "https://www.example.com/legal"
+					  MerchantUserAgreementUri = "https://www.example.com/legal",
+					  
+					  // OPTIONAL - ShippingAddressOption (Both, None, PayPal, Provided)
+					  ShippingAddressOption = ShippingAddressOption.Both,
+					  
+					  // OPTIONAL - Language: Default languege for PayPal Plug-In
+					  Language = "es",
+					  
+					   // OPTIONAL - PhoneCountryCode: Default phone country code for PayPal Plug-In
+					  PhoneCountryCode = "52",
 				  }
 			);
 ...
@@ -34,6 +43,15 @@ From official PayPal SDK page (https://github.com/paypal/PayPal-iOS-SDK#with-or-
 
 * Add the open source license acknowledgments
 * Add squemas into Info.plist
+
+###VERY IMPORTANT FOR IOS 10 IF YOU WANT TO USE THE CAMERA FEATURES
+
+Add "NSCameraUsageDescription" into you Info.plist file.
+
+```
+<key>NSCameraUsageDescription</key>
+<string>We will use your camera to scan the credit card</string>
+```
 
 ##Android
 
@@ -57,7 +75,7 @@ protected override void OnDestroy()
 ##Single Item
 
 ```
-var result = await CrossPaypalManager.Current.Buy (new PayPalItem ("Test Product", new Decimal (12.50), "USD"), new Decimal (0));
+var result = await CrossPayPalManager.Current.Buy (new PayPalItem ("Test Product", new Decimal (12.50), "USD"), new Decimal (0));
 if (result.Status == PayPalStatus.Cancelled) {
 	Debug.WriteLine ("Cancelled");
 }else if(result.Status == PayPalStatus.Error){
@@ -70,7 +88,7 @@ if (result.Status == PayPalStatus.Cancelled) {
 ##List of Items
 
 ```
-var result = await CrossPaypalManager.Current.Buy (new PayPalItem[] {
+var result = await CrossPayPalManager.Current.Buy (new PayPalItem[] {
 				new PayPalItem ("sample item #1", 2, new Decimal (87.50), "USD",
 					"sku-12345678"), 
 				new PayPalItem ("free sample item #2", 1, new Decimal (0.00),
@@ -115,7 +133,7 @@ else if (result.Status == PayPalStatus.Successful)
 ##Future Payments
 
 ```
-var result = await CrossPaypalManager.Current.RequestFuturePayments();
+var result = await CrossPayPalManager.Current.RequestFuturePayments();
 if (result.Status == PayPalStatus.Cancelled) {
 	Debug.WriteLine ("Cancelled");
 }else if(result.Status == PayPalStatus.Error){
@@ -143,7 +161,7 @@ if (result.Status == PayPalStatus.Cancelled) {
 
 ```
 //Print Client Metadata Id
-Debug.WriteLine(CrossPaypalManager.Current.ClientMetadataId);
+Debug.WriteLine(CrossPayPalManager.Current.ClientMetadataId);
 ```
 
 ##Standalone Card Scanner
