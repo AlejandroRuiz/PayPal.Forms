@@ -38,6 +38,12 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
+    <Reference Include="Square.OkIO">
+      <HintPath>..\MobileApps\PayPal.Forms\packages\Square.OkIO.1.6.0.0\lib\MonoAndroid\Square.OkIO.dll</HintPath>
+    </Reference>
+    <Reference Include="Square.OkHttp">
+      <HintPath>..\MobileApps\PayPal.Forms\packages\Square.OkHttp.2.7.5.0\lib\MonoAndroid\Square.OkHttp.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -45,6 +51,7 @@
   <ItemGroup>
     <None Include="Additions\AboutAdditions.txt" />
     <None Include="Jars\AboutJars.txt" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <TransformFile Include="Transforms\EnumFields.xml" />
@@ -52,10 +59,6 @@
     <TransformFile Include="Transforms\Metadata.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.Bindings.targets" />
-  <ItemGroup>
-    <EmbeddedReferenceJar Include="Jars\okhttp-3.0.1.jar" />
-    <EmbeddedReferenceJar Include="Jars\okio-1.6.0.jar" />
-  </ItemGroup>
   <ItemGroup>
     <LibraryProjectZip Include="Jars\PayPalAndroidSDK-2.14.5.aar" />
   </ItemGroup>
