@@ -57,7 +57,7 @@ Add "NSCameraUsageDescription" into you Info.plist file.
 
 YOU MUST NEED TO HAVE INSTALLED THE NEXT PACKAGE
 
-https://www.nuget.org/packages/Square.OkHttp
+https://www.nuget.org/packages/Square.OkHttp3/
 
 Is very important to add the following code inside your OnActivityResult and OnDestroy on your main activity class
 ```
