@@ -10,6 +10,7 @@ using Org.Json;
 using Xamarin.PayPal.Android.CardIO.Payment;
 using Android.Graphics;
 using System.Globalization;
+using PayPal.Forms.Abstractions.Enum;
 
 namespace PayPal.Forms
 {
@@ -99,6 +100,7 @@ namespace PayPal.Forms
 			PayPal.Forms.Abstractions.PayPalItem[] items,
 			Decimal xfshipping,
 			Decimal xftax,
+			PaymentIntent xfintent,
 			Action onCancelled,
 			Action<string> onSuccess,
 			Action<string> onError,
@@ -127,7 +129,24 @@ namespace PayPal.Forms
 			PayPalPaymentDetails paymentDetails = new PayPalPaymentDetails (shipping, subtotal, tax);
 			BigDecimal amount = subtotal.Add (shipping).Add (tax);
 
-			PayPalPayment payment = new PayPalPayment (amount, nativeItems.FirstOrDefault().Currency, "Multiple items", PayPalPayment.PaymentIntentSale);
+			string paymentIntent;
+			switch (xfintent)
+			{
+				case PaymentIntent.Authorize:
+					paymentIntent = PayPalPayment.PaymentIntentAuthorize;
+					break;
+
+				case PaymentIntent.Order:
+					paymentIntent = PayPalPayment.PaymentIntentOrder;
+					break;
+
+				default:
+				case PaymentIntent.Sale:
+					paymentIntent = PayPalPayment.PaymentIntentSale;
+					break;
+			}
+
+			PayPalPayment payment = new PayPalPayment (amount, nativeItems.FirstOrDefault().Currency, "Multiple items", paymentIntent);
 			payment = payment.Items (nativeItems.ToArray ()).PaymentDetails (paymentDetails);
 
 			if (address != null)
@@ -166,6 +185,7 @@ namespace PayPal.Forms
 		public void BuyItem(
 			PayPal.Forms.Abstractions.PayPalItem item,
 			Decimal xftax,
+			PaymentIntent xfintent,
 			Action onCancelled,
 			Action<string> onSuccess,
 			Action<string> onError,
@@ -178,7 +198,24 @@ namespace PayPal.Forms
 			OnError = onError;
 			BigDecimal amount = new BigDecimal(RoundNumber((double)item.Price)).Add(new BigDecimal(RoundNumber((double)xftax)));
 
-			PayPalPayment payment = new PayPalPayment(amount, item.Currency, item.Name, PayPalPayment.PaymentIntentSale);
+			string paymentIntent;
+			switch (xfintent)
+			{
+			  case PaymentIntent.Authorize:
+			    paymentIntent = PayPalPayment.PaymentIntentAuthorize;
+			    break;
+
+			  case PaymentIntent.Order:
+			    paymentIntent = PayPalPayment.PaymentIntentOrder;
+			    break;
+
+			  default:
+			  case PaymentIntent.Sale:
+			    paymentIntent = PayPalPayment.PaymentIntentSale;
+			    break;
+			}
+
+			PayPalPayment payment = new PayPalPayment(amount, item.Currency, item.Name, paymentIntent);
 
 			if (address != null)
 			{
@@ -428,4 +465,3 @@ namespace PayPal.Forms
 		}
 	}
 }
-
