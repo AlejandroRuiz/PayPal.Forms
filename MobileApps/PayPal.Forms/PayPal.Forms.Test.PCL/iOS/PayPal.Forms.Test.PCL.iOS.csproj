@@ -100,10 +100,10 @@
 		  <HintPath>..\..\packages\Xamarin.PayPal.iOS.2.16.1\lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll</HintPath>
 		</Reference>
 		<Reference Include="PayPal.Forms.Abstractions">
-		  <HintPath>..\..\packages\PayPal.Forms.2.16.0\lib\Xamarin.iOS10\PayPal.Forms.Abstractions.dll</HintPath>
+		  <HintPath>..\..\packages\PayPal.Forms.2.16.1\lib\Xamarin.iOS10\PayPal.Forms.Abstractions.dll</HintPath>
 		</Reference>
 		<Reference Include="PayPal.Forms">
-		  <HintPath>..\..\packages\PayPal.Forms.2.16.0\lib\Xamarin.iOS10\PayPal.Forms.dll</HintPath>
+		  <HintPath>..\..\packages\PayPal.Forms.2.16.1\lib\Xamarin.iOS10\PayPal.Forms.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>

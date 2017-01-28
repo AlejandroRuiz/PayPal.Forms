@@ -97,10 +97,10 @@
 		  <HintPath>..\..\packages\Xamarin.PayPal.Android.2.15.1\lib\MonoAndroid10\Xamarin.PayPal.Android.dll</HintPath>
 		</Reference>
 		<Reference Include="PayPal.Forms.Abstractions">
-		  <HintPath>..\..\packages\PayPal.Forms.2.16.0\lib\MonoAndroid10\PayPal.Forms.Abstractions.dll</HintPath>
+		  <HintPath>..\..\packages\PayPal.Forms.2.16.1\lib\MonoAndroid10\PayPal.Forms.Abstractions.dll</HintPath>
 		</Reference>
 		<Reference Include="PayPal.Forms">
-		  <HintPath>..\..\packages\PayPal.Forms.2.16.0\lib\MonoAndroid10\PayPal.Forms.dll</HintPath>
+		  <HintPath>..\..\packages\PayPal.Forms.2.16.1\lib\MonoAndroid10\PayPal.Forms.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
