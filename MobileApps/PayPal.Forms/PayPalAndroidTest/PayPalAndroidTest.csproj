@@ -15,7 +15,7 @@
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <AssemblyName>PayPalAndroidTest</AssemblyName>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +42,18 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
+    <Reference Include="Square.OkIO">
+      <HintPath>..\packages\Square.OkIO.1.11.0\lib\MonoAndroid\Square.OkIO.dll</HintPath>
+    </Reference>
+    <Reference Include="Square.OkHttp3">
+      <HintPath>..\packages\Square.OkHttp3.3.5.0\lib\MonoAndroid\Square.OkHttp3.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.PayPal.Android.CardIO">
+      <HintPath>..\packages\Xamarin.PayPal.Android.CardIO.1.0.0\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.PayPal.Android">
+      <HintPath>..\packages\Xamarin.PayPal.Android.2.15.1\lib\MonoAndroid10\Xamarin.PayPal.Android.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -53,6 +65,7 @@
     <None Include="Resources\AboutResources.txt" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Assets\AboutAssets.txt" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />
@@ -67,14 +80,4 @@
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Xamarin.PayPal.Android\Xamarin.PayPal.Android.csproj">
-      <Project>{89663452-3B69-44EE-9039-4C1AA58CE84D}</Project>
-      <Name>Xamarin.PayPal.Android</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Xamarin.PayPal.Android.CardIO\Xamarin.PayPal.Android.CardIO.csproj">
-      <Project>{84E82AD1-6ACF-46DC-99F0-66D4E666D229}</Project>
-      <Name>Xamarin.PayPal.Android.CardIO</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

@@ -80,6 +80,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="Xamarin.PayPal.iOS">
+      <HintPath>..\..\packages\Xamarin.PayPal.iOS.2.16.1\lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Resources\Images.xcassets\AppIcons.appiconset\Contents.json" />
@@ -91,6 +94,7 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -102,10 +106,4 @@
     <Compile Include="PayPalManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Xamarin.PayPal.iOS\Xamarin.PayPal.iOS.csproj">
-      <Project>{D1319CA8-09B7-416B-AC4F-90F02E656B8C}</Project>
-      <Name>Xamarin.PayPal.iOS</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

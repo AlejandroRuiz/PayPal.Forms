@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata minClientVersion="2.8.3">
+		<id>Xamarin.PayPal.Android</id>
+		<version>2.15.1</version>
+		<title>PayPal for Xamarin.Android</title>
+		<authors>Alejandro Ruiz</authors>
+		<owners>Alejandro Ruiz</owners>
+		<iconUrl>http://xamarinos.com/img/favicon.ico</iconUrl>
+    <licenseUrl>https://raw.githubusercontent.com/AlejandroRuiz/PayPal.Forms/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/AlejandroRuiz/PayPal.Forms/tree/master/Xamarin.PayPal.Android</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>
+      PayPal Binding Lib for Xamarin.Android
+    </description>
+		<summary>PayPal Binding Lib for Xamarin.Android</summary>
+		<tags>xamarin, plugin, paypal, android, cardio</tags>
+		<dependencies>
+			<group targetFramework="MonoAndroid">
+				<dependency id="Square.OkHttp3" version="3.5.0" />
+				<dependency id="Xamarin.PayPal.Android.CardIO" version="1.0.0" />
+			</group>
+		</dependencies>
+	</metadata>
+	<files>
+
+		<!--Xamarin.Android-->
+		<file src="Xamarin.PayPal.Android/bin/Release/Xamarin.PayPal.Android.dll" target="lib/MonoAndroid10" />
+    
+	</files>
+</package>

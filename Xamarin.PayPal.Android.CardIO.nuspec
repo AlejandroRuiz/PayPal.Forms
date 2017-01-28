@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata minClientVersion="2.8.3">
+		<id>Xamarin.PayPal.Android.CardIO</id>
+		<version>1.0.0</version>
+		<title>CardIO for Xamarin.Android</title>
+		<authors>Alejandro Ruiz</authors>
+		<owners>Alejandro Ruiz</owners>
+		<iconUrl>http://xamarinos.com/img/favicon.ico</iconUrl>
+    <licenseUrl>https://raw.githubusercontent.com/AlejandroRuiz/PayPal.Forms/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/AlejandroRuiz/PayPal.Forms/tree/master/Xamarin.PayPal.Android.CardIO</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>
+      CardIO Binding Lib for Xamarin.Android
+    </description>
+		<summary>CardIO Binding Lib for Xamarin.Android</summary>
+		<tags>xamarin, plugin, paypal, android, cardio</tags>
+	</metadata>
+	<files>
+		<!--Xamarin.Android-->
+		<file src="Xamarin.PayPal.Android.CardIO/bin/Release/Xamarin.PayPal.Android.CardIO.dll" target="lib/MonoAndroid10" />
+	</files>
+</package>

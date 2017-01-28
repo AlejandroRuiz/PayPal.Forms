@@ -39,10 +39,13 @@
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
     <Reference Include="Square.OkIO">
-      <HintPath>..\MobileApps\PayPal.Forms\packages\Square.OkIO.1.6.0.0\lib\MonoAndroid\Square.OkIO.dll</HintPath>
+      <HintPath>..\MobileApps\PayPal.Forms\packages\Square.OkIO.1.11.0\lib\MonoAndroid\Square.OkIO.dll</HintPath>
     </Reference>
-    <Reference Include="Square.OkHttp">
-      <HintPath>..\MobileApps\PayPal.Forms\packages\Square.OkHttp.2.7.5.0\lib\MonoAndroid\Square.OkHttp.dll</HintPath>
+    <Reference Include="Square.OkHttp3">
+      <HintPath>..\MobileApps\PayPal.Forms\packages\Square.OkHttp3.3.5.0\lib\MonoAndroid\Square.OkHttp3.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.PayPal.Android.CardIO">
+      <HintPath>..\MobileApps\PayPal.Forms\packages\Xamarin.PayPal.Android.CardIO.1.0.0\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -58,8 +61,8 @@
     <TransformFile Include="Transforms\EnumMethods.xml" />
     <TransformFile Include="Transforms\Metadata.xml" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.Bindings.targets" />
   <ItemGroup>
-    <LibraryProjectZip Include="Jars\PayPalAndroidSDK-2.14.5.aar" />
+    <LibraryProjectZip Include="Jars\PayPalAndroidSDK-2.15.1.aar" />
   </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.Bindings.targets" />
 </Project>
