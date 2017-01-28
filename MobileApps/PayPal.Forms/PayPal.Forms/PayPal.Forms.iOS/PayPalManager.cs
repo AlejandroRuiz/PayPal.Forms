@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UIKit;
 using System.Linq;
 using System.Globalization;
+using PayPal.Forms.Abstractions.Enum;
 
 namespace PayPal.Forms
 {
@@ -200,6 +201,7 @@ namespace PayPal.Forms
             PayPal.Forms.Abstractions.PayPalItem[] items,
             Decimal xfshipping,
             Decimal xftax,
+            PaymentIntent xfintent,
             Action onCancelled,
             Action<string> onSuccess,
             Action<string> onError,
@@ -231,7 +233,24 @@ namespace PayPal.Forms
 
             var total = subtotal.Add(shipping).Add(tax);
 
-            var payment = PayPalPayment.PaymentWithAmount(total, nativeItems.FirstOrDefault().Currency, "Multiple items", PayPalPaymentIntent.Sale);
+            PayPalPaymentIntent paymentIntent;
+            switch (xfintent)
+            {
+                case PaymentIntent.Authorize:
+                    paymentIntent = PayPalPaymentIntent.Authorize;
+                    break;
+
+                case PaymentIntent.Order:
+                    paymentIntent = PayPalPaymentIntent.Order;
+                    break;
+
+                default:
+                case PaymentIntent.Sale:
+                    paymentIntent = PayPalPaymentIntent.Sale;
+                    break;
+            }
+
+            var payment = PayPalPayment.PaymentWithAmount(total, nativeItems.FirstOrDefault().Currency, "Multiple items", paymentIntent);
             payment.Items = nativeItems.ToArray();
             payment.PaymentDetails = paymentDetails;
 
@@ -278,6 +297,7 @@ namespace PayPal.Forms
         public void BuyItem(
             PayPal.Forms.Abstractions.PayPalItem item,
             Decimal xftax,
+            PaymentIntent xfintent,
             Action onCancelled,
             Action<string> onSuccess,
             Action<string> onError,
@@ -295,7 +315,24 @@ namespace PayPal.Forms
 
             var paymentDetails = PayPalPaymentDetails.PaymentDetailsWithSubtotal(subTotal, new NSDecimalNumber(0), new NSDecimalNumber(RoundNumber((double)xftax)));
 
-            var payment = PayPalPayment.PaymentWithAmount(amount, item.Currency, item.Name, PayPalPaymentIntent.Sale);
+            PayPalPaymentIntent paymentIntent;
+            switch (xfintent)
+            {
+                case PaymentIntent.Authorize:
+                    paymentIntent = PayPalPaymentIntent.Authorize;
+                break;
+
+                case PaymentIntent.Order:
+                    paymentIntent = PayPalPaymentIntent.Order;
+                break;
+
+                default:
+                case PaymentIntent.Sale:
+                    paymentIntent = PayPalPaymentIntent.Sale;
+                break;
+            }
+
+            var payment = PayPalPayment.PaymentWithAmount(amount, item.Currency, item.Name, paymentIntent);
             payment.PaymentDetails = paymentDetails;
             payment.Items = new NSObject[]{
                 PayPalItem.ItemWithName (

@@ -18,25 +18,25 @@ namespace PayPal.Forms
 
 		#region IPayPalManager implementation
 
-		public Task<PaymentResult> Buy (PayPalItem[] items, Decimal shipping, Decimal tax, ShippingAddress address = null)
+		public Task<PaymentResult> Buy (PayPalItem[] items, Decimal shipping, Decimal tax, ShippingAddress address = null, PaymentIntent intent = PaymentIntent.Sale)
 		{
 			if (buyTcs != null) {
 				buyTcs.TrySetCanceled ();
 				buyTcs.TrySetResult (null);
 			}
 			buyTcs = new TaskCompletionSource<PaymentResult> ();
-			Manager.BuyItems (items, shipping, tax, SendOnPayPalPaymentDidCancel, SendOnPayPalPaymentCompleted, SendOnPayPalPaymentError, address);
+			Manager.BuyItems (items, shipping, tax, intent, SendOnPayPalPaymentDidCancel, SendOnPayPalPaymentCompleted, SendOnPayPalPaymentError, address);
 			return buyTcs.Task;
 		}
 
-		public Task<PaymentResult> Buy (PayPalItem item, Decimal tax, ShippingAddress address = null)
+		public Task<PaymentResult> Buy (PayPalItem item, Decimal tax, ShippingAddress address = null, PaymentIntent intent = PaymentIntent.Sale)
 		{
 			if (buyTcs != null) {
 				buyTcs.TrySetCanceled ();
 				buyTcs.TrySetResult (null);
 			}
 			buyTcs = new TaskCompletionSource<PaymentResult> ();
-			Manager.BuyItem (item, tax, SendOnPayPalPaymentDidCancel, SendOnPayPalPaymentCompleted, SendOnPayPalPaymentError, address);
+			Manager.BuyItem (item, tax, intent, SendOnPayPalPaymentDidCancel, SendOnPayPalPaymentCompleted, SendOnPayPalPaymentError, address);
 			return buyTcs.Task;
 		}
 
@@ -162,4 +162,3 @@ namespace PayPal.Forms
 		}
 	}
 }
-
