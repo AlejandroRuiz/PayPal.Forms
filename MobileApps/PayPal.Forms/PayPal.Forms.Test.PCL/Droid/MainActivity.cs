@@ -32,9 +32,20 @@ namespace PayPal.Forms.Test.PCL.Droid
 					MerchantUserAgreementUri = "https://www.example.com/legal"
 				}
 			);
-
+            SetNoRemeberData();
 			LoadApplication (new App ());
+
+
 		}
+
+        void SetNoRemeberData()
+        {
+            //Hack: create the instance from lazy impl.
+            var n = PayPal.Forms.CrossPayPalManager.Current;
+            var internalConfig = (Xamarin.PayPal.Android.PayPalConfiguration)typeof(PayPal.Forms.PayPalManager).GetField("config", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(PayPalManagerImplementation.Manager);
+            internalConfig = internalConfig.RememberUser(false);
+            typeof(PayPal.Forms.PayPalManager).GetField("config", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).SetValue(PayPalManagerImplementation.Manager, internalConfig);
+        }
 
 		protected override void OnActivityResult (int requestCode, Result resultCode, Intent data)
 		{
