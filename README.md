@@ -3,7 +3,7 @@ PayPal Plugin for Xamarin.Forms
 
 # Setup
 
-##iOS & Android
+## iOS & Android
 
 In MainActivity(Android)/AppDelegate(iOS) after "Forms.Init()"  call the Init method with your PayPal config value
 ```
@@ -37,14 +37,14 @@ global::Xamarin.Forms.Forms.Init ();
 
 ```
 
-##iOS
+## iOS
 
 From official PayPal SDK page (https://github.com/paypal/PayPal-iOS-SDK#with-or-without-cocoapods) follow the two steps:
 
 * Add the open source license acknowledgments
 * Add squemas into Info.plist
 
-###VERY IMPORTANT FOR IOS 10 IF YOU WANT TO USE THE CAMERA FEATURES
+### VERY IMPORTANT FOR IOS 10 IF YOU WANT TO USE THE CAMERA FEATURES
 
 Add "NSCameraUsageDescription" into you Info.plist file.
 
@@ -53,7 +53,7 @@ Add "NSCameraUsageDescription" into you Info.plist file.
 <string>We will use your camera to scan the credit card</string>
 ```
 
-##Android
+## Android
 
 YOU MUST NEED TO HAVE INSTALLED THE NEXT PACKAGE
 
@@ -76,7 +76,7 @@ protected override void OnDestroy()
 
 # Usage
 
-##Single Item
+## Single Item
 
 ```
 var result = await CrossPayPalManager.Current.Buy (new PayPalItem ("Test Product", new Decimal (12.50), "USD"), new Decimal (0));
@@ -89,7 +89,7 @@ if (result.Status == PayPalStatus.Cancelled) {
 }
 ```
 
-##List of Items
+## List of Items
 
 ```
 var result = await CrossPayPalManager.Current.Buy (new PayPalItem[] {
@@ -109,7 +109,7 @@ if (result.Status == PayPalStatus.Cancelled) {
 }
 ```
 
-##Shipping Address (Optional)
+## Shipping Address (Optional)
 
 ```
 //Optional shipping address parameter into Buy methods.
@@ -134,7 +134,7 @@ else if (result.Status == PayPalStatus.Successful)
 }
 ```
 
-##Future Payments
+## Future Payments
 
 ```
 var result = await CrossPayPalManager.Current.RequestFuturePayments();
@@ -148,7 +148,7 @@ if (result.Status == PayPalStatus.Cancelled) {
 }
 ```
 
-##Profile sharing
+## Profile sharing
 
 ```
 var result = await CrossPayPalManager.Current.AuthorizeProfileSharing();
@@ -161,14 +161,14 @@ if (result.Status == PayPalStatus.Cancelled) {
 }
 ```
 
-##Obtain a Client Metadata ID
+## Obtain a Client Metadata ID
 
 ```
 //Print Client Metadata Id
 Debug.WriteLine(CrossPayPalManager.Current.ClientMetadataId);
 ```
 
-##Standalone Card Scanner
+## Standalone Card Scanner
 
 ```
 //Optional parameter CardIOLogo("PayPal", "CardIO" or "None") for ScanCard method by default "PayPal" is used
