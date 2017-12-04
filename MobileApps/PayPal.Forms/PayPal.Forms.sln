@@ -35,10 +35,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PayPayiOSTest", "PayPalAndr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Nuget", "Nuget", "{6CDD8DE1-1587-407D-A481-23545D962620}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\nuget\PayPal.Forms.nuspec = ..\..\nuget\PayPal.Forms.nuspec
-		..\..\nuget\Xamarin.PayPal.Android.CardIO.nuspec = ..\..\nuget\Xamarin.PayPal.Android.CardIO.nuspec
-		..\..\nuget\Xamarin.PayPal.Android.nuspec = ..\..\nuget\Xamarin.PayPal.Android.nuspec
-		..\..\nuget\Xamarin.PayPal.iOS.nuspec = ..\..\nuget\Xamarin.PayPal.iOS.nuspec
+		..\..\PayPal.Forms.nuspec = ..\..\PayPal.Forms.nuspec
+		..\..\Xamarin.PayPal.Android.CardIO.nuspec = ..\..\Xamarin.PayPal.Android.CardIO.nuspec
+		..\..\Xamarin.PayPal.Android.nuspec = ..\..\Xamarin.PayPal.Android.nuspec
+		..\..\Xamarin.PayPal.iOS.nuspec = ..\..\Xamarin.PayPal.iOS.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PayPal.Forms.Test.PCL", "PayPal.Forms.Test.PCL", "{FFAF1A76-94CB-4386-BA2C-3E3CB7CFD8CC}"

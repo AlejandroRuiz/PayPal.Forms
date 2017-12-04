@@ -45,7 +45,7 @@
       <HintPath>..\MobileApps\PayPal.Forms\packages\Square.OkHttp3.3.5.0\lib\MonoAndroid\Square.OkHttp3.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.PayPal.Android.CardIO">
-      <HintPath>..\MobileApps\PayPal.Forms\packages\Xamarin.PayPal.Android.CardIO.1.0.0\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
+      <HintPath>..\MobileApps\PayPal.Forms\packages\Xamarin.PayPal.Android.CardIO.2.0.0\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

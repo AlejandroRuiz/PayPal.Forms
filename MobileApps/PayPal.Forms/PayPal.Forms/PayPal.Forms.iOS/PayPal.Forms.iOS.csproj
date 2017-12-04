@@ -34,9 +34,6 @@
 		<Reference Include="System.Xml" />
 		<Reference Include="System.Core" />
 		<Reference Include="Xamarin.iOS" />
-		<Reference Include="Xamarin.PayPal.iOS">
-		  <HintPath>..\..\packages\Xamarin.PayPal.iOS.2.16.1\lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll</HintPath>
-		</Reference>
 		<Reference Include="Microsoft.CSharp" />
 		<Reference Include="System.IO.Compression" />
 		<Reference Include="System.Net.Http" />
@@ -54,6 +51,9 @@
 		</Reference>
 		<Reference Include="Xamarin.Forms.Xaml">
 		  <HintPath>..\..\packages\Xamarin.Forms.2.5.0.121934\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+		</Reference>
+		<Reference Include="Xamarin.PayPal.iOS">
+		  <HintPath>..\..\packages\Xamarin.PayPal.iOS.2.17.0\lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>

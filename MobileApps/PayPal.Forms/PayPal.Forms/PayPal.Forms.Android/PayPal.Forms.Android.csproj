@@ -49,12 +49,6 @@
 		<Reference Include="Square.OkHttp3">
 		  <HintPath>..\..\packages\Square.OkHttp3.3.5.0\lib\MonoAndroid\Square.OkHttp3.dll</HintPath>
 		</Reference>
-		<Reference Include="Xamarin.PayPal.Android.CardIO">
-		  <HintPath>..\..\packages\Xamarin.PayPal.Android.CardIO.1.0.0\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
-		</Reference>
-		<Reference Include="Xamarin.PayPal.Android">
-		  <HintPath>..\..\packages\Xamarin.PayPal.Android.2.15.1\lib\MonoAndroid10\Xamarin.PayPal.Android.dll</HintPath>
-		</Reference>
 		<Reference Include="Microsoft.CSharp" />
 		<Reference Include="System.IO.Compression" />
 		<Reference Include="System.Net.Http" />
@@ -123,6 +117,12 @@
 		</Reference>
 		<Reference Include="Xamarin.Forms.Xaml">
 		  <HintPath>..\..\packages\Xamarin.Forms.2.5.0.121934\lib\MonoAndroid10\Xamarin.Forms.Xaml.dll</HintPath>
+		</Reference>
+		<Reference Include="Xamarin.PayPal.Android.CardIO">
+		  <HintPath>..\..\packages\Xamarin.PayPal.Android.CardIO.2.0.0\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
+		</Reference>
+		<Reference Include="Xamarin.PayPal.Android">
+		  <HintPath>..\..\packages\Xamarin.PayPal.Android.2.17.0\lib\MonoAndroid10\Xamarin.PayPal.Android.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>

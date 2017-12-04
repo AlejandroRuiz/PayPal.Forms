@@ -1,7 +1,6 @@
 ﻿using System;
 
 using Xamarin.Forms;
-using PayPal.Forms.Abstractions.Enum;
 using System.Diagnostics;
 using PayPal.Forms.Abstractions;
 
