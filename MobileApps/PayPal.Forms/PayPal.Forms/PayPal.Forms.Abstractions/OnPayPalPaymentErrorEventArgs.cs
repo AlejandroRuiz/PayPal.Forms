@@ -2,14 +2,13 @@
 
 namespace PayPal.Forms.Abstractions
 {
-	public class OnPayPalPaymentErrorEventArgs:EventArgs
-	{
-		public string ErrorMessage { get; private set; }
+    public class OnPayPalPaymentErrorEventArgs : EventArgs
+    {
+        public string ErrorMessage { get; }
 
-		public OnPayPalPaymentErrorEventArgs (string errorMessage)
-		{
-			ErrorMessage = errorMessage;
-		}
-	}
+        public OnPayPalPaymentErrorEventArgs(string errorMessage)
+        {
+            this.ErrorMessage = errorMessage;
+        }
+    }
 }
-

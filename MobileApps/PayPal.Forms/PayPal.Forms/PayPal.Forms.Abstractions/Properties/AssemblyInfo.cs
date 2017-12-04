@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle ("PayPal.Forms.Abstractions")]
 [assembly: AssemblyDescription ("PayPal Plugin for Xamarin.Forms")]
 [assembly: AssemblyConfiguration ("")]
-[assembly: AssemblyCompany ("Los Xamarinos")]
+[assembly: AssemblyCompany ("Alejandro Ruiz")]
 [assembly: AssemblyProduct ("PayPal.Forms")]
 [assembly: AssemblyCopyright ("Alejandro Ruiz")]
 [assembly: AssemblyTrademark ("")]

@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace PayPal.Forms.Abstractions.Enum
+namespace PayPal.Forms.Abstractions
 {
-	public enum PayPalEnvironment
-	{
-		NoNetwork,
-		Production,
-		Sandbox
-	}
+    public enum PayPalEnvironment
+    {
+        NoNetwork,
+        Production,
+        Sandbox
+    }
 }
-

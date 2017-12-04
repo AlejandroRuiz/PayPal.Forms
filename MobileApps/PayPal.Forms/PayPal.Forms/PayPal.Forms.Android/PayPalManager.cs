@@ -10,458 +10,423 @@ using Org.Json;
 using Xamarin.PayPal.Android.CardIO.Payment;
 using Android.Graphics;
 using System.Globalization;
-using PayPal.Forms.Abstractions.Enum;
+using PayPalForms = PayPal.Forms.Abstractions;
 
 namespace PayPal.Forms
 {
-	public class PayPalManager
-	{
-		Context Context;
-
-		private static string CONFIG_ENVIRONMENT;
-
-		private static string CONFIG_CLIENT_ID = "credential from developer.paypal.com";
-
-		public static int REQUEST_CODE_PAYMENT = 1;
-		public static int REQUEST_CODE_FUTURE_PAYMENT = 2;
-		public static int REQUEST_CODE_PROFILE_SHARING = 3;
-		public static int REQUEST_CODE_CARD_SCAN = 4;
-
-		private PayPalConfiguration config;
-
-		PayPal.Forms.Abstractions.PayPalConfiguration _xfconfig;
-
-		public PayPalManager (Context context, PayPal.Forms.Abstractions.PayPalConfiguration xfconfig)
-		{
-			_xfconfig = xfconfig;
-			Context = context;
-
-			switch (xfconfig.Environment) {
-			case PayPal.Forms.Abstractions.Enum.PayPalEnvironment.NoNetwork:
-				CONFIG_ENVIRONMENT = PayPalConfiguration.EnvironmentNoNetwork;
-				break;
-			case PayPal.Forms.Abstractions.Enum.PayPalEnvironment.Production:
-				CONFIG_ENVIRONMENT = PayPalConfiguration.EnvironmentProduction;
-				break;
-			case PayPal.Forms.Abstractions.Enum.PayPalEnvironment.Sandbox:
-				CONFIG_ENVIRONMENT = PayPalConfiguration.EnvironmentSandbox;
-				break;
-			}
-
-			CONFIG_CLIENT_ID = xfconfig.PayPalKey;
-
-			config = new PayPalConfiguration()
-				.Environment(CONFIG_ENVIRONMENT)
-				.ClientId(CONFIG_CLIENT_ID)
-				.AcceptCreditCards(xfconfig.AcceptCreditCards)
-				.MerchantName(xfconfig.MerchantName)
-				.MerchantPrivacyPolicyUri(global::Android.Net.Uri.Parse(xfconfig.MerchantPrivacyPolicyUri))
-				.MerchantUserAgreementUri(global::Android.Net.Uri.Parse(xfconfig.MerchantUserAgreementUri));
-
-			if (!String.IsNullOrEmpty(xfconfig.Language))
-				config = config.LanguageOrLocale(xfconfig.Language);
-
-			if (!String.IsNullOrEmpty(xfconfig.PhoneCountryCode))
-				config = config.DefaultUserPhoneCountryCode(xfconfig.PhoneCountryCode);
-
-			Intent intent = new Intent (Context, typeof(PayPalService));
-			intent.PutExtra (PayPalService.ExtraPaypalConfiguration, config);
-			Context.StartService (intent);
-		}
-
-		private PayPalPayment getThingToBuy(string paymentIntent) {
-			return new PayPalPayment (new BigDecimal ("1.75"), "USD", "sample item",
-				paymentIntent);
-		}
-
-		private void addAppProvidedShippingAddress(PayPalPayment paypalPayment) {
-			ShippingAddress shippingAddress =
-				new ShippingAddress ().RecipientName ("Mom Parker").Line1 ("52 North Main St.")
-					.City ("Austin").State ("TX").PostalCode ("78729").CountryCode ("US");
-			paypalPayment.InvokeProvidedShippingAddress (shippingAddress);
-		}
-
-		private PayPalOAuthScopes getOauthScopes() {
-			HashSet<string> scopes = new HashSet<string> ();
-			scopes.Add (PayPalOAuthScopes.PaypalScopeOpenid);
-			scopes.Add (PayPalOAuthScopes.PaypalScopeEmail);
-			scopes.Add (PayPalOAuthScopes.PaypalScopeAddress);
-			scopes.Add (PayPalOAuthScopes.PaypalScopePhone);
-			return new PayPalOAuthScopes (scopes.ToList ());
-		}
-
-		Action OnCancelled;
-
-		Action<string> OnSuccess;
-
-		Action<string> OnError;
-
-		public void BuyItems(
-			PayPal.Forms.Abstractions.PayPalItem[] items,
-			Decimal xfshipping,
-			Decimal xftax,
-			PaymentIntent xfintent,
-			Action onCancelled,
-			Action<string> onSuccess,
-			Action<string> onError,
-			PayPal.Forms.Abstractions.ShippingAddress address
-		) {
-
-			OnCancelled = onCancelled;
-			OnSuccess = onSuccess;
-			OnError = onError;
-
-			List<PayPalItem> nativeItems = new List<PayPalItem> ();
-			foreach (var product in items)
-			{
-				nativeItems.Add(new PayPalItem(
-					product.Name,
-					new Java.Lang.Integer((int)product.Quantity),
-					new BigDecimal(RoundNumber((double)product.Price)),
-					product.Currency,
-					product.SKU)
-				);
-			}
-
-			BigDecimal subtotal = PayPalItem.GetItemTotal (nativeItems.ToArray ());
-			BigDecimal shipping = new BigDecimal(RoundNumber((double)xfshipping));
-			BigDecimal tax = new BigDecimal(RoundNumber((double)xftax));
-			PayPalPaymentDetails paymentDetails = new PayPalPaymentDetails (shipping, subtotal, tax);
-			BigDecimal amount = subtotal.Add (shipping).Add (tax);
-
-			string paymentIntent;
-			switch (xfintent)
-			{
-				case PaymentIntent.Authorize:
-					paymentIntent = PayPalPayment.PaymentIntentAuthorize;
-					break;
-
-				case PaymentIntent.Order:
-					paymentIntent = PayPalPayment.PaymentIntentOrder;
-					break;
-
-				default:
-				case PaymentIntent.Sale:
-					paymentIntent = PayPalPayment.PaymentIntentSale;
-					break;
-			}
-
-			PayPalPayment payment = new PayPalPayment (amount, nativeItems.FirstOrDefault().Currency, "Multiple items", paymentIntent);
-			payment = payment.Items (nativeItems.ToArray ()).PaymentDetails (paymentDetails);
-
-			if (address != null)
-			{
-				ShippingAddress shippingAddress = new ShippingAddress()
-					.RecipientName(address.RecipientName)
-					.Line1(address.Line1)
-					.Line2(address.Line2)
-					.City(address.City)
-					.State(address.State)
-					.PostalCode(address.PostalCode)
-					.CountryCode(address.CountryCode);
-				payment = payment.InvokeProvidedShippingAddress(shippingAddress);
-			}
-
-			switch (_xfconfig.ShippingAddressOption)
-			{
-				case Abstractions.Enum.ShippingAddressOption.Both:
-				case Abstractions.Enum.ShippingAddressOption.PayPal:
-					payment = payment.EnablePayPalShippingAddressesRetrieval(true);
-					break;
-				default:
-					payment = payment.EnablePayPalShippingAddressesRetrieval(false);
-					break;
-			}
-
-			Intent intent = new Intent (Context, typeof(PaymentActivity));
-
-			intent.PutExtra (PayPalService.ExtraPaypalConfiguration, config);
-
-			intent.PutExtra (PaymentActivity.ExtraPayment, payment);
-
-			(Context as Activity).StartActivityForResult (intent, REQUEST_CODE_PAYMENT);
-		}
-
-		public void BuyItem(
-			PayPal.Forms.Abstractions.PayPalItem item,
-			Decimal xftax,
-			PaymentIntent xfintent,
-			Action onCancelled,
-			Action<string> onSuccess,
-			Action<string> onError,
-			PayPal.Forms.Abstractions.ShippingAddress address
-		)
-		{
-
-			OnCancelled = onCancelled;
-			OnSuccess = onSuccess;
-			OnError = onError;
-			BigDecimal amount = new BigDecimal(RoundNumber((double)item.Price)).Add(new BigDecimal(RoundNumber((double)xftax)));
-
-			string paymentIntent;
-			switch (xfintent)
-			{
-			  case PaymentIntent.Authorize:
-			    paymentIntent = PayPalPayment.PaymentIntentAuthorize;
-			    break;
-
-			  case PaymentIntent.Order:
-			    paymentIntent = PayPalPayment.PaymentIntentOrder;
-			    break;
-
-			  default:
-			  case PaymentIntent.Sale:
-			    paymentIntent = PayPalPayment.PaymentIntentSale;
-			    break;
-			}
-
-			PayPalPayment payment = new PayPalPayment(amount, item.Currency, item.Name, paymentIntent);
-
-			if (address != null)
-			{
-				ShippingAddress shippingAddress = new ShippingAddress()
-					.RecipientName(address.RecipientName)
-					.Line1(address.Line1)
-					.Line2(address.Line2)
-					.City(address.City)
-					.State(address.State)
-					.PostalCode(address.PostalCode)
-					.CountryCode(address.CountryCode);
-				payment = payment.InvokeProvidedShippingAddress(shippingAddress);
-			}
-
-			switch (_xfconfig.ShippingAddressOption)
-			{
-				case Abstractions.Enum.ShippingAddressOption.Both:
-				case Abstractions.Enum.ShippingAddressOption.PayPal:
-					payment = payment.EnablePayPalShippingAddressesRetrieval(true);
-					break;
-				default:
-					payment = payment.EnablePayPalShippingAddressesRetrieval(false);
-					break;
-			}
-
-			Intent intent = new Intent(Context, typeof(PaymentActivity));
-
-			intent.PutExtra(PayPalService.ExtraPaypalConfiguration, config);
-
-			intent.PutExtra(PaymentActivity.ExtraPayment, payment);
-
-			(Context as Activity).StartActivityForResult(intent, REQUEST_CODE_PAYMENT);
-		}
-
-		public string GetClientMetadataId() {
-			string metadataId = PayPalConfiguration.GetClientMetadataId(Context);
-			return metadataId;
-		}
-
-		public void FuturePayment(Action onCancelled, Action<string> onSuccess, Action<string> onError) {
-
-			OnCancelled = onCancelled;
-			OnSuccess = onSuccess;
-			OnError = onError;
-
-			Intent intent = new Intent (Context, typeof(PayPalFuturePaymentActivity));
-
-			intent.PutExtra(PayPalService.ExtraPaypalConfiguration, config);
-
-			(Context as Activity).StartActivityForResult(intent, REQUEST_CODE_FUTURE_PAYMENT);
-		}
-
-		public void AuthorizeProfileSharing(Action onCancelled, Action<string> onSuccess, Action<string> onError) {
-
-			OnCancelled = onCancelled;
-			OnSuccess = onSuccess;
-			OnError = onError;
-
-			Intent intent = new Intent (Context, typeof(PayPalProfileSharingActivity));
-
-			intent.PutExtra(PayPalService.ExtraPaypalConfiguration, config);
-
-			intent.PutExtra (PayPalProfileSharingActivity.ExtraRequestedScopes, getOauthScopes ());
-
-			(Context as Activity).StartActivityForResult (intent, REQUEST_CODE_PROFILE_SHARING);
-		}
-
-		Action RetrieveCardCancelled;
-
-		Action<Xamarin.PayPal.Android.CardIO.Payment.CreditCard, Bitmap> RetrieveCardSuccess;
-
-		public void RequestCardData(Action onCancelled, Action<Xamarin.PayPal.Android.CardIO.Payment.CreditCard, Bitmap> onSuccess, PayPal.Forms.Abstractions.Enum.CardIOLogo scannerLogo)
-		{
-			RetrieveCardCancelled = onCancelled;
-			RetrieveCardSuccess = onSuccess;
-
-			Intent intent = new Intent(Context, typeof(CardIOActivity));
-
-			switch (scannerLogo)
-			{
-				case Abstractions.Enum.CardIOLogo.CardIO:
-					intent.PutExtra(CardIOActivity.ExtraHideCardioLogo, false);
-					intent.PutExtra(CardIOActivity.ExtraUseCardioLogo, true);
-					break;
-				case Abstractions.Enum.CardIOLogo.None:
-					intent.PutExtra(CardIOActivity.ExtraHideCardioLogo, true);
-					intent.PutExtra(CardIOActivity.ExtraUseCardioLogo, false);
-					break;
-			}
-
-			intent.PutExtra (CardIOActivity.ExtraReturnCardImage, true);
-			intent.PutExtra (CardIOActivity.ExtraRequireExpiry, true);
-			intent.PutExtra (CardIOActivity.ExtraRequireCvv, true);
-
-			(Context as Activity).StartActivityForResult(intent, REQUEST_CODE_CARD_SCAN);
-
-		}
-
-		public void Destroy()
-		{
-			Context.StopService (new Intent (Context, typeof(PayPalService)));
-		}
-
-		public void OnActivityResult(int requestCode, Result resultCode, global::Android.Content.Intent data)
-		{
-			if (requestCode == PayPalManager.REQUEST_CODE_PAYMENT)
-			{
-				if (resultCode == Result.Ok)
-				{
-					PaymentConfirmation confirm =
-						(PaymentConfirmation)data.GetParcelableExtra(PaymentActivity.ExtraResultConfirmation);
-					if (confirm != null)
-					{
-						try
-						{
-							OnSuccess?.Invoke(confirm.ToJSONObject().ToString());
-							OnSuccess = null;
-
-						}
-						catch (JSONException e)
-						{
-							OnError?.Invoke("an extremely unlikely failure occurred: " + e.Message);
-							OnError = null;
-							System.Diagnostics.Debug.WriteLine("an extremely unlikely failure occurred: " + e.Message);
-						}
-					}
-					OnError?.Invoke("Unknown Error");
-					OnError = null;
-				}
-				else if (resultCode == Result.Canceled)
-				{
-					OnCancelled?.Invoke();
-					OnCancelled = null;
-					System.Diagnostics.Debug.WriteLine("The user canceled.");
-				}
-				else if ((int)resultCode == PaymentActivity.ResultExtrasInvalid)
-				{
-					OnError?.Invoke("An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
-					OnError = null;
-					System.Diagnostics.Debug.WriteLine(
-						"An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
-				}
-			}
-			else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT)
-			{
-				if (resultCode == Result.Ok)
-				{
-					PayPalAuthorization auth =
-						(PayPalAuthorization)data.GetParcelableExtra(PayPalFuturePaymentActivity.ExtraResultAuthorization);
-					if (auth != null)
-					{
-						try
-						{
-							OnSuccess?.Invoke(auth.ToJSONObject().ToString());
-							OnSuccess = null;
-						}
-						catch (JSONException e)
-						{
-							System.Diagnostics.Debug.WriteLine("an extremely unlikely failure occurred: " + e.Message);
-						}
-					}
-					OnError?.Invoke("Unknown Error");
-					OnError = null;
-				}
-				else if (resultCode == Result.Canceled)
-				{
-					OnCancelled?.Invoke();
-					OnCancelled = null;
-					System.Diagnostics.Debug.WriteLine("The user canceled.");
-				}
-				else if ((int)resultCode == PayPalFuturePaymentActivity.ResultExtrasInvalid)
-				{
-					OnError?.Invoke("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
-					OnError = null;
-					System.Diagnostics.Debug.WriteLine(
-						"Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
-				}
-			}
-			else if (requestCode == REQUEST_CODE_PROFILE_SHARING)
-			{
-				if (resultCode == Result.Ok)
-				{
-					PayPalAuthorization auth =
-						(PayPalAuthorization)data.GetParcelableExtra(PayPalProfileSharingActivity.ExtraResultAuthorization);
-					if (auth != null)
-					{
-						try
-						{
-							OnSuccess?.Invoke(auth.ToJSONObject().ToString());
-							OnSuccess = null;
-						}
-						catch (JSONException e)
-						{
-							System.Diagnostics.Debug.WriteLine("an extremely unlikely failure occurred: " + e.Message);
-						}
-					}
-					OnError?.Invoke("Unknown Error");
-					OnError = null;
-				}
-				else if (resultCode == Result.Canceled)
-				{
-					OnCancelled?.Invoke();
-					OnCancelled = null;
-					System.Diagnostics.Debug.WriteLine("The user canceled.");
-				}
-				else if ((int)resultCode == PayPalFuturePaymentActivity.ResultExtrasInvalid)
-				{
-					OnError?.Invoke("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
-					OnError = null;
-					System.Diagnostics.Debug.WriteLine(
-						"Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
-				}
-			} else if(requestCode == REQUEST_CODE_CARD_SCAN){
-				if (data == null) {
-					RetrieveCardCancelled?.Invoke ();
-					RetrieveCardCancelled = null;
-					System.Diagnostics.Debug.WriteLine ("The user canceled.");
-					return;
-				}
-				var card = (CreditCard)data.GetParcelableExtra(CardIOActivity.ExtraScanResult);
-				if (card != null)
-				{
-					RetrieveCardSuccess?.Invoke(card, CardIOActivity.GetCapturedCardImage (data));
-					RetrieveCardSuccess = null;
-				}
-				else
-				{
-					RetrieveCardCancelled?.Invoke();
-					RetrieveCardCancelled = null;
-					System.Diagnostics.Debug.WriteLine("The user canceled.");
-				}
-			}
-		}
-
-		string RoundNumber(double myNumber)
-		{
-			var s = string.Format(CultureInfo.InvariantCulture, "{0:0.00}", myNumber);
-
-			if (s.EndsWith("00"))
-			{
-				return ((int)myNumber).ToString();
-			}
-			else
-			{
-				return s;
-			}
-		}
-	}
+    public class PayPalManager
+    {
+        public const int REQUEST_CODE_PAYMENT = 1;
+        public const int REQUEST_CODE_FUTURE_PAYMENT = 2;
+        public const int REQUEST_CODE_PROFILE_SHARING = 3;
+        public const int REQUEST_CODE_CARD_SCAN = 4;
+
+        string _configEnvironment;
+        string _configClientId = "credential from developer.paypal.com";
+        PayPalConfiguration _nativeConfig;
+        PayPalForms.PayPalConfiguration _formsConfig;
+        Action _onCancelled;
+        Action<string> _onSuccess;
+        Action<string> _onError;
+        Action _retrieveCardCancelled;
+        Action<Xamarin.PayPal.Android.CardIO.Payment.CreditCard, Bitmap> _retrieveCardSuccess;
+
+        public PayPalManager(PayPalForms.PayPalConfiguration xfconfig, Context context)
+        {
+            Context = context;
+            UpdateConfig(xfconfig);
+        }
+
+        public void BuyItems(PayPalForms.PayPalItem[] items, Decimal xfshipping, Decimal xftax, PayPalForms.PaymentIntent xfintent, Action onCancelled, Action<string> onSuccess, Action<string> onError, PayPalForms.ShippingAddress address)
+        {
+            _onCancelled = onCancelled;
+            _onSuccess = onSuccess;
+            _onError = onError;
+
+            List<PayPalItem> nativeItems = new List<PayPalItem>();
+            foreach (var product in items)
+            {
+                nativeItems.Add(new PayPalItem(
+                    product.Name,
+                    new Java.Lang.Integer((int)product.Quantity),
+                    new BigDecimal(RoundNumber((double)product.Price)),
+                    product.Currency,
+                    product.SKU)
+                );
+            }
+            BigDecimal subtotal = PayPalItem.GetItemTotal(nativeItems.ToArray());
+            BigDecimal shipping = new BigDecimal(RoundNumber((double)xfshipping));
+            BigDecimal tax = new BigDecimal(RoundNumber((double)xftax));
+            PayPalPaymentDetails paymentDetails = new PayPalPaymentDetails(shipping, subtotal, tax);
+            BigDecimal amount = subtotal.Add(shipping).Add(tax);
+            string paymentIntent;
+            switch (xfintent)
+            {
+                case PayPalForms.PaymentIntent.Authorize:
+                    paymentIntent = PayPalPayment.PaymentIntentAuthorize;
+                    break;
+                case PayPalForms.PaymentIntent.Order:
+                    paymentIntent = PayPalPayment.PaymentIntentOrder;
+                    break;
+                default:
+                    paymentIntent = PayPalPayment.PaymentIntentSale;
+                    break;
+            }
+            PayPalPayment payment = new PayPalPayment(amount, nativeItems.FirstOrDefault().Currency, "Multiple items", paymentIntent);
+            payment = payment.Items(nativeItems.ToArray()).PaymentDetails(paymentDetails);
+            if (address != null)
+            {
+                ShippingAddress shippingAddress = new ShippingAddress()
+                    .RecipientName(address.RecipientName)
+                    .Line1(address.Line1)
+                    .Line2(address.Line2)
+                    .City(address.City)
+                    .State(address.State)
+                    .PostalCode(address.PostalCode)
+                    .CountryCode(address.CountryCode);
+                payment = payment.InvokeProvidedShippingAddress(shippingAddress);
+            }
+            switch (_formsConfig.ShippingAddressOption)
+            {
+                case Abstractions.ShippingAddressOption.Both:
+                case Abstractions.ShippingAddressOption.PayPal:
+                    payment = payment.EnablePayPalShippingAddressesRetrieval(true);
+                    break;
+                default:
+                    payment = payment.EnablePayPalShippingAddressesRetrieval(false);
+                    break;
+            }
+            Intent intent = new Intent(Context, typeof(PaymentActivity));
+            intent.PutExtra(PayPalService.ExtraPaypalConfiguration, _nativeConfig);
+            intent.PutExtra(PaymentActivity.ExtraPayment, payment);
+            (Context as Activity).StartActivityForResult(intent, REQUEST_CODE_PAYMENT);
+        }
+
+        public void BuyItem(PayPalForms.PayPalItem item, Decimal xftax, PayPalForms.PaymentIntent xfintent, Action onCancelled, Action<string> onSuccess, Action<string> onError, PayPalForms.ShippingAddress address)
+        {
+            _onCancelled = onCancelled;
+            _onSuccess = onSuccess;
+            _onError = onError;
+
+            BigDecimal amount = new BigDecimal(RoundNumber((double)item.Price)).Add(new BigDecimal(RoundNumber((double)xftax)));
+            string paymentIntent;
+            switch (xfintent)
+            {
+                case PayPalForms.PaymentIntent.Authorize:
+                    paymentIntent = PayPalPayment.PaymentIntentAuthorize;
+                    break;
+
+                case PayPalForms.PaymentIntent.Order:
+                    paymentIntent = PayPalPayment.PaymentIntentOrder;
+                    break;
+
+                default:
+                case PayPalForms.PaymentIntent.Sale:
+                    paymentIntent = PayPalPayment.PaymentIntentSale;
+                    break;
+            }
+            PayPalPayment payment = new PayPalPayment(amount, item.Currency, item.Name, paymentIntent);
+            if (address != null)
+            {
+                ShippingAddress shippingAddress = new ShippingAddress()
+                    .RecipientName(address.RecipientName)
+                    .Line1(address.Line1)
+                    .Line2(address.Line2)
+                    .City(address.City)
+                    .State(address.State)
+                    .PostalCode(address.PostalCode)
+                    .CountryCode(address.CountryCode);
+                payment = payment.InvokeProvidedShippingAddress(shippingAddress);
+            }
+            switch (_formsConfig.ShippingAddressOption)
+            {
+                case Abstractions.ShippingAddressOption.Both:
+                case Abstractions.ShippingAddressOption.PayPal:
+                    payment = payment.EnablePayPalShippingAddressesRetrieval(true);
+                    break;
+                default:
+                    payment = payment.EnablePayPalShippingAddressesRetrieval(false);
+                    break;
+            }
+            Intent intent = new Intent(Context, typeof(PaymentActivity));
+            intent.PutExtra(PayPalService.ExtraPaypalConfiguration, _nativeConfig);
+            intent.PutExtra(PaymentActivity.ExtraPayment, payment);
+            (Context as Activity).StartActivityForResult(intent, REQUEST_CODE_PAYMENT);
+        }
+
+        public string GetClientMetadataId() => PayPalConfiguration.GetClientMetadataId(Context);
+
+        public void FuturePayment(Action onCancelled, Action<string> onSuccess, Action<string> onError)
+        {
+            _onCancelled = onCancelled;
+            _onSuccess = onSuccess;
+            _onError = onError;
+
+            Intent intent = new Intent(Context, typeof(PayPalFuturePaymentActivity));
+            intent.PutExtra(PayPalService.ExtraPaypalConfiguration, _nativeConfig);
+            (Context as Activity).StartActivityForResult(intent, REQUEST_CODE_FUTURE_PAYMENT);
+        }
+
+        public void AuthorizeProfileSharing(Action onCancelled, Action<string> onSuccess, Action<string> onError)
+        {
+            _onCancelled = onCancelled;
+            _onSuccess = onSuccess;
+            _onError = onError;
+
+            Intent intent = new Intent(Context, typeof(PayPalProfileSharingActivity));
+            intent.PutExtra(PayPalService.ExtraPaypalConfiguration, _nativeConfig);
+            intent.PutExtra(PayPalProfileSharingActivity.ExtraRequestedScopes, GetOauthScopes());
+            (Context as Activity).StartActivityForResult(intent, REQUEST_CODE_PROFILE_SHARING);
+        }
+
+        public void RequestCardData(Action onCancelled, Action<CreditCard, Bitmap> onSuccess, PayPalForms.CardIOLogo scannerLogo)
+        {
+            _retrieveCardCancelled = onCancelled;
+            _retrieveCardSuccess = onSuccess;
+
+            Intent intent = new Intent(Context, typeof(CardIOActivity));
+            switch (scannerLogo)
+            {
+                case PayPalForms.CardIOLogo.CardIO:
+                    intent.PutExtra(CardIOActivity.ExtraHideCardioLogo, false);
+                    intent.PutExtra(CardIOActivity.ExtraUseCardioLogo, true);
+                    break;
+                case PayPalForms.CardIOLogo.None:
+                    intent.PutExtra(CardIOActivity.ExtraHideCardioLogo, true);
+                    intent.PutExtra(CardIOActivity.ExtraUseCardioLogo, false);
+                    break;
+            }
+            intent.PutExtra(CardIOActivity.ExtraReturnCardImage, true);
+            intent.PutExtra(CardIOActivity.ExtraRequireExpiry, true);
+            intent.PutExtra(CardIOActivity.ExtraRequireCvv, true);
+            (Context as Activity).StartActivityForResult(intent, REQUEST_CODE_CARD_SCAN);
+        }
+
+        public void Destroy()
+        {
+            try
+            {
+                Context.StopService(new Intent(Context, typeof(PayPalService)));
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine($"[Exception] while stopping service {e.Message}");
+            }
+        }
+
+        public void UpdateConfig(PayPalForms.PayPalConfiguration _newConfig)
+        {
+            _formsConfig = _newConfig;
+            InitConfig();
+        }
+
+        public void ClearUserData()
+        {
+            Destroy();
+            _nativeConfig = _nativeConfig.RememberUser(false);
+            StartService();
+        }
+
+        public void OnActivityResult(int requestCode, Result resultCode, global::Android.Content.Intent data)
+        {
+            if (requestCode == REQUEST_CODE_PAYMENT)
+            {
+                if (resultCode == Result.Ok)
+                {
+                    PaymentConfirmation confirm = (PaymentConfirmation)data.GetParcelableExtra(PaymentActivity.ExtraResultConfirmation);
+                    if (confirm != null)
+                    {
+                        try
+                        {
+                            _onSuccess?.Invoke(confirm.ToJSONObject().ToString());
+                            _onSuccess = null;
+
+                        }
+                        catch (JSONException e)
+                        {
+                            _onError?.Invoke("an extremely unlikely failure occurred: " + e.Message);
+                            _onError = null;
+                            System.Diagnostics.Debug.WriteLine("an extremely unlikely failure occurred: " + e.Message);
+                        }
+                    }
+                    _onError?.Invoke("Unknown Error");
+                    _onError = null;
+                }
+                else if (resultCode == Result.Canceled)
+                {
+                    _onCancelled?.Invoke();
+                    _onCancelled = null;
+                    System.Diagnostics.Debug.WriteLine("The user canceled.");
+                }
+                else if ((int)resultCode == PaymentActivity.ResultExtrasInvalid)
+                {
+                    _onError?.Invoke("An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+                    _onError = null;
+                    System.Diagnostics.Debug.WriteLine("An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
+                }
+            }
+            else if (requestCode == REQUEST_CODE_FUTURE_PAYMENT)
+            {
+                if (resultCode == Result.Ok)
+                {
+                    PayPalAuthorization auth = (PayPalAuthorization)data.GetParcelableExtra(PayPalFuturePaymentActivity.ExtraResultAuthorization);
+                    if (auth != null)
+                    {
+                        try
+                        {
+                            _onSuccess?.Invoke(auth.ToJSONObject().ToString());
+                            _onSuccess = null;
+                        }
+                        catch (JSONException e)
+                        {
+                            System.Diagnostics.Debug.WriteLine("an extremely unlikely failure occurred: " + e.Message);
+                        }
+                    }
+                    _onError?.Invoke("Unknown Error");
+                    _onError = null;
+                }
+                else if (resultCode == Result.Canceled)
+                {
+                    _onCancelled?.Invoke();
+                    _onCancelled = null;
+                    System.Diagnostics.Debug.WriteLine("The user canceled.");
+                }
+                else if ((int)resultCode == PayPalFuturePaymentActivity.ResultExtrasInvalid)
+                {
+                    _onError?.Invoke("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+                    _onError = null;
+                    System.Diagnostics.Debug.WriteLine("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+                }
+            }
+            else if (requestCode == REQUEST_CODE_PROFILE_SHARING)
+            {
+                if (resultCode == Result.Ok)
+                {
+                    PayPalAuthorization auth = (PayPalAuthorization)data.GetParcelableExtra(PayPalProfileSharingActivity.ExtraResultAuthorization);
+                    if (auth != null)
+                    {
+                        try
+                        {
+                            _onSuccess?.Invoke(auth.ToJSONObject().ToString());
+                            _onSuccess = null;
+                        }
+                        catch (JSONException e)
+                        {
+                            System.Diagnostics.Debug.WriteLine("an extremely unlikely failure occurred: " + e.Message);
+                        }
+                    }
+                    _onError?.Invoke("Unknown Error");
+                    _onError = null;
+                }
+                else if (resultCode == Result.Canceled)
+                {
+                    _onCancelled?.Invoke();
+                    _onCancelled = null;
+                    System.Diagnostics.Debug.WriteLine("The user canceled.");
+                }
+                else if ((int)resultCode == PayPalFuturePaymentActivity.ResultExtrasInvalid)
+                {
+                    _onError?.Invoke("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+                    _onError = null;
+                    System.Diagnostics.Debug.WriteLine("Probably the attempt to previously start the PayPalService had an invalid PayPalConfiguration. Please see the docs.");
+                }
+            }
+            else if (requestCode == REQUEST_CODE_CARD_SCAN)
+            {
+                if (data == null)
+                {
+                    _retrieveCardCancelled?.Invoke();
+                    _retrieveCardCancelled = null;
+                    System.Diagnostics.Debug.WriteLine("The user canceled.");
+                }
+                else
+                {
+                    var card = (CreditCard)data.GetParcelableExtra(CardIOActivity.ExtraScanResult);
+                    if (card != null)
+                    {
+                        _retrieveCardSuccess?.Invoke(card, CardIOActivity.GetCapturedCardImage(data));
+                        _retrieveCardSuccess = null;
+                    }
+                    else
+                    {
+                        _retrieveCardCancelled?.Invoke();
+                        _retrieveCardCancelled = null;
+                        System.Diagnostics.Debug.WriteLine("The user canceled.");
+                    }
+                }
+            }
+        }
+
+        public Context Context { get; }
+
+        void InitConfig()
+        {
+            Destroy();
+
+            switch (_formsConfig.Environment)
+            {
+                case PayPalForms.PayPalEnvironment.NoNetwork:
+                    _configEnvironment = PayPalConfiguration.EnvironmentNoNetwork;
+                    break;
+                case PayPalForms.PayPalEnvironment.Production:
+                    _configEnvironment = PayPalConfiguration.EnvironmentProduction;
+                    break;
+                case PayPalForms.PayPalEnvironment.Sandbox:
+                    _configEnvironment = PayPalConfiguration.EnvironmentSandbox;
+                    break;
+            }
+
+            _configClientId = _formsConfig.PayPalKey;
+
+            _nativeConfig = new PayPalConfiguration()
+                .Environment(_configEnvironment)
+                .ClientId(_configClientId)
+                .AcceptCreditCards(_formsConfig.AcceptCreditCards)
+                .MerchantName(_formsConfig.MerchantName)
+                .MerchantPrivacyPolicyUri(global::Android.Net.Uri.Parse(_formsConfig.MerchantPrivacyPolicyUri))
+                .MerchantUserAgreementUri(global::Android.Net.Uri.Parse(_formsConfig.MerchantUserAgreementUri))
+                .RememberUser(_formsConfig.StoreUserData);
+
+            if (!String.IsNullOrEmpty(_formsConfig.Language))
+            {
+                _nativeConfig = _nativeConfig.LanguageOrLocale(_formsConfig.Language);
+            }
+
+            if (!String.IsNullOrEmpty(_formsConfig.PhoneCountryCode))
+            {
+                _nativeConfig = _nativeConfig.DefaultUserPhoneCountryCode(_formsConfig.PhoneCountryCode);
+            }
+            StartService();
+        }
+
+        void StartService()
+        {
+            Intent intent = new Intent(Context, typeof(PayPalService));
+            intent.PutExtra(PayPalService.ExtraPaypalConfiguration, _nativeConfig);
+            Context.StartService(intent);
+        }
+
+        PayPalOAuthScopes GetOauthScopes()
+        {
+            HashSet<string> scopes = new HashSet<string>();
+            scopes.Add(PayPalOAuthScopes.PaypalScopeOpenid);
+            scopes.Add(PayPalOAuthScopes.PaypalScopeEmail);
+            scopes.Add(PayPalOAuthScopes.PaypalScopeAddress);
+            scopes.Add(PayPalOAuthScopes.PaypalScopePhone);
+            return new PayPalOAuthScopes(scopes.ToList());
+        }
+
+        string RoundNumber(double baseNumber)
+        {
+            var s = string.Format(CultureInfo.InvariantCulture, "{0:0.00}", baseNumber);
+            if (s.EndsWith("00", true, CultureInfo.InvariantCulture))
+            {
+                return ((int)baseNumber).ToString();
+            }
+            else
+            {
+                return s;
+            }
+        }
+    }
 }

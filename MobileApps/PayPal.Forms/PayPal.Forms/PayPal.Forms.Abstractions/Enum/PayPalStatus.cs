@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace PayPal.Forms.Abstractions.Enum
+namespace PayPal.Forms.Abstractions
 {
-	public enum PayPalStatus
-	{
-		Successful,
-		Cancelled,
-		Error
-	}
+    public enum PayPalStatus
+    {
+        Successful,
+        Cancelled,
+        Error
+    }
 }
-

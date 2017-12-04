@@ -1,11 +1,11 @@
 ﻿using System;
-namespace PayPal.Forms.Abstractions.Enum
-{
-	public enum CardIOLogo
-	{
-		PayPal,
-		CardIO,
-		None
-	}
-}
 
+namespace PayPal.Forms.Abstractions
+{
+    public enum CardIOLogo
+    {
+        PayPal,
+        CardIO,
+        None
+    }
+}

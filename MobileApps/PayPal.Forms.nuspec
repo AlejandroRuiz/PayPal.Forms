@@ -1,61 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-	<metadata minClientVersion="2.8.3">
+	<metadata>
 		<id>PayPal.Forms</id>
-		<version>2.16.2</version>
+		<version>2.17.0</version>
 		<title>PayPal Plugin for Xamarin.Forms</title>
 		<authors>Alejandro Ruiz</authors>
 		<owners>Alejandro Ruiz</owners>
 		<iconUrl>http://xamarinos.com/img/favicon.ico</iconUrl>
-    <licenseUrl>https://raw.githubusercontent.com/AlejandroRuiz/PayPal.Forms/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/AlejandroRuiz/PayPal.Forms</projectUrl>
+        <licenseUrl>https://raw.githubusercontent.com/AlejandroRuiz/PayPal.Forms/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/AlejandroRuiz/PayPal.Forms</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>
-      PayPal PlugIn for Xamarin.Forms.
-    </description>
-		<summary>PayPal PlugIn for Xamarin.Forms.</summary>
-		<tags>xamarin, pcl, xam.pcl, plugin, plugin for xamarin.forms, android, xamarin.forms, ios, paypal</tags>
-		<dependencies>
-			<group targetFramework="net">
-				<dependency id="Newtonsoft.Json" version="10.0.3" />
-				<dependency id="Xamarin.Forms" version="2.4.0.38779" />
-			</group>
-			<group targetFramework="MonoAndroid">
-				<dependency id="Newtonsoft.Json" version="10.0.3" />
-				<dependency id="Xamarin.Forms" version="2.4.0.38779" />
-				<dependency id="Xamarin.PayPal.Android" version="2.15.1" />
-			</group>
-			<group targetFramework="Xamarin.iOS10">
-				<dependency id="Newtonsoft.Json" version="10.0.3" />
-				<dependency id="Xamarin.Forms" version="2.4.0.38779" />
-				<dependency id="Xamarin.PayPal.iOS" version="2.16.1" />
-			</group>
-			<group targetFramework="portable-net45+win8+wpa81+wp8">
-				<dependency id="Newtonsoft.Json" version="10.0.3" />
-				<dependency id="Xamarin.Forms" version="2.4.0.38779" />
-			</group>
-			<group targetFramework="dotnet">
-				<dependency id="Newtonsoft.Json" version="10.0.3" />
-				<dependency id="Xamarin.Forms" version="2.4.0.38779" />
-			</group>
-		</dependencies>
+		<description>PayPal PlugIn for Xamarin.Forms.</description>
+        <summary>PayPal PlugIn for Xamarin.Forms.</summary>
+        <tags>xamarin, pcl, xam.pcl, plugin, plugin for xamarin.forms, android, xamarin.forms, ios, paypal</tags>
+        <dependencies>
+            <group targetFramework="win">
+                <dependency id="Newtonsoft.Json" version="10.0.3" />
+                <dependency id="Xamarin.Forms" version="2.5.0.121934" />
+            </group>
+            <group targetFramework="netstandard1.0">
+                <dependency id="NETStandard.Library" version="1.6.1" />
+                <dependency id="Newtonsoft.Json" version="10.0.3" />
+                <dependency id="Xamarin.Forms" version="2.5.0.121934" />
+            </group>
+            <group targetFramework="portable-net45+win+wpa81+wp80">
+                <dependency id="Newtonsoft.Json" version="10.0.3" />
+                <dependency id="Xamarin.Forms" version="2.5.0.121934" />
+            </group>
+            <group targetFramework="net">
+                <dependency id="Newtonsoft.Json" version="10.0.3" />
+                <dependency id="Xamarin.Forms" version="2.5.0.121934" />
+            </group>
+            <group targetFramework="MonoAndroid10">
+                <dependency id="Newtonsoft.Json" version="10.0.3" />
+                <dependency id="Xamarin.Forms" version="2.5.0.121934" />
+                <dependency id="Xamarin.PayPal.Android" version="2.15.1" />
+            </group>
+            <group targetFramework="Xamarin.iOS10">
+                <dependency id="Newtonsoft.Json" version="10.0.3" />
+    			<dependency id="Xamarin.Forms" version="2.5.0.121934" />
+    			<dependency id="Xamarin.PayPal.iOS" version="2.16.1" />
+            </group>
+            <group targetFramework="portable-net45+win8+wpa81+wp8">
+    			<dependency id="Newtonsoft.Json" version="10.0.3" />
+    			<dependency id="Xamarin.Forms" version="2.5.0.121934" />
+    		</group>
+    		<group targetFramework="dotnet">
+    			<dependency id="Newtonsoft.Json" version="10.0.3" />
+    			<dependency id="Xamarin.Forms" version="2.5.0.121934" />
+    		</group>
+        </dependencies>
 	</metadata>
 	<files>
-		<!--Core-->
-		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms/bin/Release/PayPal.Forms.Abstractions.dll" target="lib/portable-net45+wp8+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10" />
-		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms/bin/Release/PayPal.Forms.dll" target="lib/portable-net45+wp8+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10" />
+		<!--PCL-->
+		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms/bin/Release/PayPal.Forms.Abstractions.dll" target="lib/portable-win+net45+wp80+win81+wpa81" />
+		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms/bin/Release/PayPal.Forms.dll" target="lib/portable-win+net45+wp80+win81+wpa81" />
 		
-		<!--dotnet-->
-		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms/bin/Release/PayPal.Forms.Abstractions.dll" target="lib/portable-net45+wp8+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10" />
-		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms/bin/Release/PayPal.Forms.dll" target="lib/portable-net45+wp8+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10" />
+        <!--netstandard-->
+		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms/bin/Release/PayPal.Forms.Abstractions.dll" target="lib/netstandard1.0" />
+		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms/bin/Release/PayPal.Forms.dll" target="lib/netstandard1.0" />
 
-		<!--Xamarin.Android-->
+		<!--Android-->
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Android/bin/Release/PayPal.Forms.dll" target="lib/MonoAndroid10" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.Android/bin/Release/PayPal.Forms.Abstractions.dll" target="lib/MonoAndroid10" />
 
-		<!--Xamarin.iOS-->
+		<!--iOS Unified-->
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/PayPal.Forms.dll" target="lib/Xamarin.iOS10" />
 		<file src="PayPal.Forms/PayPal.Forms/PayPal.Forms.iOS/bin/Release/PayPal.Forms.Abstractions.dll" target="lib/Xamarin.iOS10" />
-    
 	</files>
 </package>

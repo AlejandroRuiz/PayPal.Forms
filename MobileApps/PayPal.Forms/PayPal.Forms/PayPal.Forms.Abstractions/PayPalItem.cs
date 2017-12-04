@@ -2,33 +2,32 @@
 
 namespace PayPal.Forms.Abstractions
 {
-	public class PayPalItem
-	{
-		public string Name { get; private set; }
+    public class PayPalItem
+    {
+        public string Name { get; }
 
-		public uint Quantity { get; private set; } 
+        public uint Quantity { get; }
 
-		public Decimal Price { get; private set; }
+        public Decimal Price { get; }
 
-		public string Currency { get; private set; }
+        public string Currency { get; }
 
-		public string SKU { get; private set; }
+        public string SKU { get; }
 
-		public PayPalItem (string name, uint quantity, Decimal price, string currency, string sku)
-		{
-			Name = name;
-			Quantity = quantity;
-			Price = price;
-			Currency = currency;
-			SKU = sku;
-		}
+        public PayPalItem(string name, uint quantity, Decimal price, string currency, string sku)
+        {
+            this.Name = name;
+            this.Quantity = quantity;
+            this.Price = price;
+            this.Currency = currency;
+            this.SKU = sku;
+        }
 
-		public PayPalItem (string name, Decimal price, string currency)
-		{
-			Name = name;
-			Price = price;
-			Currency = currency;
-		}
-	}
+        public PayPalItem(string name, Decimal price, string currency)
+        {
+            this.Name = name;
+            this.Price = price;
+            this.Currency = currency;
+        }
+    }
 }
-

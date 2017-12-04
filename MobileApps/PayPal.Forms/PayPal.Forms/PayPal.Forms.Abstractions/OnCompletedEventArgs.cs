@@ -2,14 +2,13 @@
 
 namespace PayPal.Forms.Abstractions
 {
-	public class OnCompletedEventArgs:EventArgs
-	{
-		public string ConfirmationJSON { get; private set; }
+    public class OnCompletedEventArgs : EventArgs
+    {
+        public string ConfirmationJSON { get; }
 
-		public OnCompletedEventArgs(string confirmationJSON)
-		{
-			ConfirmationJSON = confirmationJSON;
-		}
-	}
+        public OnCompletedEventArgs(string confirmationJSON)
+        {
+            this.ConfirmationJSON = confirmationJSON;
+        }
+    }
 }
-

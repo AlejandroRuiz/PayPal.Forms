@@ -1,12 +1,12 @@
-﻿using PayPal.Forms.Abstractions.Enum;
+﻿using System;
 
 namespace PayPal.Forms.Abstractions
 {
     public class PayPalConfiguration
     {
-        public PayPalEnvironment Environment { get; private set; }
+        public PayPalEnvironment Environment { get; }
 
-        public string PayPalKey { get; private set; }
+        public string PayPalKey { get; }
 
         public string PhoneCountryCode { get; set; }
 
@@ -20,12 +20,14 @@ namespace PayPal.Forms.Abstractions
 
         public bool AcceptCreditCards { get; set; }
 
+        public bool StoreUserData { get; set; } = true;
+
         public ShippingAddressOption ShippingAddressOption { get; set; }
 
         public PayPalConfiguration(PayPalEnvironment environment, string idEnvironment)
         {
-            Environment = environment;
-            PayPalKey = idEnvironment;
+            this.Environment = environment;
+            this.PayPalKey = idEnvironment;
         }
     }
 }

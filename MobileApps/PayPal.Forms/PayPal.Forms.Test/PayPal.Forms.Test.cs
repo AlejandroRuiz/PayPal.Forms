@@ -2,7 +2,6 @@
 
 using Xamarin.Forms;
 using PayPal.Forms.Abstractions;
-using PayPal.Forms.Abstractions.Enum;
 using System.Diagnostics;
 
 namespace PayPal.Forms.Test
@@ -121,11 +120,16 @@ namespace PayPal.Forms.Test
 				new PayPalItem ("sample item #3 with a longer name", 6, new Decimal (37.99),
 					"USD", "sku-33333") 
 			}, new Decimal (20.5), new Decimal (13.20));
-			if (result.Status == PayPalStatus.Cancelled) {
+			if (result.Status == PayPalStatus.Cancelled)
+            {
 				Debug.WriteLine ("Cancelled");
-			}else if(result.Status == PayPalStatus.Error){
+			}
+            else if(result.Status == PayPalStatus.Error)
+            {
 				Debug.WriteLine (result.ErrorMessage);
-			}else if(result.Status == PayPalStatus.Successful){
+			}
+            else if(result.Status == PayPalStatus.Successful)
+            {
 				Debug.WriteLine (result.ServerResponse.Response.Id);
 			}
 		}
@@ -154,11 +158,16 @@ namespace PayPal.Forms.Test
 		async void BuyOnethingButton_Clicked (object sender, EventArgs e)
 		{
 			var result = await CrossPayPalManager.Current.Buy (new PayPalItem ("Test Product", new Decimal (12.50), "USD"), new Decimal (150.30));
-			if (result.Status == PayPalStatus.Cancelled) {
+			if (result.Status == PayPalStatus.Cancelled)
+            {
 				Debug.WriteLine ("Cancelled");
-			}else if(result.Status == PayPalStatus.Error){
+			}
+            else if(result.Status == PayPalStatus.Error)
+            {
 				Debug.WriteLine (result.ErrorMessage);
-			}else if(result.Status == PayPalStatus.Successful){
+			}
+            else if(result.Status == PayPalStatus.Successful)
+            {
 				Debug.WriteLine (result.ServerResponse.Response.Id);
 			}
 		}
@@ -186,11 +195,16 @@ namespace PayPal.Forms.Test
 		async void ProfileSharingButton_Clicked(object sender, EventArgs e)
 		{
 			var result = await CrossPayPalManager.Current.AuthorizeProfileSharing();
-			if (result.Status == PayPalStatus.Cancelled) {
+			if (result.Status == PayPalStatus.Cancelled)
+            {
 				Debug.WriteLine ("Cancelled");
-			}else if(result.Status == PayPalStatus.Error){
+			}
+            else if(result.Status == PayPalStatus.Error)
+            {
 				Debug.WriteLine (result.ErrorMessage);
-			}else if(result.Status == PayPalStatus.Successful){
+			}
+            else if(result.Status == PayPalStatus.Successful)
+            {
 				Debug.WriteLine (result.ServerResponse.Response.Code);
 			}
 		}
