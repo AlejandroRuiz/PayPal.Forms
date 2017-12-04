@@ -2,24 +2,20 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 	<metadata>
 		<id>Xamarin.PayPal.iOS</id>
-		<version>2.16.1</version>
+		<version>2.17.0</version>
 		<title>PayPal for Xamarin.iOS</title>
 		<authors>Alejandro Ruiz</authors>
 		<owners>Alejandro Ruiz</owners>
-		<iconUrl>http://xamarinos.com/img/favicon.ico</iconUrl>
-    <licenseUrl>https://raw.githubusercontent.com/AlejandroRuiz/PayPal.Forms/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/AlejandroRuiz/PayPal.Forms/tree/master/Xamarin.PayPal.iOS</projectUrl>
+		<iconUrl>http://alejandroruizvarela.com/images/formspaypallogo.png</iconUrl>
+        <licenseUrl>https://raw.githubusercontent.com/AlejandroRuiz/PayPal.Forms/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/AlejandroRuiz/PayPal.Forms/tree/master/Xamarin.PayPal.iOS</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>
-       PayPal Binding Lib for Xamarin.iOS
-    </description>
+		<description>PayPal Binding Lib for Xamarin.iOS</description>
 		<summary>PayPal Binding Lib for Xamarin.iOS</summary>
 		<tags>xamarin, plugin, plugin for ios, ios, paypal</tags>
 	</metadata>
-	<files>
-
+	<files>   
 		<!--Xamarin.iOS-->
 		<file src="Xamarin.PayPal.iOS/bin/Release/Xamarin.PayPal.iOS.dll" target="lib/Xamarin.iOS10" />
-    
 	</files>
 </package>
