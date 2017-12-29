@@ -47,10 +47,10 @@
 	    <HintPath>..\..\packages\Xamarin.Forms.2.5.0.121934\lib\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.Xaml.dll</HintPath>
 	  </Reference>
 	  <Reference Include="PayPal.Forms.Abstractions">
-	    <HintPath>..\..\packages\PayPal.Forms.2.17.1\lib\portable-win+net45+wp80+win81+wpa81\PayPal.Forms.Abstractions.dll</HintPath>
+	    <HintPath>..\..\packages\PayPal.Forms.2.18.1\lib\portable-win+net45+wp80+win81+wpa81\PayPal.Forms.Abstractions.dll</HintPath>
 	  </Reference>
 	  <Reference Include="PayPal.Forms">
-	    <HintPath>..\..\packages\PayPal.Forms.2.17.1\lib\portable-win+net45+wp80+win81+wpa81\PayPal.Forms.dll</HintPath>
+	    <HintPath>..\..\packages\PayPal.Forms.2.18.1\lib\portable-win+net45+wp80+win81+wpa81\PayPal.Forms.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 	<ItemGroup>

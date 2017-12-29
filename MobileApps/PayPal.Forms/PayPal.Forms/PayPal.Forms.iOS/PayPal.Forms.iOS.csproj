@@ -53,7 +53,7 @@
 		  <HintPath>..\..\packages\Xamarin.Forms.2.5.0.121934\lib\Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
 		</Reference>
 		<Reference Include="Xamarin.PayPal.iOS">
-		  <HintPath>..\..\packages\Xamarin.PayPal.iOS.2.17.0\lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll</HintPath>
+		  <HintPath>..\..\packages\Xamarin.PayPal.iOS.2.18.0\lib\Xamarin.iOS10\Xamarin.PayPal.iOS.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
