@@ -80,11 +80,16 @@ protected override void OnDestroy()
 
 ```
 var result = await CrossPayPalManager.Current.Buy (new PayPalItem ("Test Product", new Decimal (12.50), "USD"), new Decimal (0));
-if (result.Status == PayPalStatus.Cancelled) {
+if (result.Status == PayPalStatus.Cancelled)
+{
 	Debug.WriteLine ("Cancelled");
-}else if(result.Status == PayPalStatus.Error){
+}
+else if(result.Status == PayPalStatus.Error)
+{
 	Debug.WriteLine (result.ErrorMessage);
-}else if(result.Status == PayPalStatus.Successful){
+}
+else if(result.Status == PayPalStatus.Successful)
+{
 	Debug.WriteLine (result.ServerResponse.Response.Id);
 }
 ```
@@ -100,11 +105,16 @@ var result = await CrossPayPalManager.Current.Buy (new PayPalItem[] {
 				new PayPalItem ("sample item #3 with a longer name", 6, new Decimal (37.99),
 					"USD", "sku-33333") 
 			}, new Decimal (20.5), new Decimal (13.20));
-if (result.Status == PayPalStatus.Cancelled) {
+if (result.Status == PayPalStatus.Cancelled)
+{
 	Debug.WriteLine ("Cancelled");
-}else if(result.Status == PayPalStatus.Error){
+}
+else if(result.Status == PayPalStatus.Error)
+{
 	Debug.WriteLine (result.ErrorMessage);
-}else if(result.Status == PayPalStatus.Successful){
+}
+else if(result.Status == PayPalStatus.Successful)
+{
 	Debug.WriteLine (result.ServerResponse.Response.Id);
 }
 ```
@@ -138,11 +148,16 @@ else if (result.Status == PayPalStatus.Successful)
 
 ```
 var result = await CrossPayPalManager.Current.RequestFuturePayments();
-if (result.Status == PayPalStatus.Cancelled) {
+if (result.Status == PayPalStatus.Cancelled)
+{
 	Debug.WriteLine ("Cancelled");
-}else if(result.Status == PayPalStatus.Error){
+}
+else if(result.Status == PayPalStatus.Error)
+{
 	Debug.WriteLine (result.ErrorMessage);
-}else if(result.Status == PayPalStatus.Successful){
+}
+else if(result.Status == PayPalStatus.Successful)
+{
 	//Print Authorization Code
 	Debug.WriteLine(result.ServerResponse.Response.Code);
 }
@@ -152,11 +167,16 @@ if (result.Status == PayPalStatus.Cancelled) {
 
 ```
 var result = await CrossPayPalManager.Current.AuthorizeProfileSharing();
-if (result.Status == PayPalStatus.Cancelled) {
+if (result.Status == PayPalStatus.Cancelled)
+{
 	Debug.WriteLine ("Cancelled");
-}else if(result.Status == PayPalStatus.Error){
+}
+else if(result.Status == PayPalStatus.Error)
+{
 	Debug.WriteLine (result.ErrorMessage);
-}else if(result.Status == PayPalStatus.Successful){
+}
+else if(result.Status == PayPalStatus.Successful)
+{
 	Debug.WriteLine (result.ServerResponse.Response.Code);
 }
 ```
@@ -192,7 +212,6 @@ else if (result.Status == PayPalStatus.Successful)
 * Nuget Package (https://www.nuget.org/packages/PayPal.Forms)
 
 # Known Issues
-* On Xamarin Studio 5.10.X you will receive an alert that xamarin cant resolve "xamarin.paypal" and/or "paypal.forms" lib name this will be fixed by upgrading to Xamarin Studio 6 in beta/alpha channel(recommended) or downgrading to Xamarin Studio 5.9(not recommended)
 
 # TODO
 No new tasks to do. All issues or features requests are welcome
