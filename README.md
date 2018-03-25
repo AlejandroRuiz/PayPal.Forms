@@ -215,3 +215,9 @@ else if (result.Status == PayPalStatus.Successful)
 
 # TODO
 No new tasks to do. All issues or features requests are welcome
+
+# Contributors
+## Special thanks for the contributors and his hard work
+### [@fdesbrosses](https://github.com/fdesbrosses)
+### [@Voydz](https://github.com/Voydz)
+### [@AlejandroRuiz](https://github.com/AlejandroRuiz)
