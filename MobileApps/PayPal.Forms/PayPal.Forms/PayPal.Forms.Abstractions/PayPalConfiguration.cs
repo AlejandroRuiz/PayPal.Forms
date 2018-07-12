@@ -24,6 +24,12 @@ namespace PayPal.Forms.Abstractions
 
         public ShippingAddressOption ShippingAddressOption { get; set; }
 
+        public bool ScanRequiresExpiry { get; set; } = true;
+
+        public bool ScanRequiresCvv { get; set; } = true;
+
+        public bool ScanExpiry { get; set; } = true;
+
         public PayPalConfiguration(PayPalEnvironment environment, string idEnvironment)
         {
             this.Environment = environment;

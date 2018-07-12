@@ -184,6 +184,10 @@ namespace PayPal.Forms
             _retrieveCardCancelled = onCancelled;
             _retrieveCardSuccess = onSuccess;
 
+            var requireExpiry = _formsConfig == null || _formsConfig.ScanRequiresExpiry;
+            var requireCvv = _formsConfig == null || _formsConfig.ScanRequiresCvv;
+            var scanExpiry = _formsConfig == null || _formsConfig.ScanExpiry;
+
             Intent intent = new Intent(Context, typeof(CardIOActivity));
             switch (scannerLogo)
             {
@@ -197,8 +201,9 @@ namespace PayPal.Forms
                     break;
             }
             intent.PutExtra(CardIOActivity.ExtraReturnCardImage, true);
-            intent.PutExtra(CardIOActivity.ExtraRequireExpiry, true);
-            intent.PutExtra(CardIOActivity.ExtraRequireCvv, true);
+            intent.PutExtra(CardIOActivity.ExtraRequireExpiry, requireExpiry);
+            intent.PutExtra(CardIOActivity.ExtraRequireCvv, requireCvv);
+            intent.PutExtra(CardIOActivity.ExtraScanExpiry, scanExpiry);
             (Context as Activity).StartActivityForResult(intent, REQUEST_CODE_CARD_SCAN);
         }
 
