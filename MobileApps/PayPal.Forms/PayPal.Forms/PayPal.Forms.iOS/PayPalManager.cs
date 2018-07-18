@@ -340,6 +340,11 @@ namespace PayPal.Forms
         {
             _retrieveCardCancelled = onCancelled;
             _retrieveCardSuccess = onSuccess;
+
+            var requireExpiry = _formsConfig == null || _formsConfig.ScanRequiresExpiry;
+            var requireCvv = _formsConfig == null || _formsConfig.ScanRequiresCvv;
+            var scanExpiry = _formsConfig == null || _formsConfig.ScanExpiry;
+
             var scanViewController = new CardIOPaymentViewController(new CustomCardIOPaymentViewControllerDelegate(this));
 
             switch (scannerLogo)
@@ -353,6 +358,11 @@ namespace PayPal.Forms
                     scanViewController.UseCardIOLogo = false;
                     break;
             }
+
+            scanViewController.CollectExpiry = requireExpiry;
+            scanViewController.CollectCVV = requireCvv;
+            scanViewController.ScanExpiry = scanExpiry;
+
             var top = GetTopViewController(UIApplication.SharedApplication.KeyWindow);
             top.PresentViewController(scanViewController, true, null);
         }
