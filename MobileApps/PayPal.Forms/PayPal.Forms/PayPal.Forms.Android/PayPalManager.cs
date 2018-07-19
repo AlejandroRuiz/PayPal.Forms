@@ -187,6 +187,7 @@ namespace PayPal.Forms
             var requireExpiry = _formsConfig == null || _formsConfig.ScanRequiresExpiry;
             var requireCvv = _formsConfig == null || _formsConfig.ScanRequiresCvv;
             var scanExpiry = _formsConfig == null || _formsConfig.ScanExpiry;
+            var disableManualEntry = _formsConfig == null || _formsConfig.ScanDisableManualEntry;
 
             Intent intent = new Intent(Context, typeof(CardIOActivity));
             switch (scannerLogo)
@@ -204,6 +205,8 @@ namespace PayPal.Forms
             intent.PutExtra(CardIOActivity.ExtraRequireExpiry, requireExpiry);
             intent.PutExtra(CardIOActivity.ExtraRequireCvv, requireCvv);
             intent.PutExtra(CardIOActivity.ExtraScanExpiry, scanExpiry);
+            intent.PutExtra(CardIOActivity.ExtraSuppressManualEntry, disableManualEntry);
+
             (Context as Activity).StartActivityForResult(intent, REQUEST_CODE_CARD_SCAN);
         }
 
