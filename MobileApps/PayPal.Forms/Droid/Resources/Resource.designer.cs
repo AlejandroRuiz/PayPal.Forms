@@ -1205,6 +1205,7 @@ namespace PayPal.Forms.Test.Droid
 			global::PayPal.Forms.Android.Resource.String.appbar_scrolling_view_behavior = global::PayPal.Forms.Test.Droid.Resource.String.appbar_scrolling_view_behavior;
 			global::PayPal.Forms.Android.Resource.String.bottom_sheet_behavior = global::PayPal.Forms.Test.Droid.Resource.String.bottom_sheet_behavior;
 			global::PayPal.Forms.Android.Resource.String.character_counter_pattern = global::PayPal.Forms.Test.Droid.Resource.String.character_counter_pattern;
+			global::PayPal.Forms.Android.Resource.String.library_name = global::PayPal.Forms.Test.Droid.Resource.String.library_name;
 			global::PayPal.Forms.Android.Resource.String.mr_button_content_description = global::PayPal.Forms.Test.Droid.Resource.String.mr_button_content_description;
 			global::PayPal.Forms.Android.Resource.String.mr_cast_button_connected = global::PayPal.Forms.Test.Droid.Resource.String.mr_cast_button_connected;
 			global::PayPal.Forms.Android.Resource.String.mr_cast_button_connecting = global::PayPal.Forms.Test.Droid.Resource.String.mr_cast_button_connecting;
@@ -5833,6 +5834,9 @@ namespace PayPal.Forms.Test.Droid
 			
 			// aapt resource value: 0x7f090038
 			public const int character_counter_pattern = 2131296312;
+			
+			// aapt resource value: 0x7f09003e
+			public const int library_name = 2131296318;
 			
 			// aapt resource value: 0x7f090000
 			public const int mr_button_content_description = 2131296256;
