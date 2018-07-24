@@ -30,6 +30,8 @@ namespace PayPal.Forms.Abstractions
 
         public bool ScanExpiry { get; set; } = true;
 
+		public bool ScanDisableManualEntry { get; set; } = false;
+
         public PayPalConfiguration(PayPalEnvironment environment, string idEnvironment)
         {
             this.Environment = environment;

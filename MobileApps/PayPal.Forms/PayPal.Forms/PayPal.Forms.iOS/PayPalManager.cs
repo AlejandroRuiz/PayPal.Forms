@@ -344,6 +344,7 @@ namespace PayPal.Forms
             var requireExpiry = _formsConfig == null || _formsConfig.ScanRequiresExpiry;
             var requireCvv = _formsConfig == null || _formsConfig.ScanRequiresCvv;
             var scanExpiry = _formsConfig == null || _formsConfig.ScanExpiry;
+            var disableManualEntry = _formsConfig == null || _formsConfig.ScanDisableManualEntry;
 
             var scanViewController = new CardIOPaymentViewController(new CustomCardIOPaymentViewControllerDelegate(this));
 
@@ -362,6 +363,7 @@ namespace PayPal.Forms
             scanViewController.CollectExpiry = requireExpiry;
             scanViewController.CollectCVV = requireCvv;
             scanViewController.ScanExpiry = scanExpiry;
+            scanViewController.DisableManualEntryButtons = disableManualEntry;
 
             var top = GetTopViewController(UIApplication.SharedApplication.KeyWindow);
             top.PresentViewController(scanViewController, true, null);
