@@ -13,7 +13,7 @@ namespace PayPal.Forms
 #if __ANDROID__
         public static void Init(PayPalConfiguration config, global::Android.Content.Context context)
         {
-            Context = context;
+            PayPalManagerImplementation.Init(config, Context = context);
 #else
         public static void Init(PayPalConfiguration config)
         {
@@ -59,7 +59,7 @@ namespace PayPal.Forms
 #if PORTABLE
             return null;
 #elif __ANDROID__
-            return new PayPalManagerImplementation(_config, Context);
+            return new PayPalManagerImplementation();
 #else
             return new PayPalManagerImplementation(_config);
 #endif

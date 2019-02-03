@@ -19,12 +19,14 @@ namespace PayPal.Forms
         TaskCompletionSource<ProfileSharingResult> apsTcs;
         TaskCompletionSource<ScanCardResult> gcardTcs;
 
-        public PayPalManagerImplementation(PayPalConfiguration config, Context context)
+        public PayPalManagerImplementation()
         {
-            Manager = new PayPalManager(config, Context = context);
         }
 
-        public Context Context { get; }
+        public static void Init(PayPalConfiguration config, Context context)
+        {
+            Manager = new PayPalManager(config, context);
+        }
 
         #region IPayPalManager implementation
 
