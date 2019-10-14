@@ -118,16 +118,16 @@
 		  <HintPath>..\..\packages\Xamarin.Android.Support.v7.MediaRouter.27.0.2\lib\MonoAndroid81\Xamarin.Android.Support.v7.MediaRouter.dll</HintPath>
 		</Reference>
 		<Reference Include="Xamarin.PayPal.Android.CardIO">
-		  <HintPath>..\..\packages\Xamarin.PayPal.Android.CardIO.2.0.0\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
+		  <HintPath>..\..\packages\Xamarin.PayPal.Android.CardIO.2.0.1\lib\MonoAndroid10\Xamarin.PayPal.Android.CardIO.dll</HintPath>
 		</Reference>
 		<Reference Include="Xamarin.PayPal.Android">
-		  <HintPath>..\..\packages\Xamarin.PayPal.Android.2.18.0\lib\MonoAndroid10\Xamarin.PayPal.Android.dll</HintPath>
+		  <HintPath>..\..\packages\Xamarin.PayPal.Android.2.18.1\lib\MonoAndroid10\Xamarin.PayPal.Android.dll</HintPath>
 		</Reference>
 		<Reference Include="PayPal.Forms.Abstractions">
-		  <HintPath>..\..\packages\PayPal.Forms.2.18.5\lib\MonoAndroid10\PayPal.Forms.Abstractions.dll</HintPath>
+		  <HintPath>..\..\packages\PayPal.Forms.2.18.6\lib\MonoAndroid10\PayPal.Forms.Abstractions.dll</HintPath>
 		</Reference>
 		<Reference Include="PayPal.Forms">
-		  <HintPath>..\..\packages\PayPal.Forms.2.18.5\lib\MonoAndroid10\PayPal.Forms.dll</HintPath>
+		  <HintPath>..\..\packages\PayPal.Forms.2.18.6\lib\MonoAndroid10\PayPal.Forms.dll</HintPath>
 		</Reference>
 		<Reference Include="Xamarin.Android.Arch.Core.Common">
 		  <HintPath>..\..\packages\Xamarin.Android.Arch.Core.Common.1.0.0\lib\MonoAndroid80\Xamarin.Android.Arch.Core.Common.dll</HintPath>

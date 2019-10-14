@@ -206,6 +206,10 @@ namespace PayPal.Forms
             if (payment.Processable)
             {
                 var paymentViewController = new PayPalPaymentViewController(payment, _nativeConfig, this);
+                if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+                {
+                    paymentViewController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+                }
                 var top = GetTopViewController(UIApplication.SharedApplication.KeyWindow);
                 top.PresentViewController(paymentViewController, true, null);
             }
@@ -264,6 +268,10 @@ namespace PayPal.Forms
             if (payment.Processable)
             {
                 var paymentViewController = new PayPalPaymentViewController(payment, _nativeConfig, this);
+                if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+                {
+                    paymentViewController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+                }
                 var top = GetTopViewController(UIApplication.SharedApplication.KeyWindow);
                 top.PresentViewController(paymentViewController, true, null);
             }
@@ -317,6 +325,10 @@ namespace PayPal.Forms
             _onCancelled = onCancelled;
             _onSuccess = onSuccess;
             var futurePaymentViewController = new PayPalFuturePaymentViewController(_nativeConfig, new CustomPayPalFuturePaymentDelegate(this));
+            if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+            {
+                futurePaymentViewController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            }
             var top = GetTopViewController(UIApplication.SharedApplication.KeyWindow);
             top.PresentViewController(futurePaymentViewController, true, null);
         }
@@ -332,6 +344,10 @@ namespace PayPal.Forms
                 Constants.kPayPalOAuth2ScopePhone.ToString()
             );
             var profileSharingViewController = new PayPalProfileSharingViewController(infoSet, _nativeConfig, new CustomAuthorizeProfileSharingDelegate(this));
+            if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+            {
+                profileSharingViewController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            }
             var top = GetTopViewController(UIApplication.SharedApplication.KeyWindow);
             top.PresentViewController(profileSharingViewController, true, null);
         }
@@ -347,6 +363,11 @@ namespace PayPal.Forms
             var disableManualEntry = _formsConfig == null || _formsConfig.ScanDisableManualEntry;
 
             var scanViewController = new CardIOPaymentViewController(new CustomCardIOPaymentViewControllerDelegate(this));
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+            {
+                scanViewController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            }
 
             switch (scannerLogo)
             {
