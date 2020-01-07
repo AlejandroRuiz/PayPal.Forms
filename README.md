@@ -1,3 +1,7 @@
+# ***DEPRECATED***
+
+This plugin is now deprecated as Paypal Mobile SDK its no longer supported in case that you want to implement paypal payments you can create your own native braintree implementation by checking this page for more details https://www.braintreepayments.com
+
 # PayPal.Forms
 PayPal Plugin for Xamarin.Forms
 
